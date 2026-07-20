@@ -35,8 +35,13 @@ for dataset,tag in [('TaiwanFuturesInstitutionalInvestors','inst'),('TaiwanFutur
             allrows+=json.load(open(fp)); continue
         rows=fetch(dataset,d0,d1)
         if rows is not None:
-            json.dump(rows,open(fp,"w")); allrows+=rows
-            print(f'[{tag} {d0}] {len(rows)} rows',flush=True)
+            new_content=json.dumps(rows)
+            # 内容比对: 相同不写入 (避免重复覆写)
+            if os.path.exists(fp) and open(fp).read()==new_content:
+                allrows+=rows; print(f'[{tag} {d0}] 内容相同, 跳过写入',flush=True)
+            else:
+                open(fp,"w").write(new_content); allrows+=rows
+                print(f'[{tag} {d0}] {len(rows)} rows 写入',flush=True)
         time.sleep(8)
     print(f'=== {tag} 共 {len(allrows)} rows ===',flush=True)
 print('DONE finmind',flush=True)

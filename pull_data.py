@@ -18,7 +18,7 @@ def fetch(date_str):
     for attempt in range(4):
         try:
             req = urllib.request.Request(url, headers=UA)
-            with urllib.request.urlopen(req, timeout=25, encoding='utf-8') as r:
+            with urllib.request.urlopen(req, timeout=25) as r:
                 return json.loads(r.read().decode("utf-8"))
         except Exception as e:
             wait = 2 ** attempt

@@ -38,7 +38,7 @@ def load_bwibbu(ds):
     else:
         try:
             url=f"https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?date={ds}&response=json"
-            d=json.loads(urllib.request.urlopen(url,timeout=20, encoding='utf-8').read().decode())
+            d=json.loads(urllib.request.urlopen(url,timeout=20).read().decode())
             json.dump(d,open(fp,"w", encoding='utf-8'),ensure_ascii=False)
         except: return {}
     out={}

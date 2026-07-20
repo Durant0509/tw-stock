@@ -27,3 +27,7 @@ desktop.ini
 # 私人记忆/排程 (不上公开 repo)
 .claude/
 update.log
+
+# finmind 破例上传 (7MB, FinMind免费API有额度限制, 用共享档避免重抓触顶)
+!data/finmind/
+!data/finmind/*.json

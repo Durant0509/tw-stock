@@ -8,6 +8,10 @@ import os, sys, subprocess, datetime
 BASE=os.path.dirname(os.path.abspath(__file__)); os.chdir(BASE)
 PY=sys.executable
 LOG=os.path.join(BASE,"update.log")
+# 强制子脚本用 UTF-8, 解决 Windows cp950 印中文崩溃
+ENV=dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUTF8="1")
+try: sys.stdout.reconfigure(encoding='utf-8')
+except: pass
 
 def log(msg):
     line=f"[{datetime.datetime.now():%Y-%m-%d %H:%M:%S}] {msg}"
@@ -16,7 +20,7 @@ def log(msg):
 
 def run(script, desc, required=False):
     log(f"▶ {desc} ({script})")
-    r=subprocess.run([PY, script], cwd=BASE, capture_output=True, text=True)
+    r=subprocess.run([PY, script], cwd=BASE, capture_output=True, text=True, encoding="utf-8", env=ENV)
     if r.returncode!=0:
         log(f"  ⚠️ {script} exit {r.returncode}: {r.stderr[-300:] if r.stderr else ''}")
         if required: log(f"  ✗ 必要步骤失败, 中止"); sys.exit(1)

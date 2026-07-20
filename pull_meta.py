@@ -2,13 +2,23 @@
 """抓基础资料: 上市公司基本资料(产业/股数) + 当日殖利率/股价净值比(BWIBBU_d)。
 这两个是 loader/precompute 必需的。每日更新会重抓 (公司资料变动少, BWIBBU 抓最新交易日)。
 """
-import os, json, glob, urllib.request, datetime
+import os, sys, json, glob, urllib.request, datetime
+# Windows cp950 终端印中文会崩, 强制 UTF-8
+try: sys.stdout.reconfigure(encoding='utf-8'); sys.stderr.reconfigure(encoding='utf-8')
+except: pass
 BASE=os.path.dirname(os.path.abspath(__file__)); os.chdir(BASE)
 os.makedirs("data", exist_ok=True)
 UA={"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"}
 
+import time
 def get(url):
-    return json.loads(urllib.request.urlopen(urllib.request.Request(url,headers=UA),timeout=30).read().decode())
+    last=None
+    for a in range(4):
+        try:
+            return json.loads(urllib.request.urlopen(urllib.request.Request(url,headers=UA),timeout=40).read().decode())
+        except Exception as e:
+            last=e; time.sleep(3*(a+1))
+    raise last
 
 # 1) 上市公司基本资料 (产业别 + 已发行股数)
 try:

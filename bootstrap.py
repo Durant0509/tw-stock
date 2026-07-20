@@ -7,6 +7,9 @@ import os, sys, subprocess
 
 BASE=os.path.dirname(os.path.abspath(__file__))
 os.chdir(BASE)   # 关键: 确保所有相对路径 data/xxx 正确
+ENV=dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUTF8="1")
+try: sys.stdout.reconfigure(encoding='utf-8')
+except: pass
 
 PULLS=[
     ("pull_data.py",    "个股量价/本益比 (MI_INDEX) ~2500天, 最久"),
@@ -18,7 +21,7 @@ PULLS=[
 
 def run(script, desc):
     print(f"\n{'='*60}\n▶ {desc}\n  执行 {script}...\n{'='*60}", flush=True)
-    r=subprocess.run([sys.executable, script], cwd=BASE)
+    r=subprocess.run([sys.executable, script], cwd=BASE, env=ENV)
     if r.returncode!=0:
         print(f"⚠️ {script} 异常退出 (code {r.returncode}), 继续下一个", flush=True)
     return r.returncode==0

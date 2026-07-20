@@ -21,6 +21,7 @@ retail={d:(ib[d][1]-ib[d][0])/ob[d] for d in ib if ob.get(d,0)>0}
 d2i={f"{d[:4]}-{d[4:6]}-{d[6:]}":i for i,d in enumerate(days)}
 ri={d2i[d]:v for d,v in retail.items() if d in d2i}
 
+assert retail, "finmind资料空! 请先跑 py pull_finmind.py 重抓台指期资料"
 vals=sorted(retail.values())
 p80=vals[int(len(vals)*.8)]; p20=vals[int(len(vals)*.2)]
 p90=vals[int(len(vals)*.9)]; p10=vals[int(len(vals)*.1)]

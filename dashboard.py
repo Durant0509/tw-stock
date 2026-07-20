@@ -72,6 +72,7 @@ for d in inst_by:
     il,ish=inst_by[d]; tot=oi_by.get(d,0)
     if tot>0: retail[d]=(ish-il)/tot
 d2i={f"{d[:4]}-{d[4:6]}-{d[6:]}":i for i,d in enumerate(days)}
+assert retail, "finmind资料空! 请先跑 py pull_finmind.py 重抓台指期资料"
 vals=sorted(retail.values()); p80=vals[int(len(vals)*.8)]
 
 def retail_traj():

@@ -32,7 +32,7 @@ while d<=END:
     if not os.path.exists(fp):
         csv=fetch_range(d,mend)
         if csv and "臺股期貨" in csv:
-            open(fp,"w").write(csv); pulled+=1
+            open(fp,"w", encoding='utf-8').write(csv); pulled+=1
             print(f"[{ym}] pulled, {len(csv)} bytes",flush=True)
         else:
             print(f"[{ym}] empty/fail",flush=True)

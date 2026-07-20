@@ -16,8 +16,8 @@ def ma_i(i): seg=adj[max(0,i-60+1):i+1]; return sum(seg)/len(seg)
 cur=len(days)-1
 regime='bull' if ma_i(cur)/ma_i(cur-20)-1>0.02 else 'bear' if ma_i(cur)/ma_i(cur-20)-1<-0.02 else 'range'
 inst=[];daily=[]
-for f in sorted(glob.glob('data/finmind/inst_*.json')): inst+=json.load(open(f))
-for f in sorted(glob.glob('data/finmind/daily_*.json')): daily+=json.load(open(f))
+for f in sorted(glob.glob('data/finmind/inst_*.json')): inst+=json.load(open(f, encoding='utf-8'))
+for f in sorted(glob.glob('data/finmind/daily_*.json')): daily+=json.load(open(f, encoding='utf-8'))
 ib=defaultdict(lambda:[0,0])
 for r in inst: ib[r['date']][0]+=r['long_open_interest_balance_volume']; ib[r['date']][1]+=r['short_open_interest_balance_volume']
 ob=defaultdict(float)
@@ -31,7 +31,7 @@ gate='red' if rcur>=p95 else 'orange' if rcur>=p90 else 'green' if rcur<=p20 els
 def load_bwibbu(ds):
     fp=f'data/bwibbu_{ds}.json'
     if not os.path.exists(fp): return {}
-    d=json.load(open(fp)); out={}
+    d=json.load(open(fp, encoding='utf-8')); out={}
     for r in d.get('data',[]):
         try: out[r[0]]={'yield':float(r[3]) if r[3] not in('','-') else None,'pb':float(r[6]) if r[6] not in('','-') else None}
         except: pass
@@ -43,7 +43,7 @@ def foreign_streak(code):
     if len(files)<5: return None
     streak=0
     for fp in reversed(files):
-        d=json.load(open(fp)); row=[r for r in d.get('data',[]) if r and r[0]==code]
+        d=json.load(open(fp, encoding='utf-8')); row=[r for r in d.get('data',[]) if r and r[0]==code]
         if not row: break
         try: net=float(str(row[0][4]).replace(',',''))
         except: break
@@ -118,5 +118,5 @@ out={'asof':f"{days[-1][:4]}-{days[-1][4:6]}-{days[-1][6:]}",'regime':regime,
 for code in uni:
     d=diagnose(code)
     if d: out['stocks'][code]=d
-json.dump(out,open('stocks_data.json','w'),ensure_ascii=False)
+json.dump(out,open('stocks_data.json','w', encoding='utf-8'),ensure_ascii=False)
 print(f"预运算完成: {len(out['stocks'])} 檔 | regime={regime} gate={gate}")

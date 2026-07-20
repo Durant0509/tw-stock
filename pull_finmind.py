@@ -14,7 +14,7 @@ def fetch(dataset,d0,d1,data_id='TX'):
     url='https://api.finmindtrade.com/api/v4/data?'+urllib.parse.urlencode(params)
     for a in range(5):
         try:
-            r=json.loads(urllib.request.urlopen(url,timeout=40).read().decode())
+            r=json.loads(urllib.request.urlopen(url,timeout=40, encoding='utf-8').read().decode())
             if r.get('status')==200: return r.get('data',[])
             print(f'  status {r.get("status")}: {r.get("msg","")[:50]}',flush=True)
             time.sleep(10*(a+1))   # 速率限, 等久一点
@@ -32,15 +32,15 @@ for dataset,tag in [('TaiwanFuturesInstitutionalInvestors','inst'),('TaiwanFutur
     for d0,d1 in periods:
         fp=os.path.join(BASE,"data","finmind",f"{tag}_{d0[:7]}.json")
         if os.path.exists(fp):
-            allrows+=json.load(open(fp)); continue
+            allrows+=json.load(open(fp, encoding='utf-8')); continue
         rows=fetch(dataset,d0,d1)
         if rows is not None:
             new_content=json.dumps(rows)
             # 内容比对: 相同不写入 (避免重复覆写)
-            if os.path.exists(fp) and open(fp).read()==new_content:
+            if os.path.exists(fp) and open(fp, encoding='utf-8').read()==new_content:
                 allrows+=rows; print(f'[{tag} {d0}] 内容相同, 跳过写入',flush=True)
             else:
-                open(fp,"w").write(new_content); allrows+=rows
+                open(fp,"w", encoding='utf-8').write(new_content); allrows+=rows
                 print(f'[{tag} {d0}] {len(rows)} rows 写入',flush=True)
         time.sleep(8)
     print(f'=== {tag} 共 {len(allrows)} rows ===',flush=True)

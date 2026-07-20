@@ -25,7 +25,7 @@ while d<=END:
         else:
             js=fetch(ds)
             if js and js.get("stat","").lower()=="ok" and js.get("tables"):
-                json.dump(js,open(fp,"w"),ensure_ascii=False); pulled+=1
+                json.dump(js,open(fp,"w", encoding='utf-8'),ensure_ascii=False); pulled+=1
                 if pulled%40==0: print(f"[{ds}] pulled={pulled}",flush=True)
             else: holiday+=1
             time.sleep(0.9)

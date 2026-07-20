@@ -17,7 +17,7 @@ def margin_day(ds):
     """回传 {code:(融资余额,融券余额)} + 大盘加总券资比"""
     fp=os.path.join(BASE,"data","margin",f"{ds}.json")
     if not os.path.exists(fp): return None,None
-    d=json.load(open(fp))
+    d=json.load(open(fp, encoding='utf-8'))
     t=None
     for tb in d.get("tables",[]):
         if tb.get("fields") and tb["fields"][0]=="代號" and len(tb.get("data",[]))>100:

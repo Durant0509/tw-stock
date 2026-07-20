@@ -9,9 +9,9 @@ from collections import defaultdict
 import backtest as B
 
 inst=[]
-for f in sorted(glob.glob('data/finmind/inst_*.json')): inst+=json.load(open(f))
+for f in sorted(glob.glob('data/finmind/inst_*.json')): inst+=json.load(open(f, encoding='utf-8'))
 daily=[]
-for f in sorted(glob.glob('data/finmind/daily_*.json')): daily+=json.load(open(f))
+for f in sorted(glob.glob('data/finmind/daily_*.json')): daily+=json.load(open(f, encoding='utf-8'))
 inst_by=defaultdict(lambda:[0,0])
 for r in inst:
     inst_by[r['date']][0]+=r['long_open_interest_balance_volume']

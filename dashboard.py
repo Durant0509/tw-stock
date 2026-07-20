@@ -59,8 +59,8 @@ def rolling_excess(strat_r, bench_r, label):
 
 # --- 散户反指: 体温=滚动"偏多后报酬"(负=有效) ---
 inst=[]; daily=[]
-for f in sorted(glob.glob('data/finmind/inst_*.json')): inst+=json.load(open(f))
-for f in sorted(glob.glob('data/finmind/daily_*.json')): daily+=json.load(open(f))
+for f in sorted(glob.glob('data/finmind/inst_*.json')): inst+=json.load(open(f, encoding='utf-8'))
+for f in sorted(glob.glob('data/finmind/daily_*.json')): daily+=json.load(open(f, encoding='utf-8'))
 inst_by=defaultdict(lambda:[0,0])
 for r in inst:
     inst_by[r['date']][0]+=r['long_open_interest_balance_volume']
@@ -104,7 +104,7 @@ dash['current']={
   'cheap':dash['cheap'][-1] if dash['cheap'] else None,
   'retail':dash['retail'][-1] if dash['retail'] else None,
 }
-json.dump(dash,open('dashboard_data.json','w'),ensure_ascii=False)
+json.dump(dash,open('dashboard_data.json','w', encoding='utf-8'),ensure_ascii=False)
 
 # 文字摘要
 print(f"\n=== 策略健康度仪表板 (截至 {dash['current']['date']}) ===")

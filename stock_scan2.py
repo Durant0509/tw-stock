@@ -18,8 +18,8 @@ cur=len(days)-1
 slope=ma_i(cur)/ma_i(cur-20)-1
 regime='bull' if slope>0.02 else 'bear' if slope<-0.02 else 'range'
 inst=[];daily=[]
-for f in sorted(glob.glob('data/finmind/inst_*.json')): inst+=json.load(open(f))
-for f in sorted(glob.glob('data/finmind/daily_*.json')): daily+=json.load(open(f))
+for f in sorted(glob.glob('data/finmind/inst_*.json')): inst+=json.load(open(f, encoding='utf-8'))
+for f in sorted(glob.glob('data/finmind/daily_*.json')): daily+=json.load(open(f, encoding='utf-8'))
 ib=defaultdict(lambda:[0,0])
 for r in inst: ib[r['date']][0]+=r['long_open_interest_balance_volume']; ib[r['date']][1]+=r['short_open_interest_balance_volume']
 ob=defaultdict(float)
@@ -34,12 +34,12 @@ gate='🔴減碼' if rcur>=p95 else '🟠謹慎' if rcur>=p90 else '🟢進場�
 def load_bwibbu(ds):
     import urllib.request
     fp=f'data/bwibbu_{ds}.json'
-    if os.path.exists(fp): d=json.load(open(fp))
+    if os.path.exists(fp): d=json.load(open(fp, encoding='utf-8'))
     else:
         try:
             url=f"https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?date={ds}&response=json"
-            d=json.loads(urllib.request.urlopen(url,timeout=20).read().decode())
-            json.dump(d,open(fp,"w"),ensure_ascii=False)
+            d=json.loads(urllib.request.urlopen(url,timeout=20, encoding='utf-8').read().decode())
+            json.dump(d,open(fp,"w", encoding='utf-8'),ensure_ascii=False)
         except: return {}
     out={}
     for r in d.get('data',[]):
@@ -56,7 +56,7 @@ def foreign_streak(code):
     if len(files)<5: return None
     streak=0
     for fp in reversed(files):
-        d=json.load(open(fp))
+        d=json.load(open(fp, encoding='utf-8'))
         row=[r for r in d.get('data',[]) if r and r[0]==code]
         if not row: break
         try: net=float(str(row[0][4]).replace(',',''))  # 外陸資買賣超

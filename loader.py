@@ -49,7 +49,7 @@ def industry_to_index(index_names):
 def load_day(date_str):
     fp = os.path.join(CACHE, f"{date_str}.json")
     if not os.path.exists(fp): return None
-    d = json.load(open(fp))
+    d = json.load(open(fp, encoding='utf-8'))
     stocks, indices = {}, {}
     for t in d.get("tables", []):
         f = t.get("fields", [])

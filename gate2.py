@@ -9,8 +9,8 @@ import backtest as B
 days=B.days
 
 inst=[];daily=[]
-for f in sorted(glob.glob('data/finmind/inst_*.json')): inst+=json.load(open(f))
-for f in sorted(glob.glob('data/finmind/daily_*.json')): daily+=json.load(open(f))
+for f in sorted(glob.glob('data/finmind/inst_*.json')): inst+=json.load(open(f, encoding='utf-8'))
+for f in sorted(glob.glob('data/finmind/daily_*.json')): daily+=json.load(open(f, encoding='utf-8'))
 ib=defaultdict(lambda:[0,0])
 for r in inst: ib[r['date']][0]+=r['long_open_interest_balance_volume']; ib[r['date']][1]+=r['short_open_interest_balance_volume']
 ob=defaultdict(float)

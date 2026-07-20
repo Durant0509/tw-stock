@@ -18,7 +18,7 @@ def fetch(date_str):
     for attempt in range(4):
         try:
             req = urllib.request.Request(url, headers=UA)
-            with urllib.request.urlopen(req, timeout=25) as r:
+            with urllib.request.urlopen(req, timeout=25, encoding='utf-8') as r:
                 return json.loads(r.read().decode("utf-8"))
         except Exception as e:
             wait = 2 ** attempt
@@ -39,7 +39,7 @@ def main():
             skipped += 1; d += datetime.timedelta(days=1); continue
         js = fetch(ds)
         if js and js.get("stat", "").lower() == "ok" and js.get("tables"):
-            with open(fp, "w") as f:
+            with open(fp, "w", encoding='utf-8') as f:
                 json.dump(js, f, ensure_ascii=False)
             pulled += 1
             if pulled % 20 == 0:

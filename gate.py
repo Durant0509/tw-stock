@@ -11,8 +11,8 @@ import backtest as B
 days=B.days
 
 inst=[];daily=[]
-for f in sorted(glob.glob('data/finmind/inst_*.json')): inst+=json.load(open(f))
-for f in sorted(glob.glob('data/finmind/daily_*.json')): daily+=json.load(open(f))
+for f in sorted(glob.glob('data/finmind/inst_*.json')): inst+=json.load(open(f, encoding='utf-8'))
+for f in sorted(glob.glob('data/finmind/daily_*.json')): daily+=json.load(open(f, encoding='utf-8'))
 ib=defaultdict(lambda:[0,0])
 for r in inst: ib[r['date']][0]+=r['long_open_interest_balance_volume']; ib[r['date']][1]+=r['short_open_interest_balance_volume']
 ob=defaultdict(float)
@@ -100,5 +100,5 @@ for i in range(1,len(days),3):
 out['hist']=gate_hist
 out['bands']={'p80':round(p80,3),'p20':round(p20,3),'p90':round(p90,3),'p10':round(p10,3)}
 out['curves']={'bh':[[c[0],round(c[1],3)] for c in bh[::5]],'gate':[[c[0],round(c[1],3)] for c in gt[::5]]}
-json.dump(out,open('gate_data.json','w'),ensure_ascii=False)
+json.dump(out,open('gate_data.json','w', encoding='utf-8'),ensure_ascii=False)
 print("\ngate_data.json 输出完成")

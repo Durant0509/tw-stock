@@ -17,8 +17,8 @@ days=B.days
 
 # --- 台指散户多空比 ---
 inst=[];daily=[]
-for f in sorted(glob.glob('data/finmind/inst_*.json')): inst+=json.load(open(f))
-for f in sorted(glob.glob('data/finmind/daily_*.json')): daily+=json.load(open(f))
+for f in sorted(glob.glob('data/finmind/inst_*.json')): inst+=json.load(open(f, encoding='utf-8'))
+for f in sorted(glob.glob('data/finmind/daily_*.json')): daily+=json.load(open(f, encoding='utf-8'))
 ib=defaultdict(lambda:[0,0])
 for r in inst: ib[r['date']][0]+=r['long_open_interest_balance_volume']; ib[r['date']][1]+=r['short_open_interest_balance_volume']
 ob=defaultdict(float)
@@ -143,5 +143,5 @@ out={
     'stats':{'low':sfin(sk_low),'high':sfin(sk_high),'ew':sfin(ew)}
   }
 }
-json.dump(out,open('ls_backtest_data.json','w'),ensure_ascii=False)
+json.dump(out,open('ls_backtest_data.json','w', encoding='utf-8'),ensure_ascii=False)
 print("\nls_backtest_data.json 输出完成")

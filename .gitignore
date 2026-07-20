@@ -1,0 +1,29 @@
+# === 大资料目录 (8.2GB, 不上 GitHub, Windows 端重抓) ===
+data/
+bwibbu_*.json
+
+# === Python ===
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# === 系统 ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === 中间产物 (每日重生成, 但网页要用的 *_data.json 保留见下) ===
+/tmp/
+
+# === 保留 (强制加回网页需要的成果 JSON) ===
+!stocks_data.json
+!dashboard_data.json
+!gate_data.json
+!gatelight_data.json
+!ls_backtest_data.json
+
+# 私人记忆/排程 (不上公开 repo)
+.claude/
+update.log

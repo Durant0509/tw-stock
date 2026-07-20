@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+"""每日更新 (Windows 排程每交易日 21:30 跑这个)。
+流程: 增量抓当日资料 → 重算指标 → 生成网页 → git push。
+跨平台。可安全重复跑 (抓取 resumable)。
+"""
+import os, sys, subprocess, datetime
+
+BASE=os.path.dirname(os.path.abspath(__file__)); os.chdir(BASE)
+PY=sys.executable
+LOG=os.path.join(BASE,"update.log")
+
+def log(msg):
+    line=f"[{datetime.datetime.now():%Y-%m-%d %H:%M:%S}] {msg}"
+    print(line, flush=True)
+    with open(LOG,"a",encoding="utf-8") as f: f.write(line+"\n")
+
+def run(script, desc, required=False):
+    log(f"▶ {desc} ({script})")
+    r=subprocess.run([PY, script], cwd=BASE, capture_output=True, text=True)
+    if r.returncode!=0:
+        log(f"  ⚠️ {script} exit {r.returncode}: {r.stderr[-300:] if r.stderr else ''}")
+        if required: log(f"  ✗ 必要步骤失败, 中止"); sys.exit(1)
+    else:
+        tail=r.stdout.strip().split("\n")[-1] if r.stdout.strip() else "ok"
+        log(f"  ✓ {tail}")
+    return r.returncode==0
+
+def git(args):
+    r=subprocess.run(["git"]+args, cwd=BASE, capture_output=True, text=True)
+    return r.returncode==0, (r.stdout+r.stderr).strip()
+
+def main():
+    log("="*50)
+    log("每日更新开始")
+    # 平日才抓 (周末无新资料; 但仍会重算+push 确保网页在线)
+    wd=datetime.date.today().weekday()
+    if wd<5:
+        # 1) 增量抓当日资料 (resumable, 只补没抓过的)
+        for s,d in [("pull_data.py","个股量价/PE"),("pull_margin.py","融资融券"),
+                    ("pull_finmind.py","台指期法人"),("pull_t86.py","三大法人现货")]:
+            if os.path.exists(s): run(s,d)
+    else:
+        log("周末, 跳过抓取")
+    # 2) 重算指标 + 生成网页 JSON
+    ok=True
+    ok&=run("dashboard.py","策略健康度")
+    ok&=run("gate.py","进场闸门")
+    ok&=run("precompute.py","个股体检",required=True)
+    # 3) 组合网页
+    run("build_warroom.py","生成作战台网页",required=True)
+    # 4) git push (只推程式+网页+成果JSON, data/ 被 gitignore 挡)
+    changed,_=git(["status","--porcelain"])
+    ok2,out=git(["add","-A"])
+    ok3,out=git(["commit","-m",f"daily update {datetime.date.today():%Y-%m-%d}"])
+    if "nothing to commit" in out:
+        log("  无变更, 跳过 push")
+    else:
+        okp,outp=git(["push"])
+        log(f"  {'✓ push 成功' if okp else '⚠️ push 失败: '+outp[-200:]}")
+    log("每日更新完成")
+
+if __name__=="__main__":
+    main()

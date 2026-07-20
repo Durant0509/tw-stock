@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>波浪理論驗證 — 我的邏輯攤開讓你挑錯</title>
+<style>
+  :root{
+    --bg:#0f1216; --panel:#171b21; --panel2:#1d232b; --line:#2a323c;
+    --txt:#e6eaf0; --dim:#8a94a3; --dim2:#5f6875;
+    --accent:#4aa8ff; --accent2:#63e6be; --warn:#ffcf5c; --bad:#ff6b6b; --good:#51cf83;
+    --radius:14px;
+  }
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f4f6f9;--panel:#fff;--panel2:#f0f3f7;--line:#e2e7ee;
+      --txt:#1a2029;--dim:#5c6673;--dim2:#8a94a3;--accent:#1a73e8;--accent2:#0ca678;}
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC",sans-serif;
+    line-height:1.65;-webkit-font-smoothing:antialiased;padding:0 0 80px}
+  .wrap{max-width:900px;margin:0 auto;padding:0 20px}
+  header{padding:52px 0 30px;border-bottom:1px solid var(--line);margin-bottom:30px}
+  .eyebrow{color:var(--accent);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+  h1{font-size:31px;font-weight:700;letter-spacing:-.01em;margin-bottom:14px}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;color:var(--dim);font-size:14px}
+  .tag{background:var(--panel2);border:1px solid var(--line);padding:3px 11px;border-radius:99px;font-size:12.5px}
+  section{margin:40px 0}
+  h2{font-size:13px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+  h2::before{content:"";width:22px;height:2px;background:var(--accent);border-radius:2px}
+  h3{font-size:17px;font-weight:650;margin-bottom:8px}
+  p{color:var(--txt);margin-bottom:10px}
+  .lead{font-size:16px;color:var(--dim)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:14px}
+  .card .k{font-size:12px;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+  code{background:var(--panel2);padding:2px 7px;border-radius:6px;font-size:12.5px;font-family:"SF Mono",ui-monospace,Menlo,monospace;color:var(--accent2)}
+  pre{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;overflow-x:auto;font-size:12.5px;font-family:"SF Mono",ui-monospace,Menlo,monospace;line-height:1.55;margin:10px 0;color:var(--txt)}
+  pre .c{color:var(--dim2)}
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:10px 0}
+  th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--dim);padding:11px 13px;background:var(--panel2);border-bottom:1px solid var(--line)}
+  td{padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td .ok{color:var(--good);font-weight:700}
+  td .bad{color:var(--bad);font-weight:700}
+  td .hl{color:var(--warn);font-weight:700}
+  .note{background:var(--panel);border-left:3px solid var(--warn);border-radius:0 10px 10px 0;padding:14px 18px;font-size:14px;color:var(--dim);margin:12px 0}
+  .note b{color:var(--txt)}
+  .note.good{border-left-color:var(--good)}
+  .note.bad{border-left-color:var(--bad)}
+  .note.accent{border-left-color:var(--accent)}
+  ul.clean{list-style:none;display:flex;flex-direction:column;gap:9px;margin:8px 0}
+  ul.clean li{padding-left:22px;position:relative;font-size:14.5px;color:var(--dim)}
+  ul.clean li::before{content:"→";position:absolute;left:0;color:var(--accent);font-weight:700}
+  ul.clean li b{color:var(--txt)}
+  .wave{font-family:"SF Mono",ui-monospace,monospace;font-size:13px;line-height:1.9;color:var(--dim);white-space:pre;overflow-x:auto;display:block;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:18px}
+  .step{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+  .step:last-child{border-bottom:none}
+  .step .n{flex:none;width:28px;height:28px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);display:grid;place-items:center;font-weight:700;color:var(--accent);font-size:13px}
+  .step .t{font-size:14.5px}
+  .step .t b{color:var(--txt)}
+  .flag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:6px}
+  .flag.miss{background:rgba(255,107,107,.15);color:var(--bad)}
+  .flag.done{background:rgba(81,207,131,.15);color:var(--good)}
+  footer{margin-top:50px;padding-top:22px;border-top:1px solid var(--line);color:var(--dim2);font-size:13px;text-align:center}
+  .big{font-size:22px;font-weight:750}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">方法透明化 · 請幫我挑錯</div>
+    <h1>波浪理論驗證 — 我的邏輯攤開</h1>
+    <div class="meta">
+      <span class="tag">台股 2018–2026</span>
+      <span class="tag">276 檔前150宇宙</span>
+      <span class="tag">2026-07-17</span>
+    </div>
+  </header>
+
+  <section>
+    <p class="lead">你問「波浪理論真沒用嗎？我是不是漏了什麼」。這頁把我做的每一步攤開，
+    包含我<b style="color:var(--txt)">自己承認的盲點</b>。你對照著挑，看我哪裡邏輯有漏。</p>
+  </section>
+
+  <!-- 1. 理論 -->
+  <section>
+    <h2>① 波浪理論在講什麼</h2>
+    <p>艾略特（Elliott）認為市場走勢由重複的<b>「5 上升波 + 3 回檔波」</b>構成：</p>
+    <div class="wave">        5↗
+       ╱╲      推動浪 (impulse)：1-2-3-4-5
+    3↗╱  ╲4      · 1、3、5 是推動（順勢）
+    ╱╲╱         · 2、4 是回檔（逆勢）
+  1↗  ╲2
+ ╱                    然後 A-B-C 三波修正
+起點</div>
+    <p style="margin-top:14px">它有幾條被認為「鐵律」的規則，其中<b style="color:var(--txt)">最常被引用、也最能量化</b>的兩條：</p>
+    <div class="card">
+      <div class="k">規則 1 · 第 3 波不是最短</div>
+      <p style="font-size:14.5px;color:var(--dim);margin:0">第 3 波通常最長最強，至少不會是 1/3/5 三個推動波裡最短的。這是波浪派公認的硬規則。</p>
+    </div>
+    <div class="card">
+      <div class="k">規則 2 · 斐波那契回檔比例</div>
+      <p style="font-size:14.5px;color:var(--dim);margin:0">第 2 波常回檔第 1 波的 <code>0.382 ~ 0.618</code>（黃金比例），第 4 波回檔第 3 波的 0.382。回檔到這些「神奇數字」後，趨勢波接著展開。</p>
+    </div>
+    <div class="note accent"><b>我的檢驗策略：</b>波浪的「數法」很主觀（10 個人數出 10 種），無法直接測。
+    所以我只測上面這兩條<b>可以客觀量化</b>的規則——如果連這兩條都沒統計效力，數波這種更主觀的就更難談預測力。</div>
+  </section>
+
+  <!-- 2. 客觀化 -->
+  <section>
+    <h2>② 我怎麼把「波」客觀化 — ZigZag</h2>
+    <p>要測波浪，得先讓「哪裡是一個波」不靠人眼判斷。我用 <b>ZigZag</b> 演算法：只保留幅度 &gt; 5% 的轉折點，濾掉小雜訊，把價格變成一串客觀的高(H)低(L)點。</p>
+    <pre><span class="c"># ZigZag：從極值反向 5% 才確認一個轉折</span>
+if trend=='up':
+    if p &gt; ext_p:              <span class="c"># 續創高 → 更新高點</span>
+        ext_p = p
+    elif p &lt;= ext_p*(1-0.05):  <span class="c"># 回落 5% → 確認這是高點 H</span>
+        piv.append((ext_i, ext_p, 'H'))
+        trend = 'down'
+<span class="c"># down 同理，反彈 5% 確認低點 L</span></pre>
+    <p>得到序列像 <code>L─H─L─H─L─H…</code>，這樣「第1波 = L到H、第2波 = H到L」就有客觀定義了。</p>
+    <div class="note bad"><b>我踩過的坑（已修）：</b>第一版 0050 只產出 1 個轉折點 —— 因為 2025-06 有 1:4 股票分割（204→46），原始價被當成一路暴跌。
+    改用<b>分割調整後</b>的價格序列才正常。這是我 playbook 的鐵則，但我還是踩了一次，修好才有下面結果。</div>
+  </section>
+
+  <!-- 3. 兩個檢驗 -->
+  <section>
+    <h2>③ 兩個命題怎麼測、結果如何</h2>
+
+    <h3 style="margin-top:8px">命題 B：第 3 波不是最短</h3>
+    <p style="font-size:14.5px">掃所有 <code>L-H-L-H-L-H</code> 五波結構，數第 3 波漲幅是否 ≥ 第1波且 ≥ 第5波（即「不是最短」）。</p>
+    <table>
+      <tbody>
+        <tr><td>符合的五波結構</td><td>515 組</td></tr>
+        <tr><td>第 3 波「不是最短」的比例</td><td class="bad">32%</td></tr>
+        <tr><td>純隨機期望（三選一非最短）</td><td>~33%</td></tr>
+      </tbody>
+    </table>
+    <div class="note bad"><b>🔴 證偽：</b>32% ≈ 隨機 33%。波浪理論最硬的規則，在台股資料裡<b>跟丟銅板沒兩樣</b>。</div>
+
+    <h3 style="margin-top:24px">命題 A：斐波那契回檔進場 —— 關鍵在「地板對照」</h3>
+    <p style="font-size:14.5px">找「第1波上漲 + 第2波回檔」，回檔落在斐波那契區間就進場，看 20 天後報酬。
+    <b style="color:var(--txt)">第一次只測斐波那契區間，看到 +7.7pp，差點以為找到寶。</b></p>
+    <p style="font-size:14.5px">但關鍵一步：我把回檔切成<b>五個幅度區間</b>對照 —— 如果只有斐波那契那格特別賺，才算波浪有料；如果各種回檔都差不多賺，那就是「回檔買低」本身的效果，跟斐波那契無關。</p>
+    <table>
+      <thead><tr><th>回檔幅度區間</th><th>n</th><th>20日後avg</th><th>勝率</th></tr></thead>
+      <tbody>
+        <tr><td>淺 0.10-0.236</td><td>522</td><td class="ok">+14.70%</td><td>79%</td></tr>
+        <tr><td>0.236-0.382</td><td>1521</td><td>+11.16%</td><td>76%</td></tr>
+        <tr><td>★ 斐波那契 0.382-0.618</td><td>2945</td><td class="hl">+9.67%</td><td>80%</td></tr>
+        <tr><td>0.618-0.786</td><td>1923</td><td>+9.61%</td><td>81%</td></tr>
+        <tr><td>深 0.786-1.0</td><td>2226</td><td>+9.27%</td><td>81%</td></tr>
+        <tr><td>隨機基線（任意日進場）</td><td>56856</td><td class="bad">+1.39%</td><td>48%</td></tr>
+      </tbody>
+    </table>
+    <div class="note bad"><b>🔴 證偽：</b>斐波那契那格 +9.67%，<b>不但不是最高，浅回檔 +14.7% 還贏它</b>。
+    斐波那契 vs 其他回檔 = <b>-0.63pp</b>（毫無特殊性）。<br>
+    但所有回檔都遠勝隨機基線（+1.39%）→ 賺的是<b style="color:var(--txt)">「回檔後買低」這個動作本身（均值回歸）</b>，跟斐波那契那幾個神奇數字完全無關。市場不認 0.618。</div>
+  </section>
+
+  <!-- 4. 裁決 -->
+  <section>
+    <h2>④ 裁決 — 但講清楚「沒用」的邊界</h2>
+    <div class="card" style="border-color:var(--bad)">
+      <p class="big" style="margin-bottom:10px">可機械化的波浪規則：🔴 無預測力</p>
+      <p style="font-size:14.5px;color:var(--dim);margin:0">第3波規則 = 隨機；斐波那契比例 = 無特殊性。作為「可回測的交易訊號」，在台股日線上驗不出 edge，跟你 playbook 裡外資買超（#10, C級）同命。</p>
+    </div>
+    <div class="note accent"><b>但這不等於「波浪理論整個沒用」。</b>我測的是「能客觀量化的那部分」。
+    波浪理論若有價值，可能在 <b>①多級別結構理解 ②人工復盤 ③斐波那契位當支撐壓力</b> —— 這些我沒測、也難機械化測。
+    對「要可回測訊號」的用途沒用；對「建立市場結構直覺」的框架用途，另當別論。</div>
+  </section>
+
+  <!-- 5. 盲點 -->
+  <section>
+    <h2>⑤ 我自己承認的盲點 — 請幫我挑</h2>
+    <p class="lead" style="margin-bottom:14px">我的結論建立在這些選擇上。如果你覺得哪個盲點致命，我可以重測：</p>
+    <div class="step"><div class="n">1</div><div class="t"><b>多時間級別（原本最擔心的漏洞）</b><span class="flag done">已補</span><br>
+      <span style="color:var(--dim);font-size:13.5px">補測小(3%)/中(5%)/大(8%)三級別。第3波規則在<b style="color:var(--txt)">三級別全部=33%(隨機)</b>，樣本 3.1萬/1.7萬/8.6千組。波浪派「你級別數錯了」的辯護被擋掉——我數了三級別，每個都隨機。斐波那契三級別也全無特殊性。</span></div></div>
+    <div class="step"><div class="n">2</div><div class="t"><b>ZigZag 閾值掃描（隨 #1 一起做）</b><span class="flag done">已補</span><br>
+      <span style="color:var(--dim);font-size:13.5px">3%/5%/8% 三個閾值即三個級別，結論一致。不是單一參數矇的。</span></div></div>
+    <div class="step"><div class="n">3</div><div class="t"><b>只測「機械規則」，沒測「人工判斷」</b><span class="flag miss">本質分歧</span><br>
+      <span style="color:var(--dim);font-size:13.5px">波浪派核心反駁：波浪是「分析框架」不是機械訊號。這點我承認測不了 —— 但不能客觀檢驗的東西，對我「用數據說話」的原則就難採用。</span></div></div>
+    <div class="step"><div class="n">4</div><div class="t"><b>做了地板對照（這個我沒漏）</b><span class="flag done">已防</span><br>
+      <span style="color:var(--dim);font-size:13.5px">斐波那契 vs 其他回檔的對照，是這次最關鍵的一步 —— 它戳破了「+7.7pp」的假象。沒有它我會誤報波浪有效。</span></div></div>
+    <div class="step"><div class="n">5</div><div class="t"><b>意外副產品：「回檔均值回歸」</b><span class="flag done">已延伸驗證</span><br>
+      <span style="color:var(--dim);font-size:13.5px">雖然波浪倒了，卻挖到「顯著回檔後進場」有 edge。嚴格驗證後（point-in-time + 跨regime）縮到熊市 +2.23pp，是個熊市因子。</span></div></div>
+  </section>
+
+  <footer>
+    波浪理論驗證 · 方法透明化供 review · ZigZag 客觀化 + 地板對照 + 分割調整<br>
+    結論：可機械化規則無預測力（C級）；框架/多級別價值未測。歡迎針對 ⑤ 的盲點指正重測方向。
+  </footer>
+
+</div>
+</body>
+</html>

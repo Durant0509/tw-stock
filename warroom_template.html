@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>台股策略作戰台</title>
+<style>
+:root{--bg:#0f1216;--panel:#171b21;--panel2:#1d232b;--line:#2a323c;--txt:#e6eaf0;--dim:#8a94a3;--dim2:#5f6875;--accent:#4aa8ff;--accent2:#63e6be;--good:#51cf83;--bad:#ff6b6b;--warn:#ffcf5c;--radius:14px}
+@media(prefers-color-scheme:light){:root{--bg:#f4f6f9;--panel:#fff;--panel2:#f0f3f7;--line:#e2e7ee;--txt:#1a2029;--dim:#5c6673;--accent:#1a73e8;--accent2:#0ca678}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC",sans-serif;line-height:1.6;padding:0 0 80px}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px}
+header{padding:40px 0 18px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.eyebrow{color:var(--accent);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+h1{font-size:29px;font-weight:700;margin-bottom:10px}
+.meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;color:var(--dim);font-size:14px}
+.tag{background:var(--panel2);border:1px solid var(--line);padding:3px 11px;border-radius:99px;font-size:12.5px}
+.regime{font-weight:700;padding:4px 12px;border-radius:8px;font-size:13px}
+.regime.bull,.pill.bull{background:rgba(81,207,131,.15);color:var(--good)}.regime.bear,.pill.bear{background:rgba(255,107,107,.15);color:var(--bad)}.regime.range,.pill.range{background:rgba(255,207,92,.15);color:var(--warn)}
+/* tabs */
+.tabs{display:flex;gap:8px;margin:20px 0 22px;border-bottom:1px solid var(--line)}
+.tab{padding:10px 18px;font-size:15px;font-weight:600;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+.page{display:none}.page.on{display:block}
+h2{font-size:13px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);margin:28px 0 14px;display:flex;align-items:center;gap:10px}
+h2::before{content:"";width:22px;height:2px;background:var(--accent);border-radius:2px}
+.summary{background:linear-gradient(135deg,rgba(74,168,255,.12),rgba(99,230,190,.06));border:1px solid var(--accent);border-radius:var(--radius);padding:22px 24px}
+.summary .big{font-size:21px;font-weight:750;margin-bottom:12px}
+.summary .row{display:flex;gap:12px;align-items:baseline;font-size:14.5px;margin:5px 0;color:var(--dim)}
+.summary .row b{color:var(--txt);min-width:80px;display:inline-block}
+.strat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-bottom:12px;display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:center}
+.strat .name{font-size:16px;font-weight:650}.strat .desc{font-size:12.5px;color:var(--dim);margin-top:2px}
+.light{font-size:14px;font-weight:800;padding:7px 14px;border-radius:9px;white-space:nowrap}
+.light.green{background:rgba(81,207,131,.15);color:var(--good)}.light.red{background:rgba(255,107,107,.15);color:var(--bad)}.light.gray{background:rgba(138,148,163,.13);color:var(--dim)}
+.spark{grid-column:1/-1;height:36px;width:100%}
+.temp{font-size:12.5px;color:var(--dim)}.temp b{color:var(--txt)}
+.big-light{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px;text-align:center}
+.big-light .lamp{font-size:44px;margin-bottom:4px}.big-light .act{font-size:17px;font-weight:650}.big-light .sub{font-size:13px;color:var(--dim);margin-top:6px}
+.gauge{margin:16px 0 6px;height:30px;position:relative;background:linear-gradient(90deg,var(--good),var(--good) 20%,#8a94a3 20%,#8a94a3 80%,var(--bad) 80%,var(--bad) 95%,#c0392b 95%);border-radius:8px;opacity:.82}
+.gauge .marker{position:absolute;top:-6px;width:3px;height:42px;background:var(--txt);box-shadow:0 0 0 2px var(--bg)}
+.gauge-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);margin-top:8px}
+.note{background:var(--panel);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:12px 16px;font-size:13px;color:var(--dim);margin:12px 0}
+.note b{color:var(--txt)}
+/* 个股 */
+.search{display:flex;gap:10px;margin-bottom:14px}
+.search input{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 15px;font-size:16px;color:var(--txt)}
+.search input:focus{outline:none;border-color:var(--accent)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.chip{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:5px 11px;font-size:12.5px;cursor:pointer;color:var(--dim)}
+.chip:hover{border-color:var(--accent);color:var(--txt)}
+.report{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:none}
+.rhead{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.rhead .nm{font-size:21px;font-weight:700}.rhead .px{font-size:13.5px;color:var(--dim)}
+.verdict{font-size:14px;font-weight:800;padding:8px 15px;border-radius:10px;white-space:nowrap}
+.dims{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:600px){.dims{grid-template-columns:1fr}}
+.dim{border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+.dim .h{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);font-weight:600;margin-bottom:7px}
+.dim .line{font-size:13.5px;margin:3px 0;color:var(--dim)}.dim .line b{color:var(--txt)}
+.ok{color:var(--good)}.bad{color:var(--bad)}.neu{color:var(--dim)}
+.disc{background:var(--panel2);border-radius:10px;padding:12px 15px;margin-top:14px;font-size:12.5px;color:var(--dim)}.disc b{color:var(--warn)}
+.empty{color:var(--dim2);text-align:center;padding:36px;font-size:14px}
+footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);color:var(--dim2);font-size:12.5px;text-align:center}
+</style></head><body><div class="wrap">
+<header><div class="eyebrow">Regime策略切換 + 進場閘門 + 個股體檢</div>
+<h1>台股策略作戰台</h1>
+<div class="meta"><span class="tag" id="asof"></span><span>大盤</span><span id="regime" class="regime"></span></div></header>
+
+<div class="tabs"><div class="tab on" onclick="tab(0)">大盤作戰</div><div class="tab" onclick="tab(1)">個股體檢</div></div>
+
+<div class="page on" id="p0">
+<h2>今日行動摘要</h2>
+<div class="summary" id="summary"></div>
+<h2>① 選哪套策略（健康度）</h2><div id="cards"></div>
+<h2>② 進場閘門（散戶情緒）</h2>
+<div class="big-light" id="biglight"></div>
+<div class="gauge"><div class="marker" id="marker"></div></div>
+<div class="gauge-labels"><span>散戶極空🟢進場佳</span><span>正常⚪</span><span>p95極多🔴減碼</span></div>
+<div class="note"><b>回測驗證：</b>只在散戶極端偏多(前5%)減碼、其餘滿倉 → Sharpe 1.18 vs 純B&H 1.05。平時不礙事，只擋尖峰風險。</div>
+</div>
+
+<div class="page" id="p1">
+<div class="search"><input id="q" placeholder="輸入股票代號，如 2330" autocomplete="off"></div>
+<div class="chips" id="chips"></div>
+<div class="report" id="report"></div>
+<div class="empty" id="empty">輸入前150大代號查看體檢報告</div>
+</div>
+
+<footer>台股策略作戰台 · 大盤(策略切換+閘門) + 個股(體檢排雷) · 資料 TWSE+FinMind 2018–2026 · 分割調整<br>
+定位誠實：策略/閘門回測驗證有效；個股體檢「避爛股」可靠、「選飆股」做不到，故為排雷工具。</footer>
+</div>
+<script>
+const M=__DATA__;const D=M.dash,G=M.gate,S=M.stocks;
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n);
+function tab(i){document.querySelectorAll('.tab').forEach((t,k)=>t.classList.toggle('on',k===i));document.querySelectorAll('.page').forEach((p,k)=>p.classList.toggle('on',k===i));}
+document.getElementById('asof').textContent='截至 '+D.current.date;
+const rg=D.current.regime;
+document.getElementById('regime').textContent=({bull:'牛市 BULL',bear:'熊市 BEAR',range:'盤整 RANGE'})[rg]||rg;
+document.getElementById('regime').className='regime '+rg;
+const names={engine:['動能引擎','族群動能+MA60 · 牛市報酬'],cheap:['撿便宜防禦','低本益比 · 熊市抗跌'],retail:['散戶反指','情緒極端 · 反向']};
+const ltxt={green:'🟢 啟用',red:'🔴 暫停',gray:'⚪ 觀望'};const col={green:css('--good'),red:css('--bad'),gray:css('--dim2')};
+function spark(t){const w=840,h=36,n=t.length;const vs=t.map(x=>x[1]);const mn=Math.min(...vs),mx=Math.max(...vs),r=mx-mn||1;const bw=w/n;let b='';t.forEach((x,i)=>{const px=i*bw;const y=h-(x[1]-mn)/r*h;b+=`<rect x="${px.toFixed(1)}" y="${Math.min(y,h/2).toFixed(1)}" width="${Math.max(bw-.3,.5).toFixed(1)}" height="${(Math.abs(y-h/2)||1).toFixed(1)}" fill="${col[x[2]]}" opacity=".85"/>`;});return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><line x1="0" y1="${h/2}" x2="${w}" y2="${h/2}" stroke="var(--line)"/>${b}</svg>`;}
+let ch='';['engine','cheap','retail'].forEach(k=>{const c=D.current[k];if(!c)return;const[nm,ds]=names[k];ch+=`<div class="strat"><div><div class="name">${nm}</div><div class="desc">${ds}</div></div><div class="light ${c[2]}">${ltxt[c[2]]}</div><div style="grid-column:1/-1">${spark(D[k])}<div class="temp">體溫 <b>${c[1]>0?'+':''}${c[1]}</b></div></div></div>`;});
+document.getElementById('cards').innerHTML=ch;
+const r=G.current.ratio,pc=G.current.pctl,b=G.bands;
+let lamp,act,col2;
+if(r>=b.p95){lamp='🔴';act='暫停新倉 / 減碼';col2=css('--bad');}else if(r>=b.p90){lamp='🟠';act='謹慎，接近危險區';col2=css('--warn');}else if(r<=b.p20){lamp='🟢';act='進場時機佳';col2=css('--good');}else{lamp='⚪';act='正常仓位';col2=css('--dim');}
+document.getElementById('biglight').innerHTML=`<div class="lamp">${lamp}</div><div class="act" style="color:${col2}">${act}</div><div class="sub">散戶多空比 <b style="color:var(--txt)">${(r*100).toFixed(1)}%</b> · 第 ${pc} 百分位 (p95減碼線 ${(b.p95*100).toFixed(0)}%)</div>`;
+document.getElementById('marker').style.left=pc+'%';
+const active=['engine','cheap','retail'].filter(k=>D.current[k]&&D.current[k][2]==='green').map(k=>names[k][0]);
+const gateOk=r<b.p90;let sumBig,advice;
+if(gateOk&&active.length){sumBig='🟢 可進場 · 用「'+active.join(' + ')+'」';advice='閘門放行，健康度🟢的策略啟用。';}else if(!gateOk){sumBig='🔴 散戶過熱 · 暫緩新倉';advice='閘門亮紅/橙，即使有🟢策略也先減碼觀望。';}else{sumBig='⚪ 觀望 · 無🟢策略';advice='目前無策略體溫達標，等回溫。';}
+document.getElementById('summary').innerHTML=`<div class="big">${sumBig}</div><div class="row"><b>大盤市況</b><span>${({bull:'牛市',bear:'熊市',range:'盤整'})[rg]||rg}</span></div><div class="row"><b>該用策略</b><span>${active.length?active.join('、'):'（無🟢）'}</span></div><div class="row"><b>進場閘門</b><span>${act}（散戶第${pc}百分位）</span></div><div class="row"><b>白話建議</b><span>${advice}</span></div>`;
+// 个股体检
+document.getElementById('chips').innerHTML=['2330','2454','2317','2308','2882','2603','1101','3037'].filter(c=>S.stocks[c]).map(c=>`<span class="chip" onclick="show('${c}')">${c} ${S.stocks[c].name}</span>`).join('');
+function fmt(v,s){return v==null?'—':(v>0?'+':'')+v+s;}
+function clv(v,g){return v==null?'neu':((g?v>0:v<0)?'ok':'bad');}
+function show(code){
+  const s=S.stocks[code];const rep=document.getElementById('report'),emp=document.getElementById('empty');
+  if(!s){rep.style.display='none';emp.style.display='block';emp.textContent=code+' 不在前150大';return;}
+  emp.style.display='none';rep.style.display='block';
+  let vc,vt;if(s.riskscore<=-2){vc='bad';vt='🔴 高風險';}else if(s.riskscore<=-1){vc='warn';vt='🟠 有風險項';}else{vc='ok';vt='🟢 無明顯地雷';}
+  const vbg={bad:'rgba(255,107,107,.15)',warn:'rgba(255,207,92,.15)',ok:'rgba(81,207,131,.15)'}[vc],vcol={bad:'var(--bad)',warn:'var(--warn)',ok:'var(--good)'}[vc];
+  let mw='';if(G.current.ratio>=b.p90)mw='<div class="disc" style="border-left:3px solid var(--bad)"><b>⚠️ 大盤散戶過熱</b>：即使個股體質OK，全市場散戶極端偏多，建議減碼觀望。</div>';
+  rep.innerHTML=`<div class="rhead"><div><div class="nm">${s.code} ${s.name}</div><div class="px">收 ${s.close} · ${s.industry||''} · 本益比 ${s.pe||'—'}</div></div><div class="verdict" style="background:${vbg};color:${vcol}">${vt}</div></div>
+  <div class="dims">
+   <div class="dim"><div class="h">趨勢 ✅預測力強</div><div class="line">距MA60 <b class="${clv(s.above_ma60,1)}">${fmt(s.above_ma60,'%')}</b></div><div class="line">距年線 <b class="${clv(s.above_ma120,1)}">${fmt(s.above_ma120,'%')}</b></div><div class="line">距52週高 <b class="neu">${fmt(s.from_high,'%')}</b></div></div>
+   <div class="dim"><div class="h">動能 ✅最強因子</div><div class="line">60日報酬 <b class="${clv(s.ret60,1)}">${fmt(s.ret60,'%')}</b></div><div class="line">RSI <b class="neu">${s.rsi??'—'}</b></div><div class="line">族群 <b class="${clv(s.sector_mom,1)}">${fmt(s.sector_mom,'%')}</b></div></div>
+   <div class="dim"><div class="h">估值 ➖選股弱</div><div class="line">本益比位階 <b class="neu">${s.pe_pctl==null?'—':s.pe_pctl+'%'}</b></div><div class="line">殖利率 <b class="neu">${s.yield==null?'—':s.yield+'%'}</b></div><div class="line">淨值比 <b class="neu">${s.pb??'—'}</b></div></div>
+   <div class="dim"><div class="h">籌碼/量能/風險</div><div class="line">外資連買 <b class="neu">${s.fstreak==null?'—':s.fstreak+'日'}</b> · 券資比 <b class="neu">${s.short_ratio??'—'}</b></div><div class="line">量能 <b class="neu">${s.vol_ratio==null?'—':s.vol_ratio+'x'}</b> · 波動 <b class="neu">${s.vol==null?'—':s.vol+'%'}</b></div></div>
+  </div>${mw}
+  <div class="disc"><b>怎麼讀：</b>趨勢+動能是回測證實有預測力的維度。估值/籌碼供參考(選股用途弱)。此工具幫你<b>排雷體檢</b>，進出場請搭配左側大盤閘門與你的判斷。</div>`;
+}
+document.getElementById('q').addEventListener('input',e=>{const v=e.target.value.trim();if(S.stocks[v])show(v);else if(v.length>=4){document.getElementById('report').style.display='none';document.getElementById('empty').style.display='block';document.getElementById('empty').textContent=v+' 不在前150大';}});
+</script></body></html>

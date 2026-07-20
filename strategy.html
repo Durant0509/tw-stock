@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>價值 × 動能選股策略 — 設計檢視</title>
+<style>
+  :root{
+    --bg:#0f1216; --panel:#171b21; --panel2:#1d232b; --line:#2a323c;
+    --txt:#e6eaf0; --dim:#8a94a3; --dim2:#5f6875;
+    --accent:#4aa8ff; --accent2:#63e6be; --warn:#ffcf5c; --bad:#ff6b6b; --good:#51cf83;
+    --radius:14px;
+  }
+  @media (prefers-color-scheme:light){
+    :root{--bg:#f4f6f9;--panel:#ffffff;--panel2:#f0f3f7;--line:#e2e7ee;
+      --txt:#1a2029;--dim:#5c6673;--dim2:#8a94a3;--accent:#1a73e8;--accent2:#0ca678;}
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC",sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased;padding:0 0 80px}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+  header{padding:56px 0 32px;border-bottom:1px solid var(--line);margin-bottom:36px}
+  .eyebrow{color:var(--accent);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+  h1{font-size:34px;font-weight:700;letter-spacing:-.01em;margin-bottom:14px}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;color:var(--dim);font-size:14px}
+  .tag{background:var(--panel2);border:1px solid var(--line);padding:3px 11px;border-radius:99px;font-size:12.5px}
+  .tag.draft{color:var(--warn);border-color:var(--warn)}
+  section{margin:44px 0}
+  h2{font-size:13px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);
+    margin-bottom:18px;display:flex;align-items:center;gap:10px}
+  h2::before{content:"";width:22px;height:2px;background:var(--accent);border-radius:2px}
+  h3{font-size:18px;font-weight:650;margin-bottom:8px}
+  p{color:var(--txt)}
+  .lead{font-size:16px;color:var(--dim)}
+  .grid{display:grid;gap:14px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:720px){.g3,.g2{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+  .card .k{font-size:12px;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+  .card .give{color:var(--warn)}
+  .card .no{color:var(--bad)}
+  .card p{font-size:14.5px;color:var(--dim)}
+  .card strong{color:var(--txt);font-weight:600}
+
+  /* verdict banner */
+  .verdict{display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,rgba(81,207,131,.14),rgba(74,168,255,.08));
+    border:1px solid rgba(81,207,131,.4);border-radius:var(--radius);padding:22px 24px}
+  .verdict .badge{font-size:15px;font-weight:800;color:#04160c;background:var(--good);padding:8px 16px;border-radius:10px;white-space:nowrap}
+  .verdict p{font-size:15px;color:var(--txt)}
+
+  /* funnel */
+  .funnel{display:flex;flex-direction:column;align-items:center;gap:7px;margin-top:6px}
+  .fstep{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:14px 18px;position:relative;transition:transform .15s}
+  .fstep:hover{transform:translateY(-2px)}
+  .fstep .num{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--dim2);font-weight:700;font-size:13px}
+  .fstep .ft{font-weight:650;font-size:15px}
+  .fstep .fd{font-size:13px;color:var(--dim);margin-top:2px}
+  .w0{width:100%}.w1{width:88%}.w2{width:74%}.w3{width:60%}.w4{width:46%}
+  .fstep.final{background:linear-gradient(135deg,var(--accent),#7c5cff);border:none;color:#fff}
+  .fstep.final .fd{color:rgba(255,255,255,.85)}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--dim);padding:12px 14px;background:var(--panel2);border-bottom:1px solid var(--line)}
+  td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td .ok{color:var(--good);font-weight:700}
+  td .warn{color:var(--warn);font-weight:700}
+  code{background:var(--panel2);padding:2px 7px;border-radius:6px;font-size:12.5px;font-family:"SF Mono",ui-monospace,Menlo,monospace;color:var(--accent2)}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px}
+  .pill.v{background:rgba(255,207,92,.15);color:var(--warn)}
+
+  /* bench steps */
+  .bench{counter-reset:b}
+  .brow{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line)}
+  .brow:last-child{border-bottom:none}
+  .brow .bn{counter-increment:b;flex:none;width:30px;height:30px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);
+    display:grid;place-items:center;font-weight:700;color:var(--accent)}
+  .brow .bn::before{content:counter(b)}
+  .brow .bt{font-weight:600}
+  .brow .bd{font-size:13.5px;color:var(--dim)}
+
+  .note{background:var(--panel);border-left:3px solid var(--warn);border-radius:0 10px 10px 0;padding:14px 18px;font-size:14px;color:var(--dim);margin-top:10px}
+  .note b{color:var(--txt)}
+  ul.clean{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:6px}
+  ul.clean li{padding-left:22px;position:relative;font-size:14.5px;color:var(--dim)}
+  ul.clean li::before{content:"→";position:absolute;left:0;color:var(--accent);font-weight:700}
+  ul.clean li b{color:var(--txt)}
+  footer{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);color:var(--dim2);font-size:13px;text-align:center}
+  .kpi{display:flex;gap:26px;flex-wrap:wrap;margin-top:4px}
+  .kpi .item .n{font-size:26px;font-weight:750;color:var(--accent2)}
+  .kpi .item .l{font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">台股選股策略 · 研究定案</div>
+    <h1>價值 × 動能選股策略</h1>
+    <div class="meta">
+      <span class="tag" style="color:var(--good);border-color:var(--good)">v0.3 · 完整研究收尾</span>
+      <span class="tag">上市市值前 150</span>
+      <span class="tag">2026-07-17</span>
+      <span>· 五熊歸因 + DSR/MC + 報酬引擎審判</span>
+    </div>
+  </header>
+
+  <!-- 回測結論 -->
+  <section>
+    <h2>★ 回測實證結論 — 五熊歸因定案</h2>
+    <div class="grid g3">
+      <div class="card" style="border-color:var(--good)">
+        <div class="k" style="color:var(--good)">🟢 核心引擎</div>
+        <h3>族群動能 + MA60</h3>
+        <p>全期報酬最高（+538%），<strong>牛市參與的來源</strong>。策略骨幹。</p>
+      </div>
+      <div class="card" style="border-color:var(--accent)">
+        <div class="k">🟢 熊市防禦因子</div>
+        <h3>撿便宜（低 P/E）</h3>
+        <p><strong>5/5 熊市</strong>都比地板更抗跌，平均 <strong>+9pp</strong>。但牛市大幅落後 0050 — 是<strong>風控不是報酬</strong>。</p>
+      </div>
+      <div class="card" style="border-color:var(--bad)">
+        <div class="k no">🔴 砍</div>
+        <h3>穩健成長 (GARP)</h3>
+        <p>0/2 熊有貢獻、牛市也不贏 0050。EPS 成長因子<strong>無獨立 alpha</strong>，移除。</p>
+      </div>
+    </div>
+
+    <h3 style="margin:26px 0 4px;font-size:15px">五熊 drawdown 明細 — 撿便宜 vs 只有MA60 地板 vs 0050</h3>
+    <p style="font-size:13px;color:var(--dim);margin-bottom:12px">「估值獨立貢獻」= 撿便宜比「只有MA60」少賠多少（隔離 MA60 後的純估值效果）</p>
+    <table>
+      <thead><tr><th>熊市</th><th>只有MA60</th><th>撿便宜</th><th>0050</th><th>估值獨立貢獻</th></tr></thead>
+      <tbody>
+        <tr><td>2011 歐債</td><td>-34%</td><td>-25%</td><td>-23%</td><td><span class="ok">+9pp</span></td></tr>
+        <tr><td>2015 陸股崩</td><td>-22%</td><td>-11%</td><td>-18%</td><td><span class="ok">+11pp</span></td></tr>
+        <tr><td>2018 貿易戰</td><td>-22%</td><td>-19%</td><td>-16%</td><td><span class="warn">+3pp</span></td></tr>
+        <tr><td>2020 COVID</td><td>-21%</td><td>-13%</td><td>-30%</td><td><span class="ok">+8pp</span></td></tr>
+        <tr><td>2022 升息</td><td>-41%</td><td>-28%</td><td>-36%</td><td><span class="ok">+13pp</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="note" style="border-left-color:var(--good)">
+      <b>定案定位：</b>最終策略 = <b>族群動能 + MA60（核心，吃牛市）＋ 低 P/E 篩選（熊市緩衝）</b>。
+      撿便宜不是選股 alpha（原假設錯），是 R19「策略價值在風控」的防禦因子。穩健成長移除。
+    </div>
+    <div class="note">
+      <b>仍未解（實盤前必補）：</b>① 牛市代價未量化 ② entry timing 假設乾淨 ③ 熊市樣本小（2018 +3pp 在雜訊邊緣）
+      ④ 換手 13筆/週過高需降頻 ⑤ MA60-only 全期 MDD -58% 未解。
+    </div>
+  </section>
+
+  <!-- 進階驗證 -->
+  <section>
+    <h2>進階驗證 — 採納幣圈交易大師方法論</h2>
+    <div class="grid g2">
+      <div class="card">
+        <div class="k">① Monte-Carlo 打亂交易順序 ×1000</div>
+        <p style="font-size:13.5px;color:var(--dim);margin-bottom:12px">「歷史回撤只是運氣好的順序」——打亂日報酬看真實尾部</p>
+        <table style="font-size:13px">
+          <tbody>
+            <tr><td>歷史單一路徑</td><td>-42%</td></tr>
+            <tr><td>打亂 p50</td><td>-36%</td></tr>
+            <tr><td><b>打亂 p99</b></td><td><span class="warn">-57%</span></td></tr>
+            <tr><td>最壞</td><td>-63%</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:10px;font-size:13.5px"><b>實盤部位上限用 p99 -57% 抓</b>，非歷史 -42%（1.4x）。</p>
+      </div>
+      <div class="card">
+        <div class="k">② Deflated Sharpe（校正多重檢驗 N=8）</div>
+        <div class="kpi" style="margin:8px 0 14px">
+          <div class="item"><div class="n" style="color:var(--warn)">0.50</div><div class="l">DSR (機率真SR>0)</div></div>
+          <div class="item"><div class="n">0.52</div><div class="l">年化 Sharpe</div></div>
+        </div>
+        <p style="font-size:13.5px;color:var(--dim)">Sharpe 0.52 ≈ 門檻 SR0 0.52 幾乎重疊 → 試 8 個變體挑最好的，靠選擇偏差本就能矇到這水準。<b style="color:var(--txt)">當賺錢引擎不合格。</b></p>
+      </div>
+    </div>
+    <div class="note" style="border-left-color:var(--accent2)">
+      <b>DSR 低不是打臉，是再次確認定位：</b>防禦型因子平時讓利、只在熊市發威，Sharpe 本就低。
+      用「報酬顯著性」衡量「風控工具」本來就會不及格——像問「保單有沒有幫你賺錢」。
+    </div>
+
+    <h3 style="margin:24px 0 10px;font-size:15px">撿便宜三層驗證後定論</h3>
+    <table>
+      <thead><tr><th>問題</th><th>答案</th></tr></thead>
+      <tbody>
+        <tr><td>撿便宜能賺錢嗎？</td><td><span style="color:var(--bad);font-weight:700">🔴 不能</span>（DSR 0.50，Sharpe 不顯著）</td></tr>
+        <tr><td>撿便宜能防守嗎？</td><td><span class="ok">🟢 能</span>（5/5 熊抗跌，平均 +9pp）</td></tr>
+        <tr><td>實盤尾部多深？</td><td>-57%（p99），非歷史 -42%</td></tr>
+        <tr><td>該怎麼用？</td><td>族群動能+MA60 核心的<b>熊市緩衝 sleeve</b>，非主報酬</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 報酬引擎審判 + 最終定案 -->
+  <section>
+    <h2>報酬引擎審判 — 找到 edge 但風控無解</h2>
+    <p class="lead" style="margin-bottom:18px">回頭單獨審判被當「地板」冷落的「族群動能+MA60」——它其實是唯一有真報酬 edge 的因子。</p>
+    <table>
+      <thead><tr><th>策略</th><th>總報酬</th><th>MDD</th><th>Sharpe</th><th>DSR</th></tr></thead>
+      <tbody>
+        <tr><td><b>族群動能+MA60</b></td><td><span class="ok">+600%</span></td><td><span style="color:var(--bad)">-58%</span></td><td>1.02</td><td><span class="ok">0.92</span></td></tr>
+        <tr><td>撿便宜 5:5</td><td>+99%</td><td>-42%</td><td>0.53</td><td>0.51</td></tr>
+        <tr><td>0050 B&H</td><td>+424%</td><td>-36%</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="note" style="border-left-color:var(--good)"><b>🟢 有真 edge：</b>報酬贏 0050 +176pp、DSR 0.92（邊際顯著，撿便宜只 0.51）、Sharpe 是門檻 2 倍。</div>
+
+    <h3 style="margin:22px 0 8px;font-size:15px">🔴 但 -58% MDD 結構性無解 — 四種風控全失敗</h3>
+    <table>
+      <thead><tr><th>風控手段</th><th>結果</th><th>失敗原因</th></tr></thead>
+      <tbody>
+        <tr><td>regime 減碼半倉</td><td>MDD 只壓 5pp</td><td>慢半拍（R20 預言中）</td></tr>
+        <tr><td>熊市切撿便宜</td><td>報酬掉 90pp</td><td>撿便宜無 edge，拖累</td></tr>
+        <tr><td>trailing stop 15-25%</td><td>-58→-55%</td><td>組合同向崩，單日來不及</td></tr>
+        <tr><td>vol targeting</td><td>殺報酬更多</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="note"><b>根因：</b>選「最熱門族群+最強動能」= 一籃子高度同向的高 beta 股（相關性&gt;0.7 非對沖）。市場急跌時 12 檔同日跳水，組合層風控救不了「籃子本身翻了」。這是策略 DNA，非參數問題。</div>
+
+    <h3 style="margin:26px 0 12px;font-size:16px">★★ 全研究最終定案 — 依你的風險偏好選</h3>
+    <div class="grid g3">
+      <div class="card" style="border-color:var(--good)">
+        <div class="k" style="color:var(--good)">① 追報酬能扛波動</div>
+        <h3>族群動能+MA60</h3>
+        <p>+600%、DSR 0.92。但 <strong>-58% MDD 自負</strong>（100萬→42萬還抱得住才行）。</p>
+      </div>
+      <div class="card" style="border-color:var(--accent)">
+        <div class="k">② 要熊市保護</div>
+        <h3>撿便宜防禦 sleeve</h3>
+        <p>5 熊少賠 9pp。<strong>但長期輸 0050</strong>，是保險不是報酬。</p>
+      </div>
+      <div class="card">
+        <div class="k">③ 不想煩</div>
+        <h3>持有 0050</h3>
+        <p>R/MDD 0.64 <strong>最高</strong>，被動最省事。選股都難贏它。</p>
+      </div>
+    </div>
+    <div class="verdict" style="margin-top:20px">
+      <span class="badge">結論</span>
+      <p><strong>找到了有 edge 的報酬引擎，但它的 -58% MDD 是結構性的、解不掉。</strong>「適不適合你」是個人風險承受度問題，不是技術問題。能試的因子與風控都試完，再調參數只會 overfit（P5）— 研究誠實收斂，就此定案。</p>
+    </div>
+  </section>
+
+  <!-- 定位 -->
+  <section>
+    <h2>定位 — 先寫定位，再寫規則</h2>
+    <div class="grid g3">
+      <div class="card">
+        <div class="k">🎯 首要目標</div>
+        <p><strong>選股 alpha</strong> — 找「估值相對便宜 + 有題材動能」的股票。不是控 MDD，那是 Layer C 的活。</p>
+      </div>
+      <div class="card">
+        <div class="k give">⊘ 放棄了什麼</div>
+        <p>放棄純噴出<strong>飆股尾部報酬</strong>（低 P/E 會濾掉最貴的 AI 飆股）；放棄<strong>超短線 / 當沖</strong>。</p>
+      </div>
+      <div class="card">
+        <div class="k no">✕ 誰不該用</div>
+        <p>想抓當沖、隔日沖、追高動能的人。這是<strong>週~月級持有</strong>，目標不合就別用。</p>
+      </div>
+    </div>
+    <div class="note" style="border-left-color:var(--accent)">
+      <b>核心洞見：</b>價值（低 P/E）與動能（族群 / 價格強度）是相關性最低的兩個因子，互補。
+      單用價值會踩<b>價值陷阱</b>、單用動能會<b>追在頂部</b>；兩者交集才是甜蜜點。
+    </div>
+  </section>
+
+  <!-- 資料可行性 -->
+  <section>
+    <h2>資料可行性 — 已實測</h2>
+    <div class="verdict">
+      <span class="badge">GO ✓</span>
+      <p>Point-in-time 本益比 + 倖存者偏差<strong>都天然免疫</strong>。TWSE 官方每日快照的 P/E 只用「當天已公告」的 EPS 計算，回測不會偷看未來。</p>
+    </div>
+
+    <div class="kpi" style="margin:22px 4px 24px">
+      <div class="item"><div class="n">720</div><div class="l">交易日 (3 年)</div></div>
+      <div class="item"><div class="n">~1,440</div><div class="l">requests 一次抓完</div></div>
+      <div class="item"><div class="n">965</div><div class="l">檔在庫 (3 年前)</div></div>
+      <div class="item"><div class="n">0</div><div class="l">look-ahead bias</div></div>
+    </div>
+
+    <table>
+      <thead><tr><th>你需要的</th><th>資料源</th><th>狀態</th><th>關鍵</th></tr></thead>
+      <tbody>
+        <tr><td>本益比 (PIT)</td><td><code>BWIBBU_d</code></td><td><span class="ok">✓</span></td><td>附「財報年/季」欄，官方就是 point-in-time</td></tr>
+        <tr><td>成交金額 (流動性)</td><td><code>MI_INDEX</code></td><td><span class="ok">✓</span></td><td>同一支給 OHLC + 量 + 金額 + P/E</td></tr>
+        <tr><td>股價淨值比 / 殖利率</td><td><code>BWIBBU_d</code></td><td><span class="ok">✓</span></td><td>免費附送第二估值因子</td></tr>
+        <tr><td>產業分類</td><td><code>t187ap03_L</code></td><td><span class="ok">✓</span></td><td>每檔產業代碼 (台積電=24)</td></tr>
+        <tr><td>族群動能</td><td><code>MI_INDEX</code> 產業指數</td><td><span class="ok">✓</span></td><td>半導體/航運/金融… 日收盤算相對超額</td></tr>
+        <tr><td>市值排名 (選前150)</td><td>股數 × 價格</td><td><span class="warn">⚠</span></td><td>股數用現值快照，大型股影響小 (見 caveat)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 因子漏斗 -->
+  <section>
+    <h2>因子堆疊 — 由粗到細篩</h2>
+    <div class="funnel">
+      <div class="fstep w0"><div class="ft">前 150 大宇宙</div><div class="fd">市值排名，動態重排，倖存者偏差免疫</div></div>
+      <div class="fstep w1"><span class="num">①</span><div class="ft" style="margin-left:20px">量能門檻</div><div class="fd" style="margin-left:20px">日均成交額 &gt; 門檻 · 反大戶操縱 + 保流動性</div></div>
+      <div class="fstep w2"><span class="num">②</span><div class="ft" style="margin-left:20px">熱門族群動能</div><div class="fd" style="margin-left:20px">產業指數近 20/60 日相對大盤超額 &gt; 0</div></div>
+      <div class="fstep w3"><span class="num">③</span><div class="ft" style="margin-left:20px">估值便宜</div><div class="fd" style="margin-left:20px">相對同族群中位數 &amp; 自身 3 年河流圖位階</div></div>
+      <div class="fstep w4"><span class="num">④</span><div class="ft" style="margin-left:20px">品質防陷阱</div><div class="fd" style="margin-left:20px">月營收 YoY &gt; 0 · 便宜不是因為要衰退</div></div>
+      <div class="fstep final w4"><div class="ft">綜合評分 → 選 top N</div><div class="fd">估值分 + 族群動能分 + 品質分</div></div>
+    </div>
+  </section>
+
+  <!-- 頻率 & rebalance -->
+  <section>
+    <h2>頻率設計 — 用組合寬度，不縮短持有</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3>你的需求：≥ 1 筆 / 週</h3>
+        <p style="font-size:14.5px;color:var(--dim)">直覺是縮短持有到幾天 — 但那會<b style="color:var(--bad)">殺掉基本面 edge + 手續費侵蝕</b>。本益比是慢訊號，便宜的股需要時間讓市場重新定價。</p>
+      </div>
+      <div class="card" style="border-color:var(--accent2)">
+        <h3 style="color:var(--accent2)">✓ 正解：組合寬度</h3>
+        <ul class="clean">
+          <li><b>每週固定掃描一次</b>（rebalance cadence）</li>
+          <li>持有 <b>10–15 檔</b>輪動組合、單檔抱 1–3 月</li>
+          <li>跨組合進出加總<b>自然 ≥ 1 筆/週</b></li>
+          <li>有訊號才動、沒訊號 pass（T1 四綠精神）</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benchmark -->
+  <section>
+    <h2>Benchmark — 三層，缺一不可</h2>
+    <div class="card bench">
+      <div class="brow"><div class="bn"></div><div><div class="bt">0050 買進持有</div><div class="bd">市場 beta — 有沒有贏大盤</div></div></div>
+      <div class="brow"><div class="bn"></div><div><div class="bt">前 150 宇宙等權 B&amp;H</div><div class="bd">宇宙 beta — 揭露 alpha 是「選股」還是「宇宙本身漲」</div></div></div>
+      <div class="brow"><div class="bn"></div><div><div class="bt">單因子對照組</div><div class="bd">純估值 / 純動能 / 隨機選 N — 證明「價值×動能」勝過各單因子，否則組合是多餘的</div></div></div>
+    </div>
+    <div class="note"><b>報告 headline 必附三數：</b>絕對報酬 · MDD · return-to-MDD ratio。「alpha=0 但 MDD 砍到 1/4」也可以是頂級結果。</div>
+  </section>
+
+  <!-- 決策表 -->
+  <section>
+    <h2>待你拍板的叉路</h2>
+    <table>
+      <thead><tr><th>決策</th><th>我的建議起點</th><th>影響</th></tr></thead>
+      <tbody>
+        <tr><td>持股檔數 N</td><td><span class="pill v">12 檔</span></td><td>太少→集中風險；太多→稀釋 alpha + 手續費</td></tr>
+        <tr><td>量能門檻</td><td><span class="pill v">日均額 &gt; 1 億</span></td><td>先看分布再定；太高宇宙縮太小</td></tr>
+        <tr><td>估值 : 動能 權重</td><td><span class="pill v">5 : 5 起跑</span></td><td>偏價值抗跌但慢熱；偏動能跟題材但易追高</td></tr>
+        <tr><td>停損寬度</td><td><span class="pill v">-10 ~ -12%</span></td><td>比 Layer A 寬，因持有較長</td></tr>
+        <tr><td>regime 減碼</td><td><span class="pill v">先不加</span></td><td>先跑 passive 地板 (P7)；R20 證明常負貢獻</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- caveats -->
+  <section>
+    <h2>已知 caveats — 不藏</h2>
+    <ul class="clean">
+      <li><b>市值用現股數快照</b>：歷史前150宇宙有輕微 look-ahead（增減資個股偏），大型股影響小</li>
+      <li><b>月營收公告日對齊</b>：YoY 濾網要用「當時已公告」的營收，公告日 ≤ 回測日</li>
+      <li><b>本益比虧損標記</b>：EPS ≤ 0 時 P/E =「-」，直接剔除，不當成便宜</li>
+      <li><b>交易成本</b>：手續費 + 證交稅 0.3% + 滑價全扣進淨損益</li>
+    </ul>
+  </section>
+
+  <footer>
+    價值 × 動能選股策略 v0.3 · 完整研究收尾（P5 倖存者 · P7 地板法 · R22 跨N熊 · R19 風控價值 · R20 regime減碼負貢獻）<br>
+    定案：找到報酬 edge（族群動能+MA60, DSR 0.92）但 -58% MDD 結構性無解 · 選擇取決於個人風險承受度
+  </footer>
+
+</div>
+</body>
+</html>

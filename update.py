@@ -36,7 +36,8 @@ def main():
     wd=datetime.date.today().weekday()
     if wd<5:
         # 1) 增量抓当日资料 (resumable, 只补没抓过的)
-        for s,d in [("pull_data.py","个股量价/PE"),("pull_margin.py","融资融券"),
+        for s,d in [("pull_data.py","个股量价/PE"),("pull_meta.py","公司资料+殖利率/PB"),
+                    ("pull_margin.py","融资融券"),
                     ("pull_finmind.py","台指期法人"),("pull_t86.py","三大法人现货")]:
             if os.path.exists(s): run(s,d)
     else:

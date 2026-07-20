@@ -10,6 +10,7 @@ os.chdir(BASE)   # 关键: 确保所有相对路径 data/xxx 正确
 
 PULLS=[
     ("pull_data.py",    "个股量价/本益比 (MI_INDEX) ~2500天, 最久"),
+    ("pull_meta.py",    "公司基本资料 + 殖利率/PB (loader 必需)"),
     ("pull_margin.py",  "融资融券 ~980天"),
     ("pull_finmind.py", "台指期三大法人 (散户多空比)"),
     ("pull_t86.py",     "三大法人现货买卖超 (外资连买)"),

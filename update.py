@@ -55,15 +55,27 @@ def main():
     # 3) 组合网页
     run("build_warroom.py","生成作战台网页",required=True)
     # 4) git push (只推程式+网页+成果JSON, data/ 被 gitignore 挡)
-    ok2,out=git(["add","-A"])
-    ok3,out=git(["commit","-m",f"daily update {datetime.date.today():%Y-%m-%d}"])
+    # 先确保 git 身份已设 (没设的话 commit 会 fatal, 曾导致文件卡 staged 却假装 push 成功)
+    okn,_=git(["config","user.name"])
+    if not okn:
+        git(["config","user.name","tw-stock-bot"])
+        git(["config","user.email","tw-stock-bot@users.noreply.github.com"])
+        log("  ⚙️ git 身份未设, 已自动补上")
+    git(["add","-A"])
+    ok_commit,out=git(["commit","-m",f"daily update {datetime.date.today():%Y-%m-%d}"])
     if "nothing to commit" in out:
         log("  无变更, 跳过 push")
+    elif not ok_commit:
+        log(f"  ✗ commit 失败, 中止 (未 push): {out[-300:]}")
+        sys.exit(1)
     else:
         # 先 pull rebase 避免远端有更新导致 push 失败
         git(["pull","--rebase","--autostash"])
         okp,outp=git(["push"])
-        log(f"  {'✓ push 成功' if okp else '⚠️ push 失败(可能需登入GitHub): '+outp[-200:]}")
+        if okp and "up-to-date" not in outp.lower():
+            log("  ✓ push 成功")
+        else:
+            log(f"  ⚠️ push 未生效(可能需登入GitHub或无新commit): {outp[-200:]}")
     log("每日更新完成")
 
 if __name__=="__main__":

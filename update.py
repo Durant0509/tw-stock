@@ -30,8 +30,9 @@ def run(script, desc, required=False):
     return r.returncode==0
 
 def git(args):
-    r=subprocess.run(["git"]+args, cwd=BASE, capture_output=True, text=True)
-    return r.returncode==0, (r.stdout+r.stderr).strip()
+    r=subprocess.run(["git"]+args, cwd=BASE, capture_output=True, text=True,
+                     encoding="utf-8", errors="replace", env=ENV)
+    return r.returncode==0, ((r.stdout or "")+(r.stderr or "")).strip()
 
 def main():
     log("="*50)
@@ -54,14 +55,15 @@ def main():
     # 3) 组合网页
     run("build_warroom.py","生成作战台网页",required=True)
     # 4) git push (只推程式+网页+成果JSON, data/ 被 gitignore 挡)
-    changed,_=git(["status","--porcelain"])
     ok2,out=git(["add","-A"])
     ok3,out=git(["commit","-m",f"daily update {datetime.date.today():%Y-%m-%d}"])
     if "nothing to commit" in out:
         log("  无变更, 跳过 push")
     else:
+        # 先 pull rebase 避免远端有更新导致 push 失败
+        git(["pull","--rebase","--autostash"])
         okp,outp=git(["push"])
-        log(f"  {'✓ push 成功' if okp else '⚠️ push 失败: '+outp[-200:]}")
+        log(f"  {'✓ push 成功' if okp else '⚠️ push 失败(可能需登入GitHub): '+outp[-200:]}")
     log("每日更新完成")
 
 if __name__=="__main__":

@@ -22,16 +22,25 @@ def fetch(dataset,d0,d1,data_id='TX'):
             print(f'  retry ({e})',flush=True); time.sleep(5*(a+1))
     return None
 
-# 分半年抓 (避免单次太大 + 速率限)
+# 分半年抓 (避免单次太大 + 速率限)。最后一段动态延伸到今天。
+import datetime
+_today=datetime.date.today().strftime('%Y-%m-%d')
 periods=[('2022-07-01','2022-12-31'),('2023-01-01','2023-06-30'),('2023-07-01','2023-12-31'),
          ('2024-01-01','2024-06-30'),('2024-07-01','2024-12-31'),('2025-01-01','2025-06-30'),
-         ('2025-07-01','2025-12-31'),('2026-01-01','2026-07-16')]
+         ('2025-07-01','2025-12-31'),('2026-01-01','2026-06-30'),('2026-07-01',_today)]
+# 若今天已跨到 2027+ 自动补当年段 (简单防护)
+_y=datetime.date.today().year
+for yy in range(2027,_y+1):
+    periods.append((f'{yy}-01-01',f'{yy}-06-30')); periods.append((f'{yy}-07-01',_today))
 
 for dataset,tag in [('TaiwanFuturesInstitutionalInvestors','inst'),('TaiwanFuturesDaily','daily')]:
     allrows=[]
+    cur_month=datetime.date.today().strftime('%Y-%m')
     for d0,d1 in periods:
         fp=os.path.join(BASE,"data","finmind",f"{tag}_{d0[:7]}.json")
-        if os.path.exists(fp):
+        # 过去月份的档已存在就跳过; 但「含今天的那段」一定重抓(才会有最新资料)
+        is_current = d1==_today
+        if os.path.exists(fp) and not is_current:
             allrows+=json.load(open(fp, encoding='utf-8')); continue
         rows=fetch(dataset,d0,d1)
         if rows is not None:

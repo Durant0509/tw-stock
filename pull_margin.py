@@ -5,7 +5,7 @@ import json, os, time, urllib.request, datetime
 BASE=os.path.dirname(os.path.abspath(__file__))
 CACHE=os.path.join(BASE,"data","margin"); os.makedirs(CACHE,exist_ok=True)
 UA={"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"}
-START=datetime.date(2022,7,1); END=datetime.date(2026,7,16)
+START=datetime.date(2022,7,1); END=datetime.date.today()
 
 def fetch(ds):
     url=f"https://www.twse.com.tw/rwd/zh/marginTrading/MI_MARGN?date={ds}&selectType=ALL&response=json"

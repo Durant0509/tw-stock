@@ -9,7 +9,7 @@ CACHE = os.path.join(BASE, "data", "mi_index")
 os.makedirs(CACHE, exist_ok=True)
 
 START = datetime.date(2018, 1, 1)    # 補進 2018貿易戰 / 2020 COVID / 2022 升息 三個真熊
-END   = datetime.date(2026, 7, 16)   # 到昨天為止
+END   = datetime.date.today()   # 每次跑都抓到今天
 UA = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"}
 
 def fetch(date_str):

@@ -170,7 +170,7 @@ function show(code){
      <div class="line">殖利率 <b class="neu">${s.yield==null?'—':s.yield+'%'}</b><span class="exp">配息÷股價。>4%=高息(存股用)。⚠️過高(如8%)有時是股價跌太多的假象。</span></div>
      <div class="line">淨值比 <b class="neu">${s.pb??'—'}</b><span class="exp">股價÷每股淨值。<b><1=破淨</b>(便宜或有隱憂)。金融、資產股較有參考性。</span></div></div>
    <div class="dim"><div class="h">籌碼/量能/風險</div>
-     <div class="line">外資連買 <b class="neu">${s.fstreak==null?'—':s.fstreak+'日'}</b><span class="exp">外資連續買超天數。連買多日=法人看好。⚠️單看籌碼易誤判。</span></div>
+     <div class="line">外資動向 <b class="${s.fstreak==null?'neu':(s.fstreak>0?'ok':(s.fstreak<0?'bad':'neu'))}">${s.fstreak==null?'—':(s.fstreak>0?'連買'+s.fstreak+'日':(s.fstreak<0?'連賣'+(-s.fstreak)+'日':'中性'))}</b><span class="exp"><b class="ok">連買=法人看好(買進訊號)</b>、<b class="bad">連賣=法人倒貨(危險訊號)</b>。連續天數越多越明顯。⚠️單看籌碼易誤判，要配合趨勢。</span></div>
      <div class="line">券資比 <b class="neu">${s.short_ratio??'—'}</b><span class="exp">融券÷融資。高(>0.3)=空方壓力大，有時反醞釀「軋空」上漲。</span></div>
      <div class="line">近5日量能 <b class="neu">${s.vol_ratio==null?'—':s.vol_ratio+'x'}</b><span class="exp"><b>>1.5x=爆量</b>(有事發生)、<0.6x=量縮(沒人氣)。</span></div>
      <div class="line">年化波動 <b class="neu">${s.vol==null?'—':s.vol+'%'}</b><span class="exp">震盪程度。>50%=高波動(部位要小)、<25%=溫和。</span></div></div>

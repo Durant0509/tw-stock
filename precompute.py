@@ -40,17 +40,23 @@ def load_bwibbu(ds):
 bwibbu=load_bwibbu(days[-1])
 
 def foreign_streak(code):
+    """双向连续: 连买回正(如+3), 连卖回负(如-3), 无资料回None。"""
     files=sorted(glob.glob('data/t86/*.json'))[-15:]
     if len(files)<5: return None
-    streak=0
+    # 先看最近一天是买还是卖, 决定方向
+    streak=0; direction=None
     for fp in reversed(files):
         d=json.load(open(fp, encoding='utf-8')); row=[r for r in d.get('data',[]) if r and r[0]==code]
         if not row: break
         try: net=float(str(row[0][4]).replace(',',''))
         except: break
-        if net>0: streak+=1
+        if direction is None:
+            direction = 1 if net>0 else (-1 if net<0 else 0)
+            if direction==0: break
+        if direction==1 and net>0: streak+=1
+        elif direction==-1 and net<0: streak+=1
         else: break
-    return streak
+    return streak*direction if direction else 0
 
 pxc={}
 def gpx(code):
@@ -104,6 +110,8 @@ def diagnose(code):
     if ret60 is not None and ret60<-0.1: riskscore-=1
     if pe is None: riskscore-=1
     if smom is not None and smom<-0.03: riskscore-=1
+    _fs=foreign_streak(code)
+    if _fs is not None and _fs<=-3: riskscore-=1   # 外资连卖3日以上=危险
     return {'code':code,'name':s['name'].strip(),'close':round(close,1),'pe':pe,
       'pe_pctl':round(pe_pctl) if pe_pctl is not None else None,
       'from_high':round((px[-1]/hi52-1)*100,1),'above_ma60':round((px[-1]/ma60-1)*100,1),

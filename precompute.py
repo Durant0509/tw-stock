@@ -24,7 +24,7 @@ ob=defaultdict(float)
 for r in daily: ob[r['date']]+=r.get('open_interest',0)
 retail={d:(ib[d][1]-ib[d][0])/ob[d] for d in ib if ob.get(d,0)>0}
 assert retail, "finmind资料空! 请先跑 py pull_finmind.py 重抓台指期资料"
-vals=sorted(retail.values()); rcur=retail[max(retail)]
+rvals=sorted(retail.values()); rcur=retail[max(retail)]
 rpctl=100*sum(1 for v in rvals if v<rcur)/len(rvals)
 p95=rvals[int(len(rvals)*.95)];p90=rvals[int(len(rvals)*.9)];p20=rvals[int(len(rvals)*.2)]
 gate='red' if rcur>=p95 else 'orange' if rcur>=p90 else 'green' if rcur<=p20 else 'gray'

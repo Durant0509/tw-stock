@@ -99,7 +99,7 @@ footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);color:v
 <h1>台股策略作戰台</h1>
 <div class="meta"><span class="tag" id="asof"></span><span>大盤</span><span id="regime" class="regime"></span></div></header>
 
-<div class="tabs"><div class="tab on" onclick="tab(0)">大盤作戰</div><div class="tab" onclick="tab(1)">個股體檢</div></div>
+<div class="tabs"><div class="tab on" onclick="tab(0)">大盤作戰</div><div class="tab" onclick="tab(1)">個股體檢</div><div class="tab" onclick="tab(2)">選股雷達</div></div>
 
 <div class="page on" id="p0">
 <h2>今日行動摘要</h2>
@@ -123,6 +123,14 @@ footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);color:v
 <div class="chips" id="chips"></div>
 <div class="report" id="report"></div>
 <div class="empty" id="empty">輸入前150大代號查看體檢報告</div>
+</div>
+
+<div class="page" id="p2">
+<div id="scan-gate-bar"></div>
+<div id="scan-top"></div>
+<div id="scan-watch"></div>
+<div id="scan-avoid"></div>
+<div class="note" style="margin-top:20px"><b>⚠️ 評分方法說明：</b>整合12項因子——<b>族群動能</b>（回測最強）、<b>MA60趨勢</b>、<b>量能</b>、<b>外資連買/連賣</b>（連賣≥3日有效危險訊號）、<b>投信連買/連賣</b>、<b>三大法人合力</b>、<b>外資±2σ異常大單</b>、<b>月營收YoY</b>（基本面動能）、<b>融資百分位</b>（擁擠=斷頭壓力）、<b>RSI</b>、<b>距高甜蜜點</b>、<b>排雷分數</b>。<br>宇宙：前200大市值，日均成交量 ≥ 5000萬（流動性門檻）。台股紅漲：籌碼欄 <b style="color:var(--bad)">紅=買超看多</b>、<b style="color:var(--good)">綠=賣超看空</b>。<br>這是篩選觀察清單，<b>不是明牌</b>。閘門🔴時即使高分也先觀望。</div>
 </div>
 
 <h2 style="margin-top:40px">📚 新手學習總結（看不懂先讀這）</h2>
@@ -419,4 +427,89 @@ function stockchart(c){
     +`<svg viewBox="0 0 ${W} ${totalH}">${priceSvg}${bars}${fthrSvg}${xax}</svg></div>`;
 }
 document.getElementById('q').addEventListener('input',e=>{const v=e.target.value.trim();if(S.stocks[v])show(v);else if(v.length>=4){document.getElementById('report').style.display='none';document.getElementById('empty').style.display='block';document.getElementById('empty').textContent=v+' 不在前150大';}});
+
+// ── 選股雷達 ─────────────────────────────────────────────────────
+(function(){
+  const SC=M.scan; if(!SC) return;
+  const gateLabel={'red':'🔴 散戶極熱（p95）· 即使高分也先暫緩','orange':'🟠 散戶偏熱 · 謹慎操作','green':'🟢 散戶偏冷 · 進場時機佳','gray':'⚪ 散戶情緒正常 · 可正常操作'};
+  const gateColor={'red':'var(--bad)','orange':'var(--warn)','green':'var(--good)','gray':'var(--dim)'};
+  const regimeLabel={'bull':'牛市 BULL','bear':'熊市 BEAR','range':'盤整 RANGE'};
+  document.getElementById('scan-gate-bar').innerHTML=
+    `<div class="summary" style="margin-bottom:18px;padding:16px 20px">
+      <div class="big" style="font-size:16px;margin-bottom:8px">
+        <span class="regime ${SC.regime}">${regimeLabel[SC.regime]||SC.regime}</span>
+        &nbsp;&nbsp;<span style="color:${gateColor[SC.gate]}">${gateLabel[SC.gate]||SC.gate}</span>
+      </div>
+      <div style="font-size:13px;color:var(--dim)">截至 <b style="color:var(--txt)">${SC.asof}</b>　散戶閘門第 <b style="color:var(--txt)">${SC.gate_pctl}</b> 百分位　掃描前200大（日均成交≥5000萬）</div>
+    </div>`;
+
+  function ptsBadge(pts){
+    const col=pts>=9?'var(--good)':pts>=6?'#63e6be':pts>=3?'var(--warn)':pts>=-2?'var(--dim)':'var(--bad)';
+    return `<span style="display:inline-block;min-width:42px;text-align:center;font-weight:800;font-size:15px;padding:3px 8px;border-radius:7px;background:${col}22;color:${col}">${pts>0?'+':''}${pts}</span>`;
+  }
+  function tag(txt,color){return `<span style="display:inline-block;padding:2px 7px;border-radius:5px;font-size:11.5px;background:${color}22;color:${color};margin:2px 3px 2px 0">${txt}</span>`;}
+
+  function streakLabel(v,posWord,negWord){
+    if(v==null||v===0) return null;
+    return v>0?`${posWord}${v}日`:` ${negWord}${Math.abs(v)}日`;
+  }
+
+  function stockCard(s,i){
+    const reasons=(s.reasons||[]).map(r=>tag(r,'var(--good)')).join('');
+    const flags=(s.flags||[]).map(f=>tag(f,'var(--bad)')).join('');
+    const sm=s.sector_mom!=null?`${s.sector_mom>0?'+':''}${s.sector_mom}%`:'—';
+    const vr=s.vol_ratio!=null?`${s.vol_ratio}×`:'—';
+    // 外資
+    const fs=s.fstreak!=null?(s.fstreak>=0?`連買${s.fstreak}日`:`連賣${Math.abs(s.fstreak)}日`):'—';
+    const fsColor=s.fstreak>0?'var(--bad)':s.fstreak<0?'var(--good)':'var(--dim)';
+    // 投信
+    const ts=s.tstreak!=null?(s.tstreak>=0?`連買${s.tstreak}日`:`連賣${Math.abs(s.tstreak)}日`):null;
+    const tsColor=s.tstreak>0?'var(--bad)':s.tstreak<0?'var(--good)':'var(--dim)';
+    // 月營收
+    const yoyStr=s.rev_yoy!=null?`${s.rev_yoy>0?'+':''}${s.rev_yoy}%`:null;
+    const yoyColor=s.rev_yoy>=50?'var(--bad)':s.rev_yoy>=20?'var(--warn)':s.rev_yoy<-10?'var(--good)':'var(--dim)';
+    // 融資
+    const fpStr=s.fin_pctl!=null?`融資${s.fin_pctl}pctl`:null;
+    const fpColor=s.fin_pctl>=90?'var(--bad)':s.fin_pctl>=75?'var(--warn)':'var(--dim)';
+    // z-score
+    const fzStr=s.fzscore!=null&&Math.abs(s.fzscore)>=1.5?(s.fzscore>=0?`外資異常大買(z${s.fzscore.toFixed(1)})`:`外資異常大賣(z${s.fzscore.toFixed(1)})`):null;
+    const fzColor=s.fzscore>=0?'var(--bad)':'var(--good)';
+    const rsiColor=s.rsi>=45&&s.rsi<=70?'var(--good)':s.rsi>80?'var(--bad)':'var(--warn)';
+    const ma60Color=(s.above_ma60||0)>=0?'var(--good)':'var(--bad)';
+    return `<div class="strat" style="grid-template-columns:auto 1fr auto;gap:8px 14px;margin-bottom:10px;cursor:pointer" onclick="tab(1);show('${s.code}')">
+      <div style="font-size:13px;font-weight:700;color:var(--dim2);min-width:22px;text-align:right">${i+1}</div>
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px">
+          <span style="font-size:16px;font-weight:700">${s.code} ${s.name}</span>
+          <span style="font-size:12px;color:var(--dim)">${s.industry||''}</span>
+          <span style="font-size:13px;color:var(--dim)">收 <b style="color:var(--txt)">${s.close}</b></span>
+          ${yoyStr?`<span style="font-size:12px">月營收YoY <b style="color:${yoyColor}">${yoyStr}</b></span>`:''}
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;margin-bottom:6px">
+          <span>族群 <b style="color:${(s.sector_mom||0)>=0?'var(--good)':'var(--bad)'}">${sm}</b></span>
+          <span>MA60 <b style="color:${ma60Color}">${s.above_ma60!=null?(s.above_ma60>=0?'+':'')+s.above_ma60+'%':'—'}</b></span>
+          <span>量比 <b style="color:var(--txt)">${vr}</b></span>
+          <span>外資 <b style="color:${fsColor}">${fs}</b></span>
+          ${ts!=null?`<span>投信 <b style="color:${tsColor}">${ts}</b></span>`:''}
+          ${fzStr?`<span style="color:${fzColor};font-weight:600">${fzStr}</span>`:''}
+          <span>RSI <b style="color:${rsiColor}">${s.rsi||'—'}</b></span>
+          <span>距高 <b style="color:var(--dim)">${s.from_high!=null?s.from_high+'%':'—'}</b></span>
+          ${fpStr?`<span style="color:${fpColor}">${fpStr}</span>`:''}
+        </div>
+        <div>${reasons}${flags}</div>
+      </div>
+      <div>${ptsBadge(s.pts)}</div>
+    </div>`;
+  }
+
+  function renderSection(elId,title,list,emptyMsg){
+    const el=document.getElementById(elId); if(!el) return;
+    if(!list||!list.length){el.innerHTML=`<p style="color:var(--dim);padding:12px 0">${emptyMsg}</p>`;return;}
+    el.innerHTML=`<h2>${title}</h2>`+list.map((s,i)=>stockCard(s,i)).join('');
+  }
+
+  renderSection('scan-top','★ 前段班（多因子同向，信號最強）',SC.top,'暫無高分股票');
+  renderSection('scan-watch','▷ 中段班（部分因子對齊，值得追蹤）',SC.watch,'');
+  renderSection('scan-avoid','⚠ 排雷名單（籌碼惡化 / 趨勢崩壞 / 融資擁擠）',SC.avoid,'目前無明顯排雷標的');
+})();
 </script></body></html>

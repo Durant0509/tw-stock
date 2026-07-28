@@ -15,8 +15,9 @@ stocks=json.load(open('stocks_data.json',encoding='utf-8'))
 # chips_data.json / chips_backtest_data.json 可能尚未产出 (分阶段上线); 缺档时给 None
 chips=json.load(open('chips_data.json',encoding='utf-8')) if os.path.exists('chips_data.json') else None
 chips_bt=json.load(open('chips_backtest_data.json',encoding='utf-8')) if os.path.exists('chips_backtest_data.json') else None
+scan=json.load(open('scan_data.json',encoding='utf-8')) if os.path.exists('scan_data.json') else None
 dash_slim={'current':dash['current'],'engine':ds(dash['engine']),'cheap':ds(dash['cheap']),'retail':ds(dash['retail'])}
-merged={'dash':dash_slim,'gate':gate,'stocks':stocks,'chips':chips,'chips_bt':chips_bt}
+merged={'dash':dash_slim,'gate':gate,'stocks':stocks,'chips':chips,'chips_bt':chips_bt,'scan':scan}
 data_js=json.dumps(merged,ensure_ascii=False)
 
 tmpl=open('warroom_template.html',encoding='utf-8').read()

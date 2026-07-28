@@ -56,6 +56,25 @@ h2::before{content:"";width:22px;height:2px;background:var(--accent);border-radi
 .exp b{color:var(--dim)!important;font-weight:600}
 .ok{color:var(--good)}.bad{color:var(--bad)}.neu{color:var(--dim)}
 .disc{background:var(--panel2);border-radius:10px;padding:12px 15px;margin-top:14px;font-size:12.5px;color:var(--dim)}.disc b{color:var(--warn)}
+/* 法人筹码快报 */
+.chipgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.cbox{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+.cbox .cl{font-size:12px;color:var(--dim);margin-bottom:5px}
+.cbox .cv{font-size:21px;font-weight:750;letter-spacing:-.01em}
+.cbox .cd{font-size:11.5px;color:var(--dim2);margin-top:3px}
+.cbox .cv.ok{color:var(--good)}.cbox .cv.bad{color:var(--bad)}.cbox .cv.neu{color:var(--txt)}
+.crow{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 14px}
+/* 三层综合研判 */
+.layer{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-bottom:12px}
+.layer .lt{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.layer .lbody{font-size:14px;color:var(--dim);line-height:1.7}
+.layer .lbody b{color:var(--txt)}
+.bias{font-size:15px;font-weight:750;padding:3px 12px;border-radius:8px;margin-left:auto}
+.bias.long{background:rgba(255,107,107,.15);color:var(--bad)}
+.bias.short{background:rgba(81,207,131,.15);color:var(--good)}
+.bias.neu{background:rgba(138,148,163,.13);color:var(--dim)}
+.sectag{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:3px 9px;font-size:12.5px;margin:3px 4px 3px 0}
+.vfoot{font-size:11.5px;color:var(--dim2);margin-top:6px}
 .empty{color:var(--dim2);text-align:center;padding:36px;font-size:14px}
 .learn{display:flex;flex-direction:column;gap:12px}
 .lblock{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;font-size:14px;color:var(--dim);line-height:1.7}
@@ -79,6 +98,12 @@ footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);color:v
 <div class="gauge"><div class="marker" id="marker"></div></div>
 <div class="gauge-labels"><span>散戶極空🟢進場佳</span><span>正常⚪</span><span>p95極多🔴減碼</span></div>
 <div class="note"><b>回測驗證：</b>只在散戶極端偏多(前5%)減碼、其餘滿倉 → Sharpe 1.18 vs 純B&H 1.05。平時不礙事，只擋尖峰風險。</div>
+
+<h2>③ 今日法人籌碼快報</h2>
+<div id="chipflash"><div class="note" style="color:var(--dim)">籌碼資料尚未產生（需跑 chips.py）</div></div>
+
+<h2>④ 今日綜合研判（大盤→產業→個股）</h2>
+<div id="verdict3"><div class="note" style="color:var(--dim)">研判資料尚未產生</div></div>
 </div>
 
 <div class="page" id="p1">
@@ -114,6 +139,14 @@ footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);color:v
   <b>2.</b> 閘門紅燈🔴 → 不管股票多好都先觀望；綠燈/正常 → 可以找標的。<br>
   <b>3.</b> 個股體檢輸入代號 → 前兩格(趨勢動能)全綠才考慮，有🔴高風險就避開。</div>
 
+  <div class="lblock"><div class="lh">③ 法人籌碼快報怎麼看？</div>
+  <b>台股紅漲綠跌</b>（跟美股相反）：<b class="bad">紅=買超/偏多</b>、<b class="ok">綠=賣超/偏空</b>。<br>
+  <b>現貨買賣超</b>：外資/投信/自營今天買進或賣出多少億。外資是最大咖，連續大賣要留意。<br>
+  <b>外資台指期淨未平倉</b>：外資在期貨的方向。<b>大幅淨空(綠)</b>=外資避險/看空；淨多(紅)=看多。<br>
+  <b>散戶小台淨未平倉</b>：散戶在小台的方向。散戶是<b>反指標</b>，散戶越偏多(紅)反而越危險。<br>
+  <b>P/C Ratio</b>：賣權/買權比，越高代表避險情緒越濃。<b>此為未平倉量自算，與坊間成交量版數字不同</b>，看趨勢別看絕對值。<br>
+  <b class="bad">⚠️ 這些都是「事實數字」</b>，哪些真能預測漲跌由回測決定（見每項標註），沒標✅的僅供參考。</div>
+
   <div class="lblock" style="border-color:var(--warn)"><div class="lh" style="color:var(--warn)">⚠️ 一定要知道的限制</div>
   這系統回測證實「<b>避開爛股</b>」很可靠，但「<b>選出飆股</b>」做不到(台股沒有這種聖杯)。<br>
   所以把它當<b>「體檢+紅綠燈」</b>，不是「明牌產生器」。最終買賣是你的決定，它只幫你少踩雷、看懂風險。</div>
@@ -144,6 +177,92 @@ const active=['engine','cheap','retail'].filter(k=>D.current[k]&&D.current[k][2]
 const gateOk=r<b.p90;let sumBig,advice;
 if(gateOk&&active.length){sumBig='🟢 可進場 · 用「'+active.join(' + ')+'」';advice='閘門放行，健康度🟢的策略啟用。';}else if(!gateOk){sumBig='🔴 散戶過熱 · 暫緩新倉';advice='閘門亮紅/橙，即使有🟢策略也先減碼觀望。';}else{sumBig='⚪ 觀望 · 無🟢策略';advice='目前無策略體溫達標，等回溫。';}
 document.getElementById('summary').innerHTML=`<div class="big">${sumBig}</div><div class="row"><b>大盤市況</b><span>${({bull:'牛市',bear:'熊市',range:'盤整'})[rg]||rg}</span></div><div class="row"><b>該用策略</b><span>${active.length?active.join('、'):'（無🟢）'}</span></div><div class="row"><b>進場閘門</b><span>${act}（散戶第${pc}百分位）</span></div><div class="row"><b>白話建議</b><span>${advice}</span></div>`;
+// ③ 今日法人籌碼快報 (台股慣例: 買超正=紅、賣超負=綠)
+(function(){
+  const C=M.chips; const host=document.getElementById('chipflash'); if(!C||!C.current){return;}
+  const cur=C.current;
+  // 台股紅漲綠跌: 正(買超/偏多)=紅(bad class其實是紅), 負(賣超/偏空)=綠(ok class是綠)
+  const twcol=v=>v==null?'neu':(v>0?'bad':'ok');   // 買超紅=bad色, 賣超綠=ok色
+  const sgn=v=>v==null?'—':(v>0?'+':'')+v;
+  const chg=v=>v==null?'':(v>0?' ▲+':' ▼')+(v>0?v:v);
+  // 現貨三大法人 (億)
+  const sp=cur.spot||{};
+  let box='<div class="chipgrid">';
+  box+=`<div class="cbox"><div class="cl">外資現貨買賣超</div><div class="cv ${twcol(sp.foreign)}">${sgn(sp.foreign)} 億</div><div class="cd">${sp.date||''}</div></div>`;
+  box+=`<div class="cbox"><div class="cl">投信買賣超</div><div class="cv ${twcol(sp.trust)}">${sgn(sp.trust)} 億</div></div>`;
+  box+=`<div class="cbox"><div class="cl">自營商買賣超</div><div class="cv ${twcol(sp.dealer)}">${sgn(sp.dealer)} 億</div></div>`;
+  box+=`<div class="cbox"><div class="cl">三大法人合計</div><div class="cv ${twcol(sp.total)}">${sgn(sp.total)} 億</div></div>`;
+  box+='</div>';
+  // 期貨/選擇權未平倉 (口)
+  box+='<div class="chipgrid">';
+  box+=`<div class="cbox"><div class="cl">外資台指期淨未平倉</div><div class="cv ${twcol(cur.tx_foreign)}">${sgn(cur.tx_foreign)} 口</div><div class="cd">${cur.tx_date||''}${cur.tx_foreign_chg!=null?' · 增減 '+sgn(cur.tx_foreign_chg):''}</div></div>`;
+  box+=`<div class="cbox"><div class="cl">散戶小台淨未平倉</div><div class="cv ${twcol(cur.retail_mtx)}">${sgn(cur.retail_mtx)} 口</div><div class="cd">${cur.mtx_date||''} · 散戶偏多為主</div></div>`;
+  box+=`<div class="cbox"><div class="cl">外資買權淨未平倉</div><div class="cv ${twcol(cur.opt_call_foreign)}">${sgn(cur.opt_call_foreign)} 口</div><div class="cd">看多籌碼</div></div>`;
+  box+=`<div class="cbox"><div class="cl">外資賣權淨未平倉</div><div class="cv ${twcol(cur.opt_put_foreign)}">${sgn(cur.opt_put_foreign)} 口</div><div class="cd">避險/看空籌碼</div></div>`;
+  box+=`<div class="cbox"><div class="cl">P/C Ratio <span style="color:var(--dim2)">(自算)</span></div><div class="cv neu">${cur.pc_ratio!=null?cur.pc_ratio+'%':'—'}</div><div class="cd">未平倉量比 · 越高越偏空避險</div></div>`;
+  box+='</div>';
+  // 外資連買/連賣排行 (複用 S.stocks 的 fstreak)
+  const arr=Object.values(S.stocks);
+  const buys=arr.filter(x=>x.fstreak>0).sort((a,b)=>b.fstreak-a.fstreak).slice(0,8);
+  const sells=arr.filter(x=>x.fstreak<0).sort((a,b)=>a.fstreak-b.fstreak).slice(0,8);
+  const chiprow=x=>`<span class="chip" onclick="tab(1);show('${x.code}')">${x.code} ${x.name} <b class="${x.fstreak>0?'bad':'ok'}">${x.fstreak>0?'連買'+x.fstreak:'連賣'+(-x.fstreak)}日</b></span>`;
+  box+=`<div class="note" style="border-left-color:var(--good)"><b>外資連買排行 🔴</b>（點擊看體檢）</div><div class="crow">${buys.length?buys.map(chiprow).join(''):'<span class="temp">今日無</span>'}</div>`;
+  box+=`<div class="note" style="border-left-color:var(--bad)"><b>外資連賣排行 🟢</b>（連賣是危險訊號）</div><div class="crow">${sells.length?sells.map(chiprow).join(''):'<span class="temp">今日無</span>'}</div>`;
+  host.innerHTML=box;
+})();
+// ④ 今日综合研判 (大盘→产业→个股); 只用回测有效因子
+(function(){
+  const host=document.getElementById('verdict3'); if(!host)return;
+  const C=M.chips, BT=M.chips_bt, arr=Object.values(S.stocks);
+  // --- 大盘层: regime + 散户闸门 + 外资期货水位(若回测有效) ---
+  let signals=[], score=0;
+  // regime
+  const rgTxt={bull:'牛市',bear:'熊市',range:'盤整'}[rg]||rg;
+  signals.push(`市況 <b>${rgTxt}</b>`); if(rg==='bull')score++; else if(rg==='bear')score--;
+  // 散户闸门 (反指: 散户过热→偏空)
+  if(r>=b.p90){signals.push('散戶過熱(<b class="ok">偏空</b>)');score--;}
+  else if(r<=b.p20){signals.push('散戶極空(<b class="bad">偏多</b>)');score++;}
+  else signals.push('散戶情緒中性');
+  // 外资期货水位 (回测✅顺势): 从 chips_bt 找是否 stable
+  let txStable=false;
+  if(BT&&BT.factors){const f=BT.factors.find(x=>x.factor==='tx_foreign_level'); if(f&&f.stable)txStable=true;}
+  if(txStable&&C&&C.current&&C.current.tx_foreign!=null){
+    // 用历史序列算当前水位 z-score 的位置 (简化: 看最新 vs 近期区间)
+    const hist=(C.hist&&C.hist.tx_foreign)||[];
+    const vs=hist.map(x=>x[1]).filter(v=>v!=null);
+    if(vs.length>20){
+      const cur=C.current.tx_foreign, mn=Math.min(...vs), mx=Math.max(...vs);
+      const pos=(cur-mn)/((mx-mn)||1); // 0~1
+      if(pos>=0.7){signals.push('外資期貨相對偏多(<b class="bad">偏多</b>,回測✅順勢)');score++;}
+      else if(pos<=0.3){signals.push('外資期貨相對偏空(<b class="ok">偏空</b>,回測✅順勢)');score--;}
+      else signals.push('外資期貨部位中性(回測✅)');
+    }
+  }
+  const bias=score>=1?['long','🔴 偏多']:score<=-1?['short','🟢 偏空']:['neu','⚪ 中性'];
+  let html=`<div class="layer"><div class="lt">🌐 大盤層 <span class="bias ${bias[0]}">${bias[1]}</span></div>`
+    +`<div class="lbody">${signals.join(' · ')}<div class="vfoot">綜合分數 ${score>0?'+':''}${score}（每項驗證過的訊號 ±1）· 外資期貨為回測✅有效因子，散戶閘門為回測✅反指，市況為趨勢背景</div></div></div>`;
+  // --- 产业层: sector_mom 排序 + 外资连买家数 ---
+  const sec={};
+  arr.forEach(x=>{if(!x.industry)return; if(!sec[x.industry])sec[x.industry]={mom:x.sector_mom,buy:0,n:0}; sec[x.industry].n++; if(x.fstreak>0)sec[x.industry].buy++;});
+  const secArr=Object.entries(sec).filter(([k,v])=>v.mom!=null).sort((a,b)=>b[1].mom-a[1].mom);
+  const strong=secArr.slice(0,5), weak=secArr.slice(-3).reverse();
+  const secTag=([k,v])=>`<span class="sectag">${k} <b class="${v.mom>0?'bad':'ok'}">${v.mom>0?'+':''}${v.mom}%</b>${v.buy?' 外資連買'+v.buy+'檔':''}</span>`;
+  html+=`<div class="layer"><div class="lt">🏭 產業層</div><div class="lbody">`
+    +`<b>強勢族群（近月動能高）：</b><br>${strong.map(secTag).join('')}<br>`
+    +`<b>弱勢族群（避開）：</b><br>${weak.map(secTag).join('')}`
+    +`<div class="vfoot">動能=產業指數近21日報酬；外資連買檔數=該產業前150大成分中外資連續買超家數</div></div></div>`;
+  const strongSet=new Set(strong.map(x=>x[0]));
+  // --- 个股层: 健康(riskscore>=0) ∩ 强势产业 ∩ 外资连买 ---
+  const watch=arr.filter(x=>x.riskscore>=0 && strongSet.has(x.industry) && x.fstreak>0)
+    .sort((a,b)=>b.fstreak-a.fstreak).slice(0,12);
+  const wchip=x=>`<span class="chip" onclick="tab(1);show('${x.code}')">${x.code} ${x.name} <b class="bad">連買${x.fstreak}</b> <span style="color:var(--dim2)">${x.industry}</span></span>`;
+  html+=`<div class="layer"><div class="lt">📋 個股層 · 觀察名單（非買賣建議）</div><div class="lbody">`
+    +`體質健康(無地雷) + 落在強勢族群 + 外資連續買超：<br><div class="crow" style="margin-top:8px">${watch.length?watch.map(wchip).join(''):'<span class="temp">今日無符合條件個股</span>'}</div>`
+    +`<div class="vfoot">⚠️ 這是「三條件交集」的觀察清單，非進出場建議。點擊看個股體檢。最終決策請自行判斷。</div></div></div>`;
+  // 顶部一句话总结
+  const oneline=bias[0]==='long'?'大盤偏多，可留意強勢族群中體質健康、外資連買的個股':bias[0]==='short'?'大盤偏空，宜保守；即使個股體質好也降低期待':'大盤中性，選股重於擇時，聚焦強勢族群龍頭';
+  host.innerHTML=`<div class="summary" style="margin-bottom:14px"><div class="big">${bias[1]} · ${oneline}</div></div>`+html;
+})();
 // 个股体检
 document.getElementById('chips').innerHTML=['2330','2454','2317','2308','2882','2603','1101','3037'].filter(c=>S.stocks[c]).map(c=>`<span class="chip" onclick="show('${c}')">${c} ${S.stocks[c].name}</span>`).join('');
 function fmt(v,s){return v==null?'—':(v>0?'+':'')+v+s;}

@@ -43,7 +43,8 @@ def main():
         # 1) 增量抓当日资料 (resumable, 只补没抓过的)
         for s,d in [("pull_data.py","个股量价/PE"),("pull_meta.py","公司资料+殖利率/PB"),
                     ("pull_margin.py","融资融券"),
-                    ("pull_finmind.py","台指期法人"),("pull_t86.py","三大法人现货")]:
+                    ("pull_finmind.py","台指期法人"),("pull_t86.py","三大法人现货"),
+                    ("pull_chips.py","法人筹码快报")]:
             if os.path.exists(s): run(s,d)
     else:
         log("周末, 跳过抓取")
@@ -51,6 +52,8 @@ def main():
     ok=True
     ok&=run("dashboard.py","策略健康度")
     ok&=run("gate.py","进场闸门")
+    if os.path.exists("chips.py"): run("chips.py","法人筹码计算")
+    if os.path.exists("chips_backtest.py"): run("chips_backtest.py","筹码因子回测")
     ok&=run("precompute.py","个股体检",required=True)
     # 3) 组合网页
     run("build_warroom.py","生成作战台网页",required=True)

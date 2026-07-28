@@ -17,6 +17,7 @@ PULLS=[
     ("pull_margin.py",  "融资融券 ~980天"),
     ("pull_finmind.py", "台指期三大法人 (散户多空比)"),
     ("pull_t86.py",     "三大法人现货买卖超 (外资连买)"),
+    ("pull_chips.py",   "法人筹码快报 (现货金额+期货/选择权OI)"),
 ]
 
 def run(script, desc):

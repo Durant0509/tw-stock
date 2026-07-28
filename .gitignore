@@ -1,5 +1,9 @@
 # === 大资料目录 (8.2GB, 不上 GitHub, Windows 端重抓) ===
-data/
+# 用逐层穿透写法: 忽略 data 下所有内容, 但放行 finmind/chips 两个共享子目录
+# (git 规则: 若整个 data/ 被忽略, 子目录 whitelist 无法穿透; 必须逐层 /* + !子目录)
+/data/*
+!/data/finmind/
+!/data/chips/
 bwibbu_*.json
 
 # === Python ===
@@ -23,11 +27,12 @@ desktop.ini
 !gate_data.json
 !gatelight_data.json
 !ls_backtest_data.json
+!chips_data.json
+!chips_backtest_data.json
 
 # 私人记忆/排程 (不上公开 repo)
 .claude/
 update.log
 
-# finmind 破例上传 (7MB, FinMind免费API有额度限制, 用共享档避免重抓触顶)
-!data/finmind/
-!data/finmind/*.json
+# finmind(台指期,7MB) + chips(法人筹码) 共享上传, 避免各机重抓触 FinMind 额度
+# 已在顶部用 /data/* + !/data/finmind/ + !/data/chips/ 放行整个子目录

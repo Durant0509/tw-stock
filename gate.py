@@ -25,6 +25,7 @@ assert retail, "finmind资料空! 请先跑 py pull_finmind.py 重抓台指期�
 vals=sorted(retail.values())
 p80=vals[int(len(vals)*.8)]; p20=vals[int(len(vals)*.2)]
 p90=vals[int(len(vals)*.9)]; p10=vals[int(len(vals)*.1)]
+p95=vals[int(len(vals)*.95)]   # 网页 biglight 减码线用
 zret={i:B.adj_ret('0050',days[i-1],days[i]) for i in range(1,len(days))}
 COST=0.0015
 
@@ -99,7 +100,10 @@ for i in range(1,len(days),3):
     lv='red' if sig>=p80 else 'green' if sig<=p20 else 'yellow'
     gate_hist.append([days[i],round(sig,3),lv])
 out['hist']=gate_hist
-out['bands']={'p80':round(p80,3),'p20':round(p20,3),'p90':round(p90,3),'p10':round(p10,3)}
+out['bands']={'p95':round(p95,3),'p90':round(p90,3),'p80':round(p80,3),'p20':round(p20,3),'p10':round(p10,3)}
 out['curves']={'bh':[[c[0],round(c[1],3)] for c in bh[::5]],'gate':[[c[0],round(c[1],3)] for c in gt[::5]]}
+# 网页 biglight 用 backtest 显示闸门 vs 纯B&H 绩效 (mb/mg = [tot,cagr,mdd,cagr/mdd,sharpe,inpos])
+out['backtest']={'bh':{'ret':round(mb[0]*100),'sharpe':round(mb[4],2),'mdd':round(mb[2]*100)},
+                 'gate':{'ret':round(mg[0]*100),'sharpe':round(mg[4],2),'mdd':round(mg[2]*100)}}
 json.dump(out,open('gate_data.json','w', encoding='utf-8'),ensure_ascii=False)
 print("\ngate_data.json 输出完成")

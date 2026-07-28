@@ -140,21 +140,69 @@ cur['opt_call_foreign']=o.get('call_foreign')
 cur['opt_put_foreign']=o.get('put_foreign')
 cur['pc_ratio']=o.get('pc_ratio')
 
-# 历史序列 (供 spark 趋势图, 降采样每3天)
-def hist(series):
-    ds=sorted(series)
-    return [[d.replace('-',''), round(series[d]) if series[d] is not None else None] for d in ds[::3]]
+import statistics as _st
+def trend_stats(series, win=90):
+    """{date:value} → 趋势+异常判断。
+    趋势: 过去win天原始值 mean/std/min/max + hist90折线序列。
+    异常: 最新一日「变化量」的 z-score (用过去60日变化量分布)。
+      持续趋势(如外资一路加空)不算异常; 只有单日剧变才算 → 避免趋势误报。
+    level: normal(|z|<1) / mild(≥1) / anomaly(≥2)。
+    """
+    ds=[d for d in sorted(series) if series[d] is not None]
+    if len(ds)<10: return None
+    vals=[series[d] for d in ds]
+    w=vals[-win:]
+    mean=_st.mean(w); std=_st.pstdev(w)
+    cur_v=vals[-1]
+    # 日变化量 z-score (异常判断核心)
+    chg=[vals[i]-vals[i-1] for i in range(1,len(vals))]
+    cur_chg=chg[-1] if chg else None
+    zchg=None; level='normal'
+    if len(chg)>=20:
+        cw=chg[-60:] if len(chg)>=60 else chg
+        cm=_st.mean(cw); cs=_st.pstdev(cw)
+        if cs>0 and cur_chg is not None:
+            zchg=(cur_chg-cm)/cs
+            a=abs(zchg)
+            level='anomaly' if a>=2 else 'mild' if a>=1 else 'normal'
+    # 当前值处于均值上方/下方多少 % (相对 std)
+    dev_pct=round((cur_v-mean)/abs(mean)*100,1) if mean else None
+    return {
+      'mean':round(mean),'std':round(std),'min':round(min(w)),'max':round(max(w)),
+      'cur':round(cur_v),'cur_chg':round(cur_chg) if cur_chg is not None else None,
+      'zchg':round(zchg,2) if zchg is not None else None,'level':level,
+      'dev_pct':dev_pct,'n':len(w),
+      'hist90':[[d.replace('-',''), round(series[d])] for d in ds[-win:]]
+    }
+
+# P/C ratio 序列 (opt 里)
+pc_series={d: opt[d]['pc_ratio'] for d in opt if opt[d].get('pc_ratio') is not None}
+opt_call_series={d: opt[d]['call_foreign'] for d in opt if opt[d].get('call_foreign') is not None}
+opt_put_series={d: opt[d]['put_foreign'] for d in opt if opt[d].get('put_foreign') is not None}
+spot_foreign_series={f"{d[:4]}-{d[4:6]}-{d[6:]}": spot[d]['foreign'] for d in spot if spot[d].get('foreign') is not None}
+
+# 每指标趋势+异常
+trends={
+  'tx_foreign':trend_stats(tx_foreign),
+  'retail_mtx':trend_stats(retail_mtx),
+  'opt_call_foreign':trend_stats(opt_call_series),
+  'opt_put_foreign':trend_stats(opt_put_series),
+  'pc_ratio':trend_stats(pc_series),
+  'spot_foreign':trend_stats(spot_foreign_series),
+}
 
 out={
   'asof':cur_date,
   'current':cur,
-  'hist':{
-    'tx_foreign':hist(tx_foreign),
-    'retail_mtx':hist(retail_mtx),
-    'pc_ratio':[[d.replace('-',''), opt[d]['pc_ratio']] for d in sorted(opt) if opt[d].get('pc_ratio') is not None][::3],
-  }
+  'trends':trends,
 }
 json.dump(out,open('chips_data.json','w',encoding='utf-8'),ensure_ascii=False)
 print(f"chips_data.json 输出完成 | asof={cur_date}")
 print(f"  现货外资: {cur['spot']['foreign']} 亿 | 外资台指净未平仓: {cur['tx_foreign']} (增减 {cur['tx_foreign_chg']})")
 print(f"  散户小台净未平仓: {cur['retail_mtx']} | 外资买权:{cur['opt_call_foreign']} 卖权:{cur['opt_put_foreign']} | P/C:{cur['pc_ratio']}%")
+print("\n=== 趋势+异常判定 ===")
+lmap={'normal':'🟢正常','mild':'🟡偏离','anomaly':'🔴异常'}
+lbl={'tx_foreign':'外资台指期','retail_mtx':'散户小台','opt_call_foreign':'外资买权','opt_put_foreign':'外资卖权','pc_ratio':'P/C Ratio','spot_foreign':'现货外资'}
+for k,t in trends.items():
+    if t: print(f"  {lbl[k]:8}: 90天均值{t['mean']:>8} 当前{t['cur']:>8} ({t['dev_pct']:+.0f}%) | 今日变化{t['cur_chg']} z={t['zchg']} {lmap[t['level']]} ({t['n']}天)")
+    else: print(f"  {lbl[k]:8}: 历史不足(<10天), 待补")

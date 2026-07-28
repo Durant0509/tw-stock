@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """预运算前200檔诊断 → stocks_data.json + scan_data.json。
 宇宙: 前200大市值, 日均成交<5000萬自動排除 (流動性門檻)。
-新增因子: 投信連買/連賣、三大法人合力、月營收YoY、外資±2σ異常、融資斷頭壓力。
+因子: 族群動能、MA60、量能、外資/投信/三大合力連買賣、±2σ異常大單、
+      月營收YoY、融資斷頭壓力、外資持股比率趨勢、月周轉率（籌碼沉澱）。
 """
 import json, glob, os, math
 import statistics as st
@@ -105,6 +106,52 @@ def foreign_zscore(code):
     if sd==0: return None
     return round((vals[-1]-m)/sd,2)
 
+# ── 外資持股比率趨勢（TWSE MI_QFIIS 每日落地）─────────────────────────
+# {code: held_pct}，取最近有資料的日
+_qfiis_today = {}
+_qfiis_3m = {}   # {code: [held_pct_3m前, held_pct_now]} 用來判斷外資持股是否上升
+_qfiis_files = sorted(glob.glob('data/shareholding/qfiis_*.json'))
+if _qfiis_files:
+    _qf_latest = json.load(open(_qfiis_files[-1], encoding='utf-8'))
+    _qfiis_today = _qf_latest.get('stocks', {})
+# 外資持股歷史（FinMind shareholding_hist，計算近3個月趨勢）
+_sh_hist_fp = 'data/shareholding/shareholding_hist.json'
+if os.path.exists(_sh_hist_fp):
+    _sh_hist = json.load(open(_sh_hist_fp, encoding='utf-8'))
+    for code, rows in _sh_hist.items():
+        if len(rows) >= 2:
+            rows_sorted = sorted(rows, key=lambda x: x['date'])
+            pct_now  = rows_sorted[-1].get('held_pct')
+            # 找約3個月前的最近一筆
+            pct_3m = next((r['held_pct'] for r in reversed(rows_sorted[:-1])
+                           if r['date'] <= rows_sorted[-1]['date'][:7][:-3] + ''), None)
+            if pct_now is not None and pct_3m is not None:
+                _qfiis_3m[code] = round(pct_now - pct_3m, 2)  # 正=上升, 負=下降
+else:
+    _sh_hist = {}
+
+def foreign_holding(code):
+    """返回 (外資持股比率%, 近3個月變化pp)"""
+    held = _qfiis_today.get(code, {}).get('held_pct')
+    chg  = _qfiis_3m.get(code)
+    return held, chg
+
+# ── 月周轉率（籌碼沉澱指標）───────────────────────────────────────────
+# {code: TurnoverRatio%}，取最新一個月
+_turnover_map = {}
+_turn_files = sorted(glob.glob('data/turnover/*.json'))
+if _turn_files:
+    try:
+        _turn_rows = json.load(open(_turn_files[-1], encoding='utf-8'))
+        for row in _turn_rows:
+            code = row.get('Code', '').strip()
+            try:
+                _turnover_map[code] = float(row.get('TurnoverRatio', '') or 0)
+            except:
+                pass
+    except:
+        pass
+
 # ── 融資融券 (最新可用日) ────────────────────────────────────────────
 # 找最新有個股資料的 margin 檔
 m_now=None; m_date=None
@@ -207,6 +254,8 @@ def diagnose(code):
     _fz=foreign_zscore(code)
     _fin,_short,_ratio,_fin_pctl=margin_pressure(code)
     rev=rev_map.get(code,{})
+    _fh_held, _fh_chg = foreign_holding(code)
+    _turn = _turnover_map.get(code)
     # 排雷分數
     riskscore=0
     if px[-1]<ma60: riskscore-=1
@@ -240,6 +289,9 @@ def diagnose(code):
         'rev_yoy':rev.get('yoy'),  # 月營收 YoY%
         'rev_mom':rev.get('mom'),  # 月營收 MoM%
         'rev_ym':rev.get('ym',''), # 營收年月
+        'fh_held':_fh_held,        # 外資持股比率%
+        'fh_chg':_fh_chg,          # 外資持股近3月變化pp（正=上升）
+        'turnover':round(_turn,2) if _turn else None,  # 月周轉率%
         'yield':bw.get('yield'),'pb':bw.get('pb'),
         'riskscore':riskscore,
         'chart':stock_chart(code)
@@ -275,6 +327,8 @@ def scan_score(s):
     fh    = s.get('from_high') or 0
     yoy   = s.get('rev_yoy')           # 可為 None
     fp    = s.get('fin_pctl')          # 可為 None
+    fh_chg = s.get('fh_chg')          # 外資持股近3月變化pp，可為 None
+    turn   = s.get('turnover')        # 月周轉率%，可為 None
 
     # ① 族群動能（核心，回測驗證最強）
     if sm>=1.5:   pts+=3; reasons.append(f'族群動能強({sm:.1f}%)')
@@ -339,6 +393,18 @@ def scan_score(s):
     if -10<=fh<=-2: pts+=1; reasons.append(f'距高甜蜜點({fh:.1f}%)')
     elif fh<-20:    pts-=1; flags.append(f'距高點過遠({fh:.1f}%)')
 
+    # ⑬ 外資持股比率趨勢（近3個月上升=籌碼流入，下降=流出）
+    if fh_chg is not None:
+        if fh_chg >= 2:    pts+=2; reasons.append(f'外資持股↑{fh_chg:+.1f}pp(3月)')
+        elif fh_chg >= 0.5:pts+=1; reasons.append(f'外資持股↑{fh_chg:+.1f}pp(3月)')
+        elif fh_chg <= -3: pts-=2; flags.append(f'外資持股↓{fh_chg:.1f}pp(3月) ⚠')
+        elif fh_chg <= -1: pts-=1; flags.append(f'外資持股↓{fh_chg:.1f}pp(3月)')
+
+    # ⑭ 月周轉率（低=籌碼沉澱，高=散戶活躍/換手頻繁）
+    if turn is not None:
+        if turn <= 5:    pts+=1; reasons.append(f'月周轉率低({turn}%，籌碼沉澱)')
+        elif turn >= 40: pts-=1; flags.append(f'月周轉率高({turn}%，換手頻繁)')
+
     return pts, reasons, flags
 
 scan_list=[]
@@ -354,6 +420,8 @@ for code,s in out['stocks'].items():
         'from_high':s.get('from_high'),'riskscore':s.get('riskscore'),
         'fin_pctl':s.get('fin_pctl'),'short_ratio':s.get('short_ratio'),
         'rev_yoy':s.get('rev_yoy'),'rev_ym':s.get('rev_ym',''),
+        'fh_held':s.get('fh_held'),'fh_chg':s.get('fh_chg'),
+        'turnover':s.get('turnover'),
         'pts':pts,'reasons':reasons,'flags':flags
     })
 scan_list.sort(key=lambda x:-x['pts'])

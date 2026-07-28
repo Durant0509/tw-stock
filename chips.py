@@ -179,7 +179,12 @@ def trend_stats(series, win=90):
 pc_series={d: opt[d]['pc_ratio'] for d in opt if opt[d].get('pc_ratio') is not None}
 opt_call_series={d: opt[d]['call_foreign'] for d in opt if opt[d].get('call_foreign') is not None}
 opt_put_series={d: opt[d]['put_foreign'] for d in opt if opt[d].get('put_foreign') is not None}
-spot_foreign_series={f"{d[:4]}-{d[4:6]}-{d[6:]}": spot[d]['foreign'] for d in spot if spot[d].get('foreign') is not None}
+# 现货三大法人各别历史序列 (YYYY-MM-DD)
+def spot_ser(key): return {f"{d[:4]}-{d[4:6]}-{d[6:]}": spot[d][key] for d in spot if spot[d].get(key) is not None}
+spot_foreign_series=spot_ser('foreign')
+spot_trust_series=spot_ser('trust')
+spot_dealer_series=spot_ser('dealer')
+spot_total_series=spot_ser('total')
 
 # 每指标趋势+异常
 trends={
@@ -189,6 +194,9 @@ trends={
   'opt_put_foreign':trend_stats(opt_put_series),
   'pc_ratio':trend_stats(pc_series),
   'spot_foreign':trend_stats(spot_foreign_series),
+  'spot_trust':trend_stats(spot_trust_series),
+  'spot_dealer':trend_stats(spot_dealer_series),
+  'spot_total':trend_stats(spot_total_series),
 }
 
 out={
@@ -202,7 +210,7 @@ print(f"  现货外资: {cur['spot']['foreign']} 亿 | 外资台指净未平仓:
 print(f"  散户小台净未平仓: {cur['retail_mtx']} | 外资买权:{cur['opt_call_foreign']} 卖权:{cur['opt_put_foreign']} | P/C:{cur['pc_ratio']}%")
 print("\n=== 趋势+异常判定 ===")
 lmap={'normal':'🟢正常','mild':'🟡偏离','anomaly':'🔴异常'}
-lbl={'tx_foreign':'外资台指期','retail_mtx':'散户小台','opt_call_foreign':'外资买权','opt_put_foreign':'外资卖权','pc_ratio':'P/C Ratio','spot_foreign':'现货外资'}
+lbl={'tx_foreign':'外资台指期','retail_mtx':'散户小台','opt_call_foreign':'外资买权','opt_put_foreign':'外资卖权','pc_ratio':'P/C Ratio','spot_foreign':'现货外资','spot_trust':'现货投信','spot_dealer':'现货自营','spot_total':'现货合计'}
 for k,t in trends.items():
     if t: print(f"  {lbl[k]:8}: 90天均值{t['mean']:>8} 当前{t['cur']:>8} ({t['dev_pct']:+.0f}%) | 今日变化{t['cur_chg']} z={t['zchg']} {lmap[t['level']]} ({t['n']}天)")
     else: print(f"  {lbl[k]:8}: 历史不足(<10天), 待补")

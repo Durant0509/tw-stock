@@ -39,24 +39,58 @@ def load_bwibbu(ds):
     return out
 bwibbu=load_bwibbu(days[-1])
 
+# 一次性载入近120交易日 t86 外资买卖超 → {date: {code: 净买卖超股数}} (供连买判断+个股图)
+_t86_files=sorted(glob.glob('data/t86/*.json'))[-120:]
+_t86={}  # ds -> {code: net}
+for _fp in _t86_files:
+    _ds=os.path.basename(_fp)[:-5]
+    try: _d=json.load(open(_fp, encoding='utf-8'))
+    except: continue
+    _row={}
+    for r in _d.get('data',[]):
+        if r and len(r)>4:
+            try: _row[r[0]]=float(str(r[4]).replace(',',''))
+            except: pass
+    _t86[_ds]=_row
+_t86_dates=sorted(_t86)
+
 def foreign_streak(code):
     """双向连续: 连买回正(如+3), 连卖回负(如-3), 无资料回None。"""
-    files=sorted(glob.glob('data/t86/*.json'))[-15:]
-    if len(files)<5: return None
-    # 先看最近一天是买还是卖, 决定方向
+    if len(_t86_dates)<5: return None
     streak=0; direction=None
-    for fp in reversed(files):
-        d=json.load(open(fp, encoding='utf-8')); row=[r for r in d.get('data',[]) if r and r[0]==code]
-        if not row: break
-        try: net=float(str(row[0][4]).replace(',',''))
-        except: break
+    for ds in reversed(_t86_dates):
+        net=_t86[ds].get(code)
+        if net is None: break
         if direction is None:
             direction = 1 if net>0 else (-1 if net<0 else 0)
             if direction==0: break
-        if direction==1 and net>0: streak+=1
-        elif direction==-1 and net<0: streak+=1
+        if (direction==1 and net>0) or (direction==-1 and net<0): streak+=1
         else: break
     return streak*direction if direction else 0
+
+def stock_chart(code):
+    """个股90天线图资料: 股价指数化 + 外资买卖超(张) + 外资买卖超±2σ阈值。
+    定位: 只看外资进出与股价关系, 不标进场点(回测证实个股筹码预测力弱 IC0.02)。"""
+    px=gpx(code)
+    if len(px)<90: return None
+    # 近90交易日股价 (指数化到100起点便于看形状)
+    seg=px[-90:]; base=seg[0] or 1
+    price=[round(v/base*100,1) for v in seg]
+    # 对齐日期 (用 days 后90个)
+    dts=[d[4:6]+'/'+d[6:] for d in days[-90:]]
+    # 外资买卖超 (张=股数/1000), 对齐 t86 有资料的近90天
+    fnet=[]
+    for ds in _t86_dates[-90:]:
+        v=_t86[ds].get(code)
+        fnet.append([ds[4:6]+'/'+ds[6:], round(v/1000) if v is not None else None])
+    # 外资买卖超 ±2σ 阈值 (判单日异常大买/大卖)
+    vals=[x[1] for x in fnet if x[1] is not None]
+    thr=None
+    if len(vals)>=20:
+        m=sum(vals)/len(vals); sd=(sum((v-m)**2 for v in vals)/len(vals))**.5
+        thr={'mean':round(m),'hi':round(m+2*sd),'lo':round(m-2*sd)}
+    return {'price':list(zip(dts,price)) if False else [[dts[i],price[i]] for i in range(len(price))],
+            'fnet':fnet,'fthr':thr}
 
 pxc={}
 def gpx(code):
@@ -120,7 +154,7 @@ def diagnose(code):
       'vol_ratio':round(vol_ratio,1) if vol_ratio else None,'rsi':round(rsi(px)) if rsi(px) else None,
       'industry':ind,'sector_mom':round(smom*100,1) if smom is not None else None,
       'short_ratio':round(ratio,2) if ratio else None,'yield':bw.get('yield'),'pb':bw.get('pb'),
-      'fstreak':foreign_streak(code),'riskscore':riskscore}
+      'fstreak':foreign_streak(code),'riskscore':riskscore,'chart':stock_chart(code)}
 
 out={'asof':f"{days[-1][:4]}-{days[-1][4:6]}-{days[-1][6:]}",'regime':regime,
      'gate':gate,'gate_pctl':round(rpctl),'stocks':{}}

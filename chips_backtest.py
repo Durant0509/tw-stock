@@ -46,6 +46,21 @@ def load_tx_foreign():
         if ds in d2i: out[d2i[ds]]=v
     return out
 
+# --- 载入现货投信买超金额 (from chips spot BFI82U) → 研究证实反指 ---
+def load_spot_trust():
+    import os
+    out={}
+    for fp in sorted(glob.glob('data/chips/spot_*.json')):
+        ds=os.path.basename(fp)[5:-5]
+        if ds not in d2i: continue
+        try: d=json.load(open(fp,encoding='utf-8'))
+        except: continue
+        for row in d.get('data',[]):
+            if row and row[0]=='投信':
+                try: out[d2i[ds]]=float(str(row[-1]).replace(',',''))/1e8
+                except: pass
+    return out
+
 def spearman_ic(pairs):
     """pairs=[(factor, fwd_ret)]; 回 Spearman 秩相关 (IC)。"""
     pairs=[(x,y) for x,y in pairs if x is not None and y is not None]
@@ -83,31 +98,34 @@ def verdict(ic, n):
     return 'none'
 
 tx=load_tx_foreign()
+spot_trust=load_spot_trust()
 idxs=sorted(tx)
 
-# 因子1: 外资期货净未平仓「水位」(用 60 日 z-score, 去除长期趋势)
-def zscore_series():
-    out={}
-    vals=[tx[i] for i in idxs]
-    for k,i in enumerate(idxs):
+# 通用: 60日 z-score 水位 (去长期趋势)
+def zscore_of(series):
+    ii=sorted(series); vals=[series[i] for i in ii]; out={}
+    for k,i in enumerate(ii):
         if k<60: continue
         window=vals[k-60:k]
         m=st.mean(window); sd=st.pstdev(window)
-        out[i]=(tx[i]-m)/sd if sd>0 else 0
+        out[i]=(series[i]-m)/sd if sd>0 else 0
     return out
 
+# 因子1: 外资期货净未平仓「水位」(顺势, 研究IC 0.15)
+def zscore_series(): return zscore_of(tx)
 # 因子2: 外资期货净未平仓「日增减」
 def chg_series():
     out={}
     for k in range(1,len(idxs)):
         i=idxs[k]; ip=idxs[k-1]
-        if i-ip<=3: out[i]=tx[i]-tx[ip]   # 相邻交易日才算增减
+        if i-ip<=3: out[i]=tx[i]-tx[ip]
     return out
 
 results=[]
 for name,desc,ser,hypo in [
     ('tx_foreign_level','外资台指期净未平仓水位(60日z-score)',zscore_series(),'水位极端→反转? 或顺势?'),
     ('tx_foreign_chg','外资台指期净未平仓日增减',chg_series(),'外资加空→未来偏空(顺势)?'),
+    ('spot_trust_level','现货投信买超水位(60日z-score)',zscore_of(spot_trust),'投信大买→反指(未来偏弱)?'),
 ]:
     row={'factor':name,'desc':desc,'hypo':hypo,'horizons':{}}
     for n in (5,20):

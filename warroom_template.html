@@ -72,7 +72,10 @@ h2::before{content:"";width:22px;height:2px;background:var(--accent);border-radi
 .chart-pop{background:var(--panel);border:1px solid var(--accent);border-radius:12px;padding:16px 18px;margin:0 0 14px}
 .chart-pop .ct{font-size:14px;font-weight:700;margin-bottom:4px}
 .chart-pop .cdesc{font-size:12.5px;color:var(--dim);margin-bottom:10px;line-height:1.6}
-.chart-pop svg{width:100%;height:150px}
+.chart-pop svg{width:100%;height:auto;display:block}
+.chart-pop .thr{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:11.5px}
+.chart-pop .thr span{color:var(--dim)}.chart-pop .thr b{color:var(--txt)}
+.chart-pop .thr i{display:inline-block;width:18px;height:0;border-top-width:2px;border-top-style:solid;vertical-align:middle;margin-right:4px}
 /* 三层综合研判 */
 .layer{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-bottom:12px}
 .layer .lt{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;display:flex;align-items:center;gap:8px}
@@ -203,24 +206,51 @@ document.getElementById('summary').innerHTML=`<div class="big">${sumBig}</div><d
   // 異常燈: normal🟢 mild🟡 anomaly🔴
   const alarmTxt={normal:'🟢正常',mild:'🟡偏離',anomaly:'🔴異常'};
   function alarm(tk){const t=TR[tk];if(!t||t.level==null||t.zchg==null)return '';return `<span class="alarm ${t.level}">${alarmTxt[t.level]}</span>`;}
-  // 90天折線圖: 折線+均線+±2σ帶, 超出帶的點標紅
+  // 数值格式化(万/亿简写, 供轴标签)
+  function kfmt(v){const a=Math.abs(v);if(a>=1e8)return(v/1e8).toFixed(1)+'億';if(a>=1e4)return Math.round(v/1e3)/10+'萬';return Math.round(v).toLocaleString();}
+  function dfmt(ymd){return ymd.length>=8?ymd.slice(4,6)+'/'+ymd.slice(6,8):ymd;}
+  // 90天完整趋势图: 折线+四条阈值线(mean/±1σ/±2σ,标数值)+分层着色+Y轴刻度+X轴日期+每点hover
   function linechart(tk){
     const t=TR[tk]; if(!t||!t.hist90||t.hist90.length<3)return '<div class="temp">歷史資料不足，等每日累積後顯示</div>';
-    const H=t.hist90, W=760, HT=150, pad=6;
-    const vs=H.map(x=>x[1]); const mn=Math.min(...vs,t.mean-2*t.std), mx=Math.max(...vs,t.mean+2*t.std), rng=(mx-mn)||1;
-    const X=i=>pad+i*(W-2*pad)/(H.length-1), Y=v=>pad+(1-(v-mn)/rng)*(HT-2*pad);
-    // ±2σ 異常帶
-    const yTop=Y(t.mean+2*t.std), yBot=Y(t.mean+ -2*t.std), yMean=Y(t.mean);
-    let band=`<rect x="${pad}" y="${yTop.toFixed(1)}" width="${W-2*pad}" height="${(yBot-yTop).toFixed(1)}" fill="var(--good)" opacity=".06"/>`;
-    band+=`<line x1="${pad}" y1="${yMean.toFixed(1)}" x2="${W-pad}" y2="${yMean.toFixed(1)}" stroke="var(--dim)" stroke-dasharray="4 3" opacity=".6"/>`;
-    // 折線
+    const H=t.hist90, W=760, HT=200, mL=64, mR=90, mT=10, mB=24;  // 左留Y轴,右留阈值标签,下留日期
+    const iw=W-mL-mR, ih=HT-mT-mB;
+    const m=t.mean, sd=t.std;
+    const vs=H.map(x=>x[1]);
+    const mn=Math.min(...vs, m-2.3*sd), mx=Math.max(...vs, m+2.3*sd), rng=(mx-mn)||1;
+    const X=i=>mL+i*iw/(H.length-1), Y=v=>mT+(1-(v-mn)/rng)*ih;
+    // 分层着色带: 正常(±1σ内)绿、偏离(1~2σ)黄、异常(>2σ)红外, 用横带
+    const yb=v=>Math.max(mT,Math.min(mT+ih,Y(v)));
+    let bands='';
+    // 异常区(±2σ外)淡红
+    bands+=`<rect x="${mL}" y="${mT}" width="${iw}" height="${(yb(m+2*sd)-mT).toFixed(1)}" fill="var(--bad)" opacity=".05"/>`;
+    bands+=`<rect x="${mL}" y="${yb(m-2*sd).toFixed(1)}" width="${iw}" height="${(mT+ih-yb(m-2*sd)).toFixed(1)}" fill="var(--bad)" opacity=".05"/>`;
+    // 偏离区(1~2σ)淡黄
+    bands+=`<rect x="${mL}" y="${yb(m+2*sd).toFixed(1)}" width="${iw}" height="${(yb(m+sd)-yb(m+2*sd)).toFixed(1)}" fill="var(--warn)" opacity=".06"/>`;
+    bands+=`<rect x="${mL}" y="${yb(m-sd).toFixed(1)}" width="${iw}" height="${(yb(m-2*sd)-yb(m-sd)).toFixed(1)}" fill="var(--warn)" opacity=".06"/>`;
+    // 正常区(±1σ内)淡绿
+    bands+=`<rect x="${mL}" y="${yb(m+sd).toFixed(1)}" width="${iw}" height="${(yb(m-sd)-yb(m+sd)).toFixed(1)}" fill="var(--good)" opacity=".05"/>`;
+    // 阈值线 + 右侧数值标签
+    const lines=[[m+2*sd,'+2σ','var(--bad)'],[m+sd,'+1σ','var(--warn)'],[m,'均值','var(--dim)'],[m-sd,'-1σ','var(--warn)'],[m-2*sd,'-2σ','var(--bad)']];
+    let thr='';
+    lines.forEach(([v,lb,c])=>{const y=Y(v).toFixed(1);thr+=`<line x1="${mL}" y1="${y}" x2="${mL+iw}" y2="${y}" stroke="${c}" stroke-dasharray="${lb==='均值'?'5 3':'2 3'}" opacity=".5"/>`;
+      thr+=`<text x="${mL+iw+4}" y="${(+y+3).toFixed(1)}" fill="${c}" font-size="10">${lb} ${kfmt(v)}</text>`;});
+    // Y轴刻度(最高/最低/均值)
+    let yax='';[mx,m,mn].forEach(v=>{const y=Y(v).toFixed(1);yax+=`<text x="${mL-6}" y="${(+y+3).toFixed(1)}" fill="var(--dim2)" font-size="10" text-anchor="end">${kfmt(v)}</text>`;});
+    // 折线
     let path='';H.forEach((x,i)=>{path+=(i?'L':'M')+X(i).toFixed(1)+' '+Y(x[1]).toFixed(1)+' ';});
     let line=`<path d="${path}" fill="none" stroke="var(--accent)" stroke-width="1.6"/>`;
-    // 異常點標紅 (超出±2σ)
-    let dots='';H.forEach((x,i)=>{const out=Math.abs(x[1]-t.mean)>2*t.std;if(out)dots+=`<circle cx="${X(i).toFixed(1)}" cy="${Y(x[1]).toFixed(1)}" r="2.4" fill="var(--bad)"/>`;});
-    // 最新點
-    const li=H.length-1;dots+=`<circle cx="${X(li).toFixed(1)}" cy="${Y(H[li][1]).toFixed(1)}" r="3.2" fill="var(--txt)"/>`;
-    return `<svg viewBox="0 0 ${W} ${HT}" preserveAspectRatio="none">${band}${line}${dots}</svg>`;
+    // 每点透明hover(原生title) + 异常点标红
+    let dots='';H.forEach((x,i)=>{
+      const out=Math.abs(x[1]-m)>2*sd, mild=!out&&Math.abs(x[1]-m)>sd;
+      const cx=X(i).toFixed(1), cy=Y(x[1]).toFixed(1);
+      if(out)dots+=`<circle cx="${cx}" cy="${cy}" r="2.6" fill="var(--bad)"/>`;
+      else if(mild)dots+=`<circle cx="${cx}" cy="${cy}" r="1.8" fill="var(--warn)"/>`;
+      dots+=`<circle cx="${cx}" cy="${cy}" r="6" fill="transparent"><title>${dfmt(x[0])} ： ${kfmt(x[1])}${out?' ⚠異常':mild?' 偏離':''}</title></circle>`;
+    });
+    const li=H.length-1;dots+=`<circle cx="${X(li).toFixed(1)}" cy="${Y(H[li][1]).toFixed(1)}" r="3.4" fill="var(--txt)"><title>最新 ${dfmt(H[li][0])} ： ${kfmt(H[li][1])}</title></circle>`;
+    // X轴日期(起,中,迄)
+    let xax='';[0,Math.floor(H.length/2),H.length-1].forEach(i=>{xax+=`<text x="${X(i).toFixed(1)}" y="${HT-6}" fill="var(--dim2)" font-size="10" text-anchor="middle">${dfmt(H[i][0])}</text>`;});
+    return `<svg viewBox="0 0 ${W} ${HT}">${bands}${thr}${yax}${line}${dots}${xax}</svg>`;
   }
   // 卡片: 帶異常燈 + 可點擊展開圖
   function card(label,val,unit,tk,cls,sub){
@@ -230,9 +260,9 @@ document.getElementById('summary').innerHTML=`<div class="big">${sumBig}</div><d
   const sp=cur.spot||{};
   let box='<div class="chipgrid">';
   box+=card('外資現貨買賣超',sgn(sp.foreign),'億','spot_foreign',twcol(sp.foreign),sp.date||'');
-  box+=card('投信買賣超',sgn(sp.trust),'億',null,twcol(sp.trust));
-  box+=card('自營商買賣超',sgn(sp.dealer),'億',null,twcol(sp.dealer));
-  box+=card('三大法人合計',sgn(sp.total),'億',null,twcol(sp.total));
+  box+=card('投信買賣超',sgn(sp.trust),'億','spot_trust',twcol(sp.trust));
+  box+=card('自營商買賣超',sgn(sp.dealer),'億','spot_dealer',twcol(sp.dealer));
+  box+=card('三大法人合計',sgn(sp.total),'億','spot_total',twcol(sp.total));
   box+='</div><div class="chipgrid">';
   box+=card('外資台指期淨未平倉',sgn(cur.tx_foreign),'口','tx_foreign',twcol(cur.tx_foreign),(cur.tx_date||'')+(cur.tx_foreign_chg!=null?' · 增減'+sgn(cur.tx_foreign_chg):''));
   box+=card('散戶小台淨未平倉',sgn(cur.retail_mtx),'口','retail_mtx',twcol(cur.retail_mtx),'散戶偏多為主');
@@ -278,20 +308,24 @@ document.getElementById('summary').innerHTML=`<div class="big">${sumBig}</div><d
   // 外资期货水位 (回测✅顺势): 从 chips_bt 找是否 stable
   let txStable=false;
   if(BT&&BT.factors){const f=BT.factors.find(x=>x.factor==='tx_foreign_level'); if(f&&f.stable)txStable=true;}
-  if(txStable&&C&&C.trends&&C.trends.tx_foreign){
-    // 用趋势序列算当前水位在90天区间的位置 (回测✅顺势因子)
-    const t=C.trends.tx_foreign, vs=(t.hist90||[]).map(x=>x[1]);
-    if(vs.length>20){
-      const cur=t.cur, mn=Math.min(...vs), mx=Math.max(...vs);
-      const pos=(cur-mn)/((mx-mn)||1); // 0~1
-      if(pos>=0.7){signals.push('外資期貨相對偏多(<b class="bad">偏多</b>,回測✅順勢)');score++;}
-      else if(pos<=0.3){signals.push('外資期貨相對偏空(<b class="ok">偏空</b>,回測✅順勢)');score--;}
-      else signals.push('外資期貨部位中性(回測✅)');
-    }
-  }
+  // 用某因子当前值在90天区间的相对位置(0~1)
+  function posOf(tk){const t=C&&C.trends&&C.trends[tk];if(!t)return null;const vs=(t.hist90||[]).map(x=>x[1]);if(vs.length<=20)return null;const mn=Math.min(...vs),mx=Math.max(...vs);return (t.cur-mn)/((mx-mn)||1);}
+  function stableF(fn){return BT&&BT.factors&&BT.factors.find(x=>x.factor===fn&&x.stable);}
+  // 外资期货水位 (回测✅顺势 IC0.15)
+  if(stableF('tx_foreign_level')){const pos=posOf('tx_foreign');if(pos!=null){
+    if(pos>=0.7){signals.push('外資期貨偏多(<b class="bad">偏多</b>,✅順勢IC.15)');score++;}
+    else if(pos<=0.3){signals.push('外資期貨偏空(<b class="ok">偏空</b>,✅順勢)');score--;}
+    else signals.push('外資期貨中性(✅)');
+  }}
+  // 投信现货买超水位 (回测✅反指 IC-0.085): 投信大买→未来偏弱
+  if(stableF('spot_trust_level')){const pos=posOf('spot_trust');if(pos!=null){
+    if(pos>=0.7){signals.push('投信大買(<b class="ok">偏空</b>,✅反指IC-.09)');score--;}
+    else if(pos<=0.3){signals.push('投信大賣(<b class="bad">偏多</b>,✅反指)');score++;}
+  }}
   const bias=score>=1?['long','🔴 偏多']:score<=-1?['short','🟢 偏空']:['neu','⚪ 中性'];
-  let html=`<div class="layer"><div class="lt">🌐 大盤層 <span class="bias ${bias[0]}">${bias[1]}</span></div>`
-    +`<div class="lbody">${signals.join(' · ')}<div class="vfoot">綜合分數 ${score>0?'+':''}${score}（每項驗證過的訊號 ±1）· 外資期貨為回測✅有效因子，散戶閘門為回測✅反指，市況為趨勢背景</div></div></div>`;
+  const actTxt=bias[0]==='long'?'可偏多/續抱':bias[0]==='short'?'偏空/減碼/平倉':'中性/觀望';
+  let html=`<div class="layer"><div class="lt">🌐 大盤層 <span class="bias ${bias[0]}">${bias[1]} · ${actTxt}</span></div>`
+    +`<div class="lbody">${signals.join(' · ')}<div class="vfoot">綜合分數 ${score>0?'+':''}${score}（每項回測✅驗證過的訊號 ±1）· 外資期貨(順勢IC.15)+投信(反指IC-.09)+散戶閘門(反指)+市況背景。未通過回測的籌碼不納入計分。</div></div></div>`;
   // --- 产业层: sector_mom 排序 + 外资连买家数 ---
   const sec={};
   arr.forEach(x=>{if(!x.industry)return; if(!sec[x.industry])sec[x.industry]={mom:x.sector_mom,buy:0,n:0}; sec[x.industry].n++; if(x.fstreak>0)sec[x.industry].buy++;});
@@ -345,7 +379,44 @@ function show(code){
      <div class="line">近5日量能 <b class="neu">${s.vol_ratio==null?'—':s.vol_ratio+'x'}</b><span class="exp"><b>>1.5x=爆量</b>(有事發生)、<0.6x=量縮(沒人氣)。</span></div>
      <div class="line">年化波動 <b class="neu">${s.vol==null?'—':s.vol+'%'}</b><span class="exp">震盪程度。>50%=高波動(部位要小)、<25%=溫和。</span></div></div>
   </div>${mw}
+  ${stockchart(s.chart)}
   <div class="disc"><b>怎麼讀：</b>趨勢+動能是回測證實有預測力的維度。估值/籌碼供參考(選股用途弱)。此工具幫你<b>排雷體檢</b>，進出場請搭配左側大盤閘門與你的判斷。</div>`;
+}
+// 个股线图: 上=股价走势, 下=外资买卖超(±2σ标异常大买/大卖). 只看关系不标进场点(回测证实个股筹码预测力弱)
+function stockchart(c){
+  if(!c||!c.price||c.price.length<10)return '';
+  const W=760,Hp=130,Hf=90,mL=44,mR=10,mT=8,mB=18,gap=16;
+  const iw=W-mL-mR;
+  // 上半: 股价
+  const pv=c.price.map(x=>x[1]),pmn=Math.min(...pv),pmx=Math.max(...pv),prg=(pmx-pmn)||1;
+  const PX=i=>mL+i*iw/(c.price.length-1),PY=v=>mT+(1-(v-pmn)/prg)*(Hp-mT-mB);
+  let pp='';c.price.forEach((x,i)=>{pp+=(i?'L':'M')+PX(i).toFixed(1)+' '+PY(x[1]).toFixed(1)+' ';});
+  const up=pv[pv.length-1]>=pv[0];
+  let priceSvg=`<text x="${mL-6}" y="${(PY(pmx)+3).toFixed(1)}" fill="var(--dim2)" font-size="9" text-anchor="end">${pmx}</text>`
+    +`<text x="${mL-6}" y="${(PY(pmn)+3).toFixed(1)}" fill="var(--dim2)" font-size="9" text-anchor="end">${pmn}</text>`
+    +`<path d="${pp}" fill="none" stroke="${up?'var(--bad)':'var(--good)'}" stroke-width="1.6"/>`;
+  // 下半: 外资买卖超柱 (红买绿卖) + ±2σ线
+  const fnet=c.fnet,fv=fnet.map(x=>x[1]).filter(v=>v!=null);
+  if(!fv.length)return `<div class="chart-pop"><div class="ct">📈 ${''}股價走勢（近${c.price.length}日）</div><svg viewBox="0 0 ${W} ${Hp}">${priceSvg}</svg></div>`;
+  const famx=Math.max(Math.abs(Math.min(...fv)),Math.abs(Math.max(...fv)),(c.fthr?Math.abs(c.fthr.hi):0),(c.fthr?Math.abs(c.fthr.lo):0))||1;
+  const fTop=Hp+gap, fMid=fTop+(Hf-mB)/2;
+  const FX=i=>mL+i*iw/(fnet.length-1),FH=v=>(v/famx)*((Hf-mB)/2);
+  const bw=Math.max(iw/fnet.length-0.6,1);
+  let bars='';fnet.forEach((x,i)=>{if(x[1]==null)return;const h=FH(x[1]);const y=x[1]>=0?fMid-h:fMid;bars+=`<rect x="${(FX(i)-bw/2).toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.abs(h).toFixed(1)}" fill="${x[1]>=0?'var(--bad)':'var(--good)'}" opacity=".8"><title>${x[0]}：外資${x[1]>=0?'買超':'賣超'}${Math.abs(x[1]).toLocaleString()}張</title></rect>`;});
+  let fthrSvg='';
+  if(c.fthr){const yhi=fMid-FH(c.fthr.hi),ylo=fMid-FH(c.fthr.lo);
+    fthrSvg=`<line x1="${mL}" y1="${yhi.toFixed(1)}" x2="${mL+iw}" y2="${yhi.toFixed(1)}" stroke="var(--bad)" stroke-dasharray="2 3" opacity=".5"/>`
+      +`<text x="${mL+iw+2}" y="${(yhi+3).toFixed(1)}" fill="var(--bad)" font-size="8.5">異常大買</text>`
+      +`<line x1="${mL}" y1="${ylo.toFixed(1)}" x2="${mL+iw}" y2="${ylo.toFixed(1)}" stroke="var(--good)" stroke-dasharray="2 3" opacity=".5"/>`
+      +`<text x="${mL+iw+2}" y="${(ylo+3).toFixed(1)}" fill="var(--good)" font-size="8.5">異常大賣</text>`;}
+  fthrSvg+=`<line x1="${mL}" y1="${fMid.toFixed(1)}" x2="${mL+iw}" y2="${fMid.toFixed(1)}" stroke="var(--line)"/>`;
+  fthrSvg+=`<text x="${mL-6}" y="${fTop+8}" fill="var(--dim2)" font-size="9" text-anchor="end">外資</text>`;
+  // 日期轴
+  let xax='';[0,Math.floor(c.price.length/2),c.price.length-1].forEach(i=>{xax+=`<text x="${PX(i).toFixed(1)}" y="${fTop+Hf-4}" fill="var(--dim2)" font-size="9" text-anchor="middle">${c.price[i][0]}</text>`;});
+  const totalH=Hp+gap+Hf;
+  return `<div class="chart-pop"><div class="ct">📈 股價走勢 vs 外資買賣超（近${c.price.length}日）</div>`
+    +`<div class="cdesc">上=股價（<b class="bad">紅漲</b>/<b class="ok">綠跌</b>），下=外資每日買賣超張數（紅買綠賣），虛線=該股±2σ異常大買/大賣門檻。<br><span style="color:var(--dim2)">⚠️ 回測顯示個股外資連買對進場預測力弱（IC 0.02、勝率46%），此圖僅供了解外資動向；唯「外資連賣3日以上」是有效危險訊號。</span></div>`
+    +`<svg viewBox="0 0 ${W} ${totalH}">${priceSvg}${bars}${fthrSvg}${xax}</svg></div>`;
 }
 document.getElementById('q').addEventListener('input',e=>{const v=e.target.value.trim();if(S.stocks[v])show(v);else if(v.length>=4){document.getElementById('report').style.display='none';document.getElementById('empty').style.display='block';document.getElementById('empty').textContent=v+' 不在前150大';}});
 </script></body></html>

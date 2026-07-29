@@ -37,6 +37,12 @@ def git(args):
 def main():
     log("="*50)
     log("每日更新开始")
+    # 0) 先拉最新 code，確保本次更新用最新策略
+    ok_pull, pull_out = git(["pull","--rebase","--autostash"])
+    if ok_pull:
+        log(f"  ✓ git pull 完成: {pull_out.splitlines()[-1] if pull_out else 'ok'}")
+    else:
+        log(f"  ⚠️ git pull 失败（继续用本地版本）: {pull_out[-200:]}")
     # 平日才抓 (周末无新资料; 但仍会重算+push 确保网页在线)
     wd=datetime.date.today().weekday()
     if wd<5:
@@ -75,8 +81,6 @@ def main():
         log(f"  ✗ commit 失败, 中止 (未 push): {out[-300:]}")
         sys.exit(1)
     else:
-        # 先 pull rebase 避免远端有更新导致 push 失败
-        git(["pull","--rebase","--autostash"])
         okp,outp=git(["push"])
         if okp and "up-to-date" not in outp.lower():
             log("  ✓ push 成功")

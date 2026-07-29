@@ -1,9 +1,5 @@
-# === 大资料目录 (8.2GB, 不上 GitHub, Windows 端重抓) ===
-# 用逐层穿透写法: 忽略 data 下所有内容, 但放行 finmind/chips 两个共享子目录
-# (git 规则: 若整个 data/ 被忽略, 子目录 whitelist 无法穿透; 必须逐层 /* + !子目录)
-/data/*
-!/data/finmind/
-!/data/chips/
+# === 所有資料目錄（本地保存，不上 git，各機各自重抓）===
+data/
 bwibbu_*.json
 
 # === Python ===

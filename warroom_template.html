@@ -658,16 +658,47 @@ document.getElementById('q').addEventListener('input',e=>{
         const retC=ret>0?'var(--good)':ret<0?'var(--bad)':'var(--dim)';
         const lot=(pos.lot||100000)/10000;
         const pnl=pos.lot?(pos.lot*ret/100).toFixed(0):'-';
-        const reasons=(pos.reasons||[]).slice(0,3).map(r=>`<span class="tg g">${r}</span>`).join('');
+
+        // ── 出場信號燈 ──
+        const score=pos.score;
+        const ma60=pos.ma60_pct;
+        const fs=pos.fstreak||0;
+        const stopDist=pos.stop_dist;
+        const hold=pos.hold_days||0;
+
+        // 分數：≤7 警告，≤6 危險
+        const scoreC=score==null?'var(--dim)':score<=6?'var(--bad)':score<=7?'var(--warn)':'var(--good)';
+        const scoreTag=score!=null?`<span style="color:${scoreC};font-weight:700">分${score}</span>`:'<span style="color:var(--dim)">分?</span>';
+
+        // MA60距離
+        const ma60C=ma60==null?'var(--dim)':ma60<-2?'var(--bad)':ma60<0?'var(--warn)':'var(--good)';
+        const ma60Tag=ma60!=null?`<span style="color:${ma60C}">MA60 ${ma60>0?'+':''}${ma60}%</span>`:'';
+
+        // 外資連買賣
+        const fsC=fs<=-5?'var(--bad)':fs<=-3?'var(--warn)':fs>=3?'var(--good)':'var(--dim)';
+        const fsLabel=fs>0?`外資連買${fs}日`:fs<0?`外資連賣${Math.abs(fs)}日`:'外資中性';
+        const fsTag=`<span style="color:${fsC}">${fsLabel}</span>`;
+
+        // 距止損
+        const sdC=stopDist!=null?(stopDist<2?'var(--bad)':stopDist<5?'var(--warn)':'var(--dim)'):'var(--dim)';
+        const sdTag=stopDist!=null?`<span style="color:${sdC}">止損距 ${stopDist>0?'+':''}${stopDist}%</span>`:'';
+
+        // 持有進度
+        const holdPct=Math.min(100,Math.round(hold/60*100));
+        const holdC=holdPct>=90?'var(--warn)':holdPct>=70?'var(--dim)':'var(--dim2)';
+        const holdTag=`<span style="color:${holdC}">持${hold}/60日</span>`;
+
+        const signals=[scoreTag,ma60Tag,fsTag,sdTag,holdTag].filter(Boolean).join('<span style="color:var(--dim2);margin:0 4px">·</span>');
+
         return `<div class="rank" onclick="tab(2);show('${pos.code}')">
           <div style="min-width:36px;text-align:center;font-size:20px">${ret>3?'🟢':ret<-3?'🔴':'🟡'}</div>
           <div class="info" style="flex:1">
             <div class="t">${pos.code} ${pos.name}</div>
-            <div class="sub" style="margin-top:3px;font-size:12px;color:var(--dim)">
+            <div style="margin-top:3px;font-size:12px;color:var(--dim)">
               進 ${(pos.entry_date||'').replace(/(\d{4})(\d{2})(\d{2})/,'$1/$2/$3')}
-              @${pos.entry_px}　持 ${pos.hold_days}日　分=${pos.entry_score}　${lot}萬
+              @${pos.entry_px}　${lot}萬
             </div>
-            <div class="tags" style="margin-top:4px">${reasons}</div>
+            <div style="margin-top:5px;font-size:12px;line-height:1.8">${signals}</div>
           </div>
           <div style="text-align:right;min-width:80px">
             <div style="font-size:18px;font-weight:700;color:${retC}">${ret>0?'+':''}${ret}%</div>

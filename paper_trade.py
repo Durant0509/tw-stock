@@ -79,10 +79,19 @@ def run():
         gross   = (cur_px - pos['entry_px']) / pos['entry_px']
         hold    = pos.get('hold_days', 0) + 1
 
+        ma60_pct = (s.get('above_ma60', 0) or 0) if s else 0
+        fs       = (s.get('fstreak', 0) or 0) if s else 0
+        stop_dist = round((gross - STOP_LOSS) * 100, 2)   # 距止損還剩幾 %（正=安全）
+
         state['positions'][code].update({
-            'cur_px': cur_px,
+            'cur_px':    cur_px,
             'hold_days': hold,
             'gross_ret': round(gross * 100, 2),
+            # 出場信號狀態（每日更新，網頁顯示用）
+            'score':     score,
+            'ma60_pct':  round(ma60_pct, 1),
+            'fstreak':   fs,
+            'stop_dist': stop_dist,   # 正值=離停損還有多遠，負=已超
         })
 
         reason = None
@@ -93,10 +102,8 @@ def run():
         elif hold >= MAX_HOLD:
             reason = f'持有 {hold} 日到期'
         elif s:
-            ma60_pct = s.get('above_ma60', 0) or 0
             if ma60_pct < -2:
                 reason = f'破MA60 ({ma60_pct:+.1f}%)'
-            fs = s.get('fstreak', 0) or 0
             if not reason and fs <= -5:
                 reason = f'外資連賣 {abs(fs)} 日'
 

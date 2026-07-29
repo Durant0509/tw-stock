@@ -653,6 +653,9 @@ document.getElementById('q').addEventListener('input',e=>{
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px">
       ${[
         ['Regime',`<span style="color:${regimeC[sm.regime]||'var(--dim)'}">${regimeL[sm.regime]||sm.regime||'-'}</span>`],
+        ['本金',`${((sm.capital||500000)/10000).toFixed(0)}萬`],
+        ['總資產',sm.total_equity?`<span style="color:${sm.total_ret_pct>=0?'var(--up)':'var(--dn)'}">${Math.round(sm.total_equity/10000)}萬</span>`:'—'],
+        ['總報酬',sm.total_ret_pct!=null?`<span style="color:${sm.total_ret_pct>=0?'var(--up)':'var(--dn)'}">${sm.total_ret_pct>=0?'+':''}${sm.total_ret_pct}%</span>`:'—'],
         ['持倉',`${sm.open_positions||0} 支`],
         ['已結交易',`${sm.closed_trades||0} 筆`],
         ['模擬勝率',`${sm.win_rate||0}%`],
@@ -679,7 +682,7 @@ document.getElementById('q').addEventListener('input',e=>{
         <div class="info" style="flex:1">
           <div class="t">${pos.code} ${pos.name}</div>
           <div class="sub" style="margin-top:3px">進場 ${(pos.entry_date||'').replace(/(\d{4})(\d{2})(\d{2})/,'$1-$2-$3')}
-            @${pos.entry_px}　持 ${pos.hold_days} 日　進場分=${pos.entry_score}</div>
+            @${pos.entry_px}　持 ${pos.hold_days} 日　分=${pos.entry_score}　配置≈${pos.allocated?Math.round(pos.allocated/10000)+'萬':'-'}</div>
           <div class="tags" style="margin-top:4px">${reasons}</div>
         </div>
         <div style="text-align:right;min-width:70px">
@@ -699,16 +702,20 @@ document.getElementById('q').addEventListener('input',e=>{
         <th style="text-align:left;padding:6px 8px">股票</th>
         <th style="text-align:right;padding:6px 8px">進場</th>
         <th style="text-align:right;padding:6px 8px">出場</th>
-        <th style="text-align:right;padding:6px 8px">報酬</th>
+        <th style="text-align:right;padding:6px 8px">報酬%</th>
+        <th style="text-align:right;padding:6px 8px">損益(元)</th>
         <th style="text-align:left;padding:6px 8px;color:var(--dim2)">出場原因</th>
       </tr></thead><tbody>`;
     html+=recent.map(r=>{
       const c=r.net_ret>0?'var(--up)':r.net_ret<0?'var(--dn)':'var(--dim)';
+      const twd=r.net_twd!=null?r.net_twd:null;
+      const twdStr=twd!=null?`${twd>=0?'+':''}${twd.toLocaleString()}`:'—';
       return `<tr style="border-bottom:1px solid var(--line)">
         <td style="padding:7px 8px"><span class="chip" onclick="tab(2);show('${r.code}')">${r.code} ${r.name}</span></td>
         <td style="text-align:right;padding:7px 8px;color:var(--dim)">${(r.entry_date||'').replace(/(\d{4})(\d{2})(\d{2})/,'$1-$2-$3')}</td>
         <td style="text-align:right;padding:7px 8px;color:var(--dim)">${(r.exit_date||'').replace(/(\d{4})(\d{2})(\d{2})/,'$1-$2-$3')}</td>
         <td style="text-align:right;padding:7px 8px;font-weight:600;color:${c}">${r.net_ret>0?'+':''}${r.net_ret}%</td>
+        <td style="text-align:right;padding:7px 8px;font-weight:600;color:${c}">${twdStr}</td>
         <td style="padding:7px 8px;color:var(--dim)">${r.reason||''}</td>
       </tr>`;
     }).join('');

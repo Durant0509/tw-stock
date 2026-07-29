@@ -582,7 +582,7 @@ document.getElementById('q').addEventListener('input',e=>{
     const excess=s.ann_ret-s.bm_ann_ret;
     html+=`<div style="background:var(--card);border-radius:10px;padding:16px 18px;margin-bottom:20px">
       <div style="color:var(--dim);font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">
-        歷史回測（${pr.entry_score||10}分進場 / ${pr.exit_score||6}分出場 · 最多${pr.max_pos||5}支）
+        歷史回測（${pr.entry_score||10}分進場 / ${pr.exit_score||6}分出場 · 無持倉上限）
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px">
         ${[
@@ -653,7 +653,7 @@ document.getElementById('q').addEventListener('input',e=>{
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px">
       ${[
         ['Regime',`<span style="color:${regimeC[sm.regime]||'var(--dim)'}">${regimeL[sm.regime]||sm.regime||'-'}</span>`],
-        ['持倉',`${sm.open_positions||0} / 5`],
+        ['持倉',`${sm.open_positions||0} 支`],
         ['已結交易',`${sm.closed_trades||0} 筆`],
         ['模擬勝率',`${sm.win_rate||0}%`],
         ['平均獲利',sm.avg_win?`<span style="color:var(--up)">+${sm.avg_win}%</span>`:'—'],
@@ -666,7 +666,7 @@ document.getElementById('q').addEventListener('input',e=>{
   </div>`;
 
   // 當前持倉
-  html+=`<h3 style="margin:0 0 10px">當前持倉（${posArr.length} / 5）</h3>`;
+  html+=`<h3 style="margin:0 0 10px">當前持倉（${posArr.length} 支）</h3>`;
   if(posArr.length===0){
     html+=`<div class="note">${sm.regime==='bear'?'bear 模式，閘門關閉，等待 bull/range 再進場。':'暫無持倉。'}</div>`;
   } else {

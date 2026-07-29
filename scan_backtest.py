@@ -18,7 +18,7 @@ MAX_HOLD    = 60     # 最長持有交易日 —— 從40→60，讓強勢倉位
 STOP_LOSS   = -0.10  # 停損 -10% —— 從12%→10%，縮小單筆最大傷害
 BUY_C   = 0.001425 + 0.0005    # 買進成本
 SELL_C  = 0.001425 + 0.003 + 0.0005  # 賣出成本（含證交稅）
-MAX_POS = 5          # 同時持倉上限（等權分配）
+MAX_POS = 99         # 無上限（好的訊號全進，歷史統計每天通常1~2支）
 BEAR_GATE = True     # bear regime 不進場（閘門控制）
 
 # ─── 載入底層資料 ─────────────────────────────────────────────────────────
@@ -248,16 +248,16 @@ for di in range(START_IDX, len(days)):
     m_now = _margin[m_dates_avail[-1]] if m_dates_avail else None
     margin_hist_30 = [_margin[x] for x in m_dates_avail[-30:] if x in _margin]
 
-    # ── 每日淨值（修正版）──────────────────────────────────────────────────
-    # 先計算今日日報酬（用昨收盤→今收盤），再處理進出場
-    # 只計算昨日就在持倉的股票（entry_di < di），排除今日新進場的
-    # 分母固定用 MAX_POS（每個 slot 各佔 1/MAX_POS，空位算現金=0）
+    # ── 每日淨值 ──────────────────────────────────────────────────────────
+    # 昨日持有的倉位才計算今日報酬，分母用昨日實際持倉數（等權）
+    # 沒有持倉時全部現金，報酬=0
     if di > START_IDX:
+        prev_held = [code for code, pos in portfolio.items() if pos['entry_di'] < di]
+        n_held = len(prev_held)
         day_ret = 0.0
-        for code, pos in portfolio.items():
-            if pos['entry_di'] < di:  # 昨日已持有才計算今日報酬
-                r = adj_ret(code, days[di-1], d)
-                day_ret += r / MAX_POS  # 固定分母，空 slot 算現金
+        if n_held > 0:
+            for code in prev_held:
+                day_ret += adj_ret(code, days[di-1], d) / n_held
         equity.append(equity[-1] * (1 + day_ret))
         equity_dates.append(d)
 

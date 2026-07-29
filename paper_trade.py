@@ -7,7 +7,7 @@
 進場規則：
   - regime != 'bear'（bear 閘門）
   - scan_score >= 10
-  - 最多同時持5支（等權）
+  - 無上限（歷史統計通常每天 1~2 支）
 
 出場規則：
   - scan_score <= 6
@@ -22,7 +22,7 @@ from datetime import datetime
 PAPER_FILE = 'paper_trade.json'
 ENTRY_SCORE = 10
 EXIT_SCORE  = 6
-MAX_POS     = 5
+MAX_POS     = 99  # 無上限，好的訊號全進
 MAX_HOLD    = 60   # 交易日
 STOP_LOSS   = -0.10
 
@@ -105,15 +105,14 @@ def run():
     # bear 閘門：bear 時不進新倉
     if regime == 'bear':
         log_entries.append(f"[閘門] bear regime，不開新倉")
-    elif len(state['positions']) < MAX_POS:
-        # 依分數排序，取尚未持倉的
+    else:
+        # 所有達到門檻的股票都進，不限數量
         candidates = sorted(
             [(s['pts'], s['code'], s) for s in all_stocks.values()
              if s['code'] not in state['positions'] and s['pts'] >= ENTRY_SCORE],
             reverse=True
         )
-        slots = MAX_POS - len(state['positions'])
-        for _, _code, s in candidates[:slots]:
+        for _, _code, s in candidates:
             code = s['code']
             entry_px = s['close']
             state['positions'][code] = {

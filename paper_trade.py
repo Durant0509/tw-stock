@@ -4,10 +4,13 @@
 每日由 update.py 呼叫。讀取 scan_data.json 決定進出場，
 狀態存在 paper_trade.json（git 追蹤，每日快照）。
 
+資金模式：固定 LOT_SIZE = 100,000 元/支
+- 現金不夠時自動「追加注資」並記錄，帳戶成本因此上升
+- 出場後現金回收，等下一筆進場
+
 進場規則：
-  - regime != 'bear'（bear 閘門）
+  - regime != 'bear'
   - scan_score >= 10
-  - 無上限（歷史統計通常每天 1~2 支）
 
 出場規則：
   - scan_score <= 6
@@ -22,75 +25,73 @@ from datetime import datetime
 PAPER_FILE  = 'paper_trade.json'
 ENTRY_SCORE = 10
 EXIT_SCORE  = 6
-MAX_POS     = 99   # 無上限，好的訊號全進
-MAX_HOLD    = 60   # 交易日
+MAX_HOLD    = 60        # 交易日
 STOP_LOSS   = -0.10
-CAPITAL     = 500_000  # 模擬本金（TWD）
+LOT_SIZE    = 100_000   # 每支固定 10 萬元
+
+BUY_COST  = 0.001425 + 0.0005   # 買進摩擦
+SELL_COST = 0.001425 + 0.003 + 0.0005  # 賣出摩擦（含證交稅）
 
 def load_state():
     if os.path.exists(PAPER_FILE):
         return json.load(open(PAPER_FILE, encoding='utf-8'))
-    return {'positions': {}, 'closed': [], 'log': [], 'start_date': None}
+    return {
+        'positions': {}, 'closed': [], 'log': [],
+        'start_date': None,
+        'cash': LOT_SIZE,          # 初始現金 = 1 lot，首筆進場剛好夠
+        'total_invested': LOT_SIZE, # 累計注入成本
+        'equity_curve': [],
+    }
 
 def save_state(state):
     json.dump(state, open(PAPER_FILE, 'w', encoding='utf-8'),
               ensure_ascii=False, indent=2)
 
 def run():
-    # 讀今日掃描結果
     if not os.path.exists('scan_data.json'):
         print("paper_trade: scan_data.json 不存在，跳過")
         return
     scan = json.load(open('scan_data.json', encoding='utf-8'))
-    today = scan['asof'].replace('-','')  # '20260729'
+    today  = scan['asof'].replace('-', '')
     regime = scan['regime']
-    gate   = scan['gate']
     all_stocks = {s['code']: s for s in scan.get('top', []) + scan.get('watch', [])}
-    score_map = {s['code']: s['pts'] for s in all_stocks.values()}
+    score_map  = {s['code']: s['pts'] for s in all_stocks.values()}
 
     state = load_state()
     if not state['start_date']:
         state['start_date'] = today
-    if 'capital' not in state:
-        state['capital'] = CAPITAL
+    # 相容舊格式：有 capital 欄位的舊版本
+    if 'cash' not in state:
+        cap = state.get('capital', LOT_SIZE)
+        state['cash'] = cap
+        state['total_invested'] = cap
     if 'equity_curve' not in state:
         state['equity_curve'] = []
 
     log_entries = []
 
-    # ── 每日持倉更新 + 出場檢查 ──────────────────────────────────────────
-    n_pos = len(state['positions'])  # 今日開始時的持倉數（計算等權比重用）
+    # ── 出場 ────────────────────────────────────────────────────────────────
     to_exit = []
     for code, pos in list(state['positions'].items()):
-        s = all_stocks.get(code)
-        cur_px = s['close'] if s else pos['entry_px']
-        score  = score_map.get(code)
-        gross_ret = (cur_px - pos['entry_px']) / pos['entry_px']
-        hold_days = pos.get('hold_days', 0) + 1
+        s       = all_stocks.get(code)
+        cur_px  = s['close'] if s else pos['entry_px']
+        score   = score_map.get(code)
+        gross   = (cur_px - pos['entry_px']) / pos['entry_px']
+        hold    = pos.get('hold_days', 0) + 1
 
-        # 等權重：每支佔本金的 1/N，N = 今日持倉數
-        weight = 1.0 / n_pos if n_pos > 0 else 0
-        allocated = round(CAPITAL * weight)   # 分配到這支的金額
-        pnl_twd   = round(allocated * gross_ret)  # 未實現損益（元）
-
-        # 更新今日收盤
         state['positions'][code].update({
-            'cur_px':   cur_px,
-            'hold_days': hold_days,
-            'gross_ret': round(gross_ret*100, 2),
-            'weight':    round(weight*100, 1),   # %
-            'allocated': allocated,
-            'pnl_twd':   pnl_twd,
+            'cur_px': cur_px,
+            'hold_days': hold,
+            'gross_ret': round(gross * 100, 2),
         })
 
-        # 出場條件
         reason = None
-        if gross_ret <= STOP_LOSS:
-            reason = f'停損 ({gross_ret*100:+.1f}%)'
+        if gross <= STOP_LOSS:
+            reason = f'停損 ({gross*100:+.1f}%)'
         elif score is not None and score <= EXIT_SCORE:
             reason = f'分數降至 {score}'
-        elif hold_days >= MAX_HOLD:
-            reason = f'持有 {hold_days} 日到期'
+        elif hold >= MAX_HOLD:
+            reason = f'持有 {hold} 日到期'
         elif s:
             ma60_pct = s.get('above_ma60', 0) or 0
             if ma60_pct < -2:
@@ -100,103 +101,116 @@ def run():
                 reason = f'外資連賣 {abs(fs)} 日'
 
         if reason:
-            to_exit.append((code, reason, cur_px, gross_ret, hold_days, allocated))
+            to_exit.append((code, reason, cur_px, gross, hold))
 
-    for code, reason, cur_px, gross_ret, hold_days, allocated in to_exit:
-        pos = state['positions'].pop(code)
-        net_ret = gross_ret - 0.001425 - 0.003 - 0.001  # 買+賣手續費+證交稅
-        net_twd = round(allocated * net_ret)
+    for code, reason, cur_px, gross, hold in to_exit:
+        pos    = state['positions'].pop(code)
+        net    = gross - BUY_COST - SELL_COST
+        lot    = pos.get('lot', LOT_SIZE)
+        net_tw = round(lot * net)
+        # 出場後現金回收
+        state['cash'] = round(state['cash'] + lot + net_tw)
         record = {
             'code': code, 'name': pos.get('name', ''),
             'entry_date': pos['entry_date'], 'exit_date': today,
             'entry_px': pos['entry_px'], 'exit_px': cur_px,
-            'gross_ret': round(gross_ret*100, 2),
-            'net_ret':   round(net_ret*100, 2),
-            'allocated': allocated,   # 這筆投入金額（元）
-            'net_twd':   net_twd,     # 這筆淨損益（元）
-            'hold_days': hold_days,
-            'reason': reason,
+            'gross_ret': round(gross * 100, 2),
+            'net_ret':   round(net * 100, 2),
+            'lot': lot, 'net_twd': net_tw,
+            'hold_days': hold, 'reason': reason,
             'entry_score': pos.get('entry_score'),
         }
         state['closed'].append(record)
-        sign = '+' if net_twd >= 0 else ''
+        sign = '+' if net_tw >= 0 else ''
         log_entries.append(
             f"[出場] {code} {pos.get('name','')} {reason}  "
-            f"net={net_ret*100:+.1f}%  ({sign}{net_twd:,} 元)"
+            f"net={net*100:+.1f}%  ({sign}{net_tw:,} 元)  現金={state['cash']:,}"
         )
 
-    # ── 進場掃描 ──────────────────────────────────────────────────────────
-    # bear 閘門：bear 時不進新倉
+    # ── 進場 ────────────────────────────────────────────────────────────────
     if regime == 'bear':
-        log_entries.append(f"[閘門] bear regime，不開新倉")
+        log_entries.append("[閘門] bear regime，不開新倉")
     else:
-        # 所有達到門檻的股票都進，不限數量
         candidates = sorted(
             [(s['pts'], s['code'], s) for s in all_stocks.values()
              if s['code'] not in state['positions'] and s['pts'] >= ENTRY_SCORE],
             reverse=True
         )
-        new_entries = []
         for _, _code, s in candidates:
             code = s['code']
+            # 現金不夠 → 追加注資
+            if state['cash'] < LOT_SIZE:
+                add = LOT_SIZE - state['cash']
+                state['cash'] += add
+                state['total_invested'] += add
+                log_entries.append(f"[注資] +{add:,} 元 → 累計投入 {state['total_invested']:,}")
+            # 買進
+            state['cash'] -= LOT_SIZE
             state['positions'][code] = {
                 'code': code, 'name': s['name'],
                 'entry_date': today, 'entry_px': s['close'],
                 'entry_score': s['pts'],
                 'cur_px': s['close'], 'hold_days': 0,
                 'gross_ret': 0.0,
-                'weight': 0.0, 'allocated': 0, 'pnl_twd': 0,
+                'lot': LOT_SIZE,
                 'reasons': s.get('reasons', []),
                 'flags':   s.get('flags', []),
             }
-            new_entries.append((s['pts'], code, s))
-        # 所有進場後統一重算等權比重
-        n_new = len(state['positions'])
-        if n_new > 0:
-            per = round(CAPITAL / n_new)
-            for c in state['positions']:
-                state['positions'][c]['weight']    = round(100/n_new, 1)
-                state['positions'][c]['allocated'] = per
-        for pts, code, s in new_entries:
-            per = state['positions'][code]['allocated']
             log_entries.append(
-                f"[進場] {code} {s['name']}  分={pts}  "
+                f"[進場] {code} {s['name']}  分={s['pts']}  "
                 f"MA60={s.get('above_ma60',0):+.1f}%  "
                 f"外資={s.get('fstreak',0):+d}日  "
-                f"配置≈{per:,}元"
+                f"配置={LOT_SIZE:,}元  現金剩={state['cash']:,}"
             )
 
-    # ── 每日淨值（等權重，與回測一致）────────────────────────────────────
-    # 持倉中每支的未實現損益加總 / 總本金 = 當日總報酬率
-    open_pnl = sum(pos.get('pnl_twd', 0) for pos in state['positions'].values())
-    total_equity = CAPITAL + open_pnl + sum(r.get('net_twd', 0) for r in state['closed'])
-    total_ret_pct = round((total_equity / CAPITAL - 1) * 100, 2)
-    state['equity_curve'].append({'date': today, 'equity': total_equity, 'ret_pct': total_ret_pct})
+    # ── 每日淨值 ─────────────────────────────────────────────────────────────
+    open_unreal = sum(
+        round(pos['lot'] * (pos['gross_ret'] / 100) - pos['lot'] * BUY_COST)
+        for pos in state['positions'].values()
+    )
+    realized = sum(r.get('net_twd', 0) for r in state['closed'])
+    # 帳戶市值 = 現金 + 所有持倉現值（以 lot 為基準）
+    pos_market_val = sum(
+        round(pos['lot'] * (1 + pos['gross_ret'] / 100))
+        for pos in state['positions'].values()
+    )
+    total_equity = state['cash'] + pos_market_val
+    total_ret_pct = round((total_equity / state['total_invested'] - 1) * 100, 2)
 
-    # ── 統計 ─────────────────────────────────────────────────────────────
+    state['equity_curve'].append({
+        'date': today,
+        'cash': state['cash'],
+        'equity': total_equity,
+        'invested': state['total_invested'],
+        'ret_pct': total_ret_pct,
+    })
+
+    # ── 統計 ─────────────────────────────────────────────────────────────────
     closed = state['closed']
-    n = len(closed)
-    wins    = [r for r in closed if r['net_ret'] > 0]
-    losses_l = [r for r in closed if r['net_ret'] <= 0]
-    win_rate = len(wins)/n*100 if n else 0
-    avg_win  = sum(r['net_ret'] for r in wins)/len(wins) if wins else 0
-    avg_loss = sum(r['net_ret'] for r in losses_l)/len(losses_l) if losses_l else 0
-    total_net_twd = sum(r.get('net_twd', 0) for r in closed)
+    n      = len(closed)
+    wins   = [r for r in closed if r['net_ret'] > 0]
+    losses = [r for r in closed if r['net_ret'] <= 0]
+    win_rate  = len(wins) / n * 100 if n else 0
+    avg_win   = sum(r['net_ret'] for r in wins)   / len(wins)   if wins   else 0
+    avg_loss  = sum(r['net_ret'] for r in losses) / len(losses) if losses else 0
+    total_net = sum(r.get('net_twd', 0) for r in closed)
 
     state['summary'] = {
-        'asof': today,
-        'capital': CAPITAL,
-        'regime': regime, 'gate': gate,
+        'asof': today, 'regime': regime,
+        'lot_size': LOT_SIZE,
+        'total_invested': state['total_invested'],
+        'cash': state['cash'],
         'open_positions': len(state['positions']),
+        'pos_market_val': pos_market_val,
+        'total_equity': total_equity,
+        'total_ret_pct': total_ret_pct,
         'closed_trades': n,
         'win_rate': round(win_rate, 1),
-        'avg_win': round(avg_win, 2),
+        'avg_win':  round(avg_win, 2),
         'avg_loss': round(avg_loss, 2),
-        'pnl_ratio': round(abs(avg_win/avg_loss), 2) if avg_loss else None,
-        'total_net_twd': total_net_twd,     # 已實現累計損益（元）
-        'open_pnl_twd': open_pnl,           # 未實現損益（元）
-        'total_equity': total_equity,        # 當前總資產（元）
-        'total_ret_pct': total_ret_pct,      # 總報酬率%
+        'pnl_ratio': round(abs(avg_win / avg_loss), 2) if avg_loss else None,
+        'realized_net_twd': total_net,
+        'open_unreal_twd':  open_unreal,
     }
 
     if log_entries:
@@ -204,7 +218,8 @@ def run():
 
     save_state(state)
     print(f"模擬盤更新: {today}  持倉={len(state['positions'])}  已結={n}  "
-          f"勝率={win_rate:.0f}%  總資產={total_equity:,.0f}元 ({total_ret_pct:+.2f}%)")
+          f"勝率={win_rate:.0f}%  投入={state['total_invested']:,}  "
+          f"資產={total_equity:,} ({total_ret_pct:+.2f}%)")
     for e in log_entries:
         print(f"  {e}")
 

@@ -567,33 +567,201 @@ document.getElementById('q').addEventListener('input',e=>{
   p.innerHTML=html;
 })();
 
-// ══════════ TAB 4：模擬盤 ══════════
+// ══════════ TAB 4：模擬盤（子頁切換）══════════
 (function(){
   const p=document.getElementById('p4');
   const PT=M.paper;
   const BT=M.scan_bt;
 
-  // ── 回測摘要 ──
-  let html=`<h2 style="margin-top:0">🧪 策略模擬盤</h2>`;
+  // 子頁狀態
+  let activeSub=0;
+  function subTab(i){
+    activeSub=i;
+    p.querySelectorAll('.subtab').forEach((t,k)=>t.classList.toggle('on',k===i));
+    p.querySelectorAll('.subpage').forEach((pp,k)=>pp.style.display=k===i?'block':'none');
+  }
 
-  // 回測統計卡
-  if(BT&&BT.summary){
+  // ── 外框（子頁 tabs） ──
+  let html=`
+  <div style="margin-bottom:18px">
+    <div style="display:flex;gap:0;border-bottom:1px solid var(--line);margin-bottom:0">
+      <div class="subtab on" onclick="p4subTab(0)" style="padding:9px 18px;font-size:14px;font-weight:600;cursor:pointer;border-bottom:2px solid var(--accent);color:var(--accent);white-space:nowrap">📡 實時模擬</div>
+      <div class="subtab" onclick="p4subTab(1)" style="padding:9px 18px;font-size:14px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;color:var(--dim);white-space:nowrap">📜 歷史回測</div>
+    </div>
+  </div>
+  <div class="subpage" id="p4live"></div>
+  <div class="subpage" id="p4bt" style="display:none"></div>`;
+  p.innerHTML=html;
+
+  window.p4subTab=function(i){
+    p.querySelectorAll('.subtab').forEach((t,k)=>{
+      t.style.borderBottomColor=k===i?'var(--accent)':'transparent';
+      t.style.color=k===i?'var(--accent)':'var(--dim)';
+    });
+    document.getElementById('p4live').style.display=i===0?'block':'none';
+    document.getElementById('p4bt').style.display=i===1?'block':'none';
+  };
+
+  // ════════ 子頁 0：實時模擬 ════════
+  (function(){
+    const el=document.getElementById('p4live');
+    if(!PT){
+      el.innerHTML=`<div class="empty">尚無模擬盤資料（update.py 跑完後自動生成）</div>`;
+      return;
+    }
+    const sm=PT.summary||{};
+    const positions=PT.positions||{};
+    const closed=PT.closed||[];
+    const posArr=Object.values(positions);
+    const regimeC={bull:'var(--good)',bear:'var(--bad)',range:'var(--warn)'};
+    const regimeL={bull:'牛市',bear:'熊市（閘門關）',range:'盤整'};
+
+    let html=``;
+
+    // 狀態卡
+    const invested=sm.total_invested||sm.capital||0;
+    const equity=sm.total_equity||invested;
+    const retPct=sm.total_ret_pct||0;
+    const retC=retPct>=0?'var(--good)':'var(--bad)';
+    const cashNow=sm.cash||0;
+    html+=`<div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div style="font-weight:700;font-size:15px">📡 模擬盤狀態</div>
+        <div style="font-size:12px;color:var(--dim)">更新 ${(sm.asof||'').replace(/(\d{4})(\d{2})(\d{2})/,'$1-$2-$3')}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px">
+        ${[
+          ['Regime',`<span style="color:${regimeC[sm.regime]||'var(--dim)'}">${regimeL[sm.regime]||sm.regime||'-'}</span>`],
+          ['累計投入',`${(invested/10000).toFixed(1)}萬`],
+          ['總資產',`<span style="color:${retC}">${(equity/10000).toFixed(1)}萬</span>`],
+          ['總報酬',`<span style="color:${retC}">${retPct>=0?'+':''}${retPct}%</span>`],
+          ['可用現金',`${(cashNow/10000).toFixed(1)}萬`],
+          ['持倉',`${sm.open_positions||0} 支`],
+          ['已結',`${sm.closed_trades||0} 筆`],
+          ['勝率',`${sm.win_rate||0}%`],
+          ['avg盈',sm.avg_win?`<span style="color:var(--good)">+${sm.avg_win}%</span>`:'—'],
+          ['avg虧',sm.avg_loss?`<span style="color:var(--bad)">${sm.avg_loss}%</span>`:'—'],
+        ].map(([k,v])=>`<div style="text-align:center">
+          <div style="font-size:11px;color:var(--dim)">${k}</div>
+          <div style="font-size:15px;font-weight:700;margin-top:2px">${v}</div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+
+    // 持倉
+    html+=`<h3 style="margin:0 0 10px;font-size:14px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em">當前持倉（${posArr.length} 支）</h3>`;
+    if(posArr.length===0){
+      html+=`<div class="note">${sm.regime==='bear'?'bear 模式閘門關閉，等待 bull/range。':'暫無持倉。'}</div>`;
+    } else {
+      html+=posArr.map(pos=>{
+        const ret=pos.gross_ret||0;
+        const retC=ret>0?'var(--good)':ret<0?'var(--bad)':'var(--dim)';
+        const lot=(pos.lot||100000)/10000;
+        const pnl=pos.lot?(pos.lot*ret/100).toFixed(0):'-';
+        const reasons=(pos.reasons||[]).slice(0,3).map(r=>`<span class="tg g">${r}</span>`).join('');
+        return `<div class="rank" onclick="tab(2);show('${pos.code}')">
+          <div style="min-width:36px;text-align:center;font-size:20px">${ret>3?'🟢':ret<-3?'🔴':'🟡'}</div>
+          <div class="info" style="flex:1">
+            <div class="t">${pos.code} ${pos.name}</div>
+            <div class="sub" style="margin-top:3px;font-size:12px;color:var(--dim)">
+              進 ${(pos.entry_date||'').replace(/(\d{4})(\d{2})(\d{2})/,'$1/$2/$3')}
+              @${pos.entry_px}　持 ${pos.hold_days}日　分=${pos.entry_score}　${lot}萬
+            </div>
+            <div class="tags" style="margin-top:4px">${reasons}</div>
+          </div>
+          <div style="text-align:right;min-width:80px">
+            <div style="font-size:18px;font-weight:700;color:${retC}">${ret>0?'+':''}${ret}%</div>
+            <div style="font-size:11px;color:${retC};margin-top:2px">${parseInt(pnl)>=0?'+':''}${parseInt(pnl).toLocaleString()}元</div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    // 已結交易（全部）
+    if(closed.length>0){
+      html+=`<h3 style="margin:20px 0 10px;font-size:14px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em">已結交易（${closed.length} 筆）</h3>`;
+      html+=`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px;min-width:560px">
+        <thead><tr style="color:var(--dim);font-size:11.5px;border-bottom:1px solid var(--line)">
+          <th style="text-align:left;padding:6px 8px">股票</th>
+          <th style="text-align:right;padding:6px 8px">進場</th>
+          <th style="text-align:right;padding:6px 8px">進價</th>
+          <th style="text-align:right;padding:6px 8px">出場</th>
+          <th style="text-align:right;padding:6px 8px">出價</th>
+          <th style="text-align:right;padding:6px 8px">淨報酬%</th>
+          <th style="text-align:right;padding:6px 8px">損益(元)</th>
+          <th style="text-align:left;padding:6px 8px">出場原因</th>
+        </tr></thead><tbody>`;
+      html+=[...closed].reverse().map(r=>{
+        const c=r.net_ret>0?'var(--good)':r.net_ret<0?'var(--bad)':'var(--dim)';
+        const twd=r.net_twd!=null?r.net_twd:null;
+        const twdStr=twd!=null?`${twd>=0?'+':''}${twd.toLocaleString()}`:'—';
+        return `<tr style="border-bottom:1px solid var(--line)">
+          <td style="padding:6px 8px"><span class="chip" onclick="tab(2);show('${r.code}')" style="cursor:pointer">${r.code} ${r.name||''}</span></td>
+          <td style="text-align:right;padding:6px 8px;color:var(--dim)">${(r.entry_date||'').replace(/(\d{4})(\d{2})(\d{2})/,'$1/$2/$3')}</td>
+          <td style="text-align:right;padding:6px 8px">${r.entry_px}</td>
+          <td style="text-align:right;padding:6px 8px;color:var(--dim)">${(r.exit_date||'').replace(/(\d{4})(\d{2})(\d{2})/,'$1/$2/$3')}</td>
+          <td style="text-align:right;padding:6px 8px">${r.exit_px||'-'}</td>
+          <td style="text-align:right;padding:6px 8px;font-weight:600;color:${c}">${r.net_ret>0?'+':''}${r.net_ret}%</td>
+          <td style="text-align:right;padding:6px 8px;font-weight:600;color:${c}">${twdStr}</td>
+          <td style="padding:6px 8px;color:var(--dim);font-size:12px">${r.reason||''}</td>
+        </tr>`;
+      }).join('');
+      html+='</tbody></table></div>';
+    }
+
+    // 操作日誌
+    const logs=(PT.log||[]).slice(-5).reverse();
+    if(logs.length>0){
+      html+=`<h3 style="margin:20px 0 8px;font-size:14px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em">操作日誌</h3>`;
+      logs.forEach(l=>{
+        html+=`<div style="margin-bottom:8px">
+          <div style="font-size:12px;font-weight:600;color:var(--dim);margin-bottom:3px">
+            ${(l.date||'').replace(/(\d{4})(\d{2})(\d{2})/,'$1-$2-$3')}
+          </div>
+          ${(l.events||[]).map(e=>{
+            const col=e.includes('[進場]')?'var(--good)':e.includes('[出場]')?'var(--bad)':e.includes('[注資]')?'var(--warn)':'var(--dim)';
+            return `<div style="font-size:13px;padding:3px 0;color:${col}">${e}</div>`;
+          }).join('')}
+        </div>`;
+      });
+    }
+
+    html+=`<div class="note" style="margin-top:24px">
+      <b>規則</b>：每支固定 10 萬元，現金不足自動注資。進場分≥10，bear閘門關。
+      出場：分≤6 / 破MA60(-2%) / 外資連賣5日 / 持滿60日 / 停損-10%。成本：買0.19%+賣0.49%。
+    </div>`;
+
+    el.innerHTML=html;
+  })();
+
+  // ════════ 子頁 1：歷史回測 ════════
+  (function(){
+    const el=document.getElementById('p4bt');
+    if(!BT){
+      el.innerHTML=`<div class="empty">尚無回測資料（scan_bt_result.json）</div>`;
+      return;
+    }
     const s=BT.summary, pr=BT.params;
     const excess=s.ann_ret-s.bm_ann_ret;
-    html+=`<div style="background:var(--card);border-radius:10px;padding:16px 18px;margin-bottom:20px">
+    let html=``;
+
+    // 摘要卡
+    html+=`<div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:16px">
       <div style="color:var(--dim);font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">
-        歷史回測（${pr.entry_score||10}分進場 / ${pr.exit_score||6}分出場 · 無持倉上限）
+        歷史回測（${pr.entry_score||10}分進場 / ${pr.exit_score||6}分出場 · 固定${(pr.lot_size||100000)/10000}萬/筆）
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px">
         ${[
-          ['年化報酬',`<span style="color:${s.ann_ret>0?'var(--up)':'var(--dn)'}">${s.ann_ret>0?'+':''}${s.ann_ret}%</span>`],
-          ['超額(vs 0050)',`<span style="color:${excess>0?'var(--up)':'var(--dn)'}">${excess>0?'+':''}${excess.toFixed(1)}%</span>`],
-          ['最大回撤',`<span style="color:var(--dn)">${s.strategy_mdd}%</span>`],
+          ['累計投入',s.total_invested?`${(s.total_invested/10000).toFixed(0)}萬`:'—'],
+          ['最終資產',s.final_equity?`${(s.final_equity/10000).toFixed(0)}萬`:'—'],
+          ['策略年化',`<span style="color:${s.ann_ret>0?'var(--good)':'var(--bad)'}">${s.ann_ret>0?'+':''}${s.ann_ret}%</span>`],
+          ['超額(vs 0050)',`<span style="color:${excess>0?'var(--good)':'var(--bad)'}">${excess>0?'+':''}${excess.toFixed(1)}%</span>`],
+          ['最大回撤',`<span style="color:var(--bad)">${s.strategy_mdd}%</span>`],
           ['總交易',`${s.total_trades} 筆`],
           ['勝率',`${s.win_rate}%`],
-          ['盈虧比',s.pnl_ratio?`${(s.avg_win/Math.abs(s.avg_loss)).toFixed(2)}`:'-'],
-          ['平均獲利',`<span style="color:var(--up)">+${s.avg_win}%</span>`],
-          ['平均虧損',`<span style="color:var(--dn)">${s.avg_loss}%</span>`],
+          ['盈虧比',s.avg_loss?`${(s.avg_win/Math.abs(s.avg_loss)).toFixed(2)}`:'-'],
+          ['avg盈',`<span style="color:var(--good)">+${s.avg_win}%</span>`],
+          ['avg虧',`<span style="color:var(--bad)">${s.avg_loss}%</span>`],
         ].map(([k,v])=>`<div style="text-align:center">
           <div style="font-size:11px;color:var(--dim)">${k}</div>
           <div style="font-size:16px;font-weight:700;margin-top:2px">${v}</div>
@@ -606,20 +774,20 @@ document.getElementById('q').addEventListener('input',e=>{
       const rs=BT.regime_stats;
       const rows=['bull','range','bear'].filter(r=>rs[r]).map(r=>{
         const d=rs[r];
-        const color=r==='bull'?'var(--up)':r==='bear'?'var(--dn)':'var(--dim)';
+        const col=r==='bull'?'var(--good)':r==='bear'?'var(--bad)':'var(--warn)';
         const label=r==='bull'?'牛市':r==='bear'?'熊市':'盤整';
-        return `<tr>
-          <td><span style="color:${color};font-weight:600">${label}</span></td>
-          <td style="text-align:right">${d.n}</td>
-          <td style="text-align:right">${d.win_rate}%</td>
-          <td style="text-align:right;color:${d.avg_ret>0?'var(--up)':'var(--dn)'}">${d.avg_ret>0?'+':''}${d.avg_ret}%</td>
+        return `<tr style="border-bottom:1px solid var(--line)">
+          <td style="padding:7px 8px"><span style="color:${col};font-weight:600">${label}</span></td>
+          <td style="text-align:right;padding:7px 8px">${d.n}</td>
+          <td style="text-align:right;padding:7px 8px">${d.win_rate}%</td>
+          <td style="text-align:right;padding:7px 8px;color:${d.avg_ret>0?'var(--good)':'var(--bad)'}">${d.avg_ret>0?'+':''}${d.avg_ret}%</td>
         </tr>`;
       }).join('');
-      html+=`<div style="background:var(--card);border-radius:10px;padding:14px 18px;margin-bottom:20px">
-        <div style="color:var(--dim);font-size:11.5px;text-transform:uppercase;margin-bottom:8px">牛熊分層（回測）</div>
-        <div class="note" style="margin-bottom:10px">bear 模式閘門全關不進場；range 勉強打平；bull 才有正期望值。</div>
+      html+=`<div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:16px">
+        <div style="color:var(--dim);font-size:11.5px;text-transform:uppercase;margin-bottom:8px">牛熊分層</div>
+        <div class="note" style="margin-bottom:10px">bear 閘門全關不進場；range 勉強打平；bull 才有正期望值。</div>
         <table style="width:100%;border-collapse:collapse;font-size:13.5px">
-          <thead><tr style="color:var(--dim);font-size:11.5px">
+          <thead><tr style="color:var(--dim);font-size:11px">
             <th style="text-align:left;padding:4px 8px">Regime</th>
             <th style="text-align:right;padding:4px 8px">筆數</th>
             <th style="text-align:right;padding:4px 8px">勝率</th>
@@ -629,123 +797,60 @@ document.getElementById('q').addEventListener('input',e=>{
         </table>
       </div>`;
     }
-  }
 
-  // ── 模擬盤現況 ──
-  if(!PT){
-    html+=`<div class="empty">尚無模擬盤資料（update.py 跑完後自動生成）</div>`;
-    p.innerHTML=html; return;
-  }
+    // 所有交易明細
+    const trades=BT.trades||[];
+    if(trades.length>0){
+      // 搜尋過濾
+      html+=`<div style="display:flex;gap:10px;margin-bottom:12px;align-items:center">
+        <h3 style="margin:0;font-size:14px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;flex:0 0 auto">全部交易（${trades.length} 筆）</h3>
+        <input id="btSearch" placeholder="搜尋代號/名稱" style="flex:1;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:14px;color:var(--txt)" oninput="filterBtTrades(this.value)">
+      </div>
+      <div style="overflow-x:auto">
+      <table id="btTable" style="width:100%;border-collapse:collapse;font-size:13px;min-width:640px">
+        <thead><tr style="color:var(--dim);font-size:11px;border-bottom:1px solid var(--line)">
+          <th style="text-align:left;padding:6px 8px">股票</th>
+          <th style="text-align:right;padding:6px 8px">進場日</th>
+          <th style="text-align:right;padding:6px 8px">進價</th>
+          <th style="text-align:right;padding:6px 8px">出場日</th>
+          <th style="text-align:right;padding:6px 8px">出價</th>
+          <th style="text-align:right;padding:6px 8px">持天</th>
+          <th style="text-align:right;padding:6px 8px">淨%</th>
+          <th style="text-align:right;padding:6px 8px">損益(元)</th>
+          <th style="text-align:left;padding:6px 8px">原因</th>
+        </tr></thead>
+        <tbody id="btTbody">`;
+      html+=trades.map((r,i)=>{
+        const c=r.net_ret>0?'var(--good)':r.net_ret<0?'var(--bad)':'var(--dim)';
+        const lot=r.lot||100000;
+        const twd=r.net_twd!=null?r.net_twd:Math.round(lot*r.net_ret/100);
+        const twdStr=`${twd>=0?'+':''}${twd.toLocaleString()}`;
+        const nm=r.name||'';
+        return `<tr style="border-bottom:1px solid var(--line)" data-q="${r.code} ${nm}">
+          <td style="padding:6px 8px">${r.code} ${nm}</td>
+          <td style="text-align:right;padding:6px 8px;color:var(--dim)">${r.entry_d.replace(/(\d{4})(\d{2})(\d{2})/,'$1/$2/$3')}</td>
+          <td style="text-align:right;padding:6px 8px">${r.entry_px}</td>
+          <td style="text-align:right;padding:6px 8px;color:var(--dim)">${r.exit_d.replace(/(\d{4})(\d{2})(\d{2})/,'$1/$2/$3')}</td>
+          <td style="text-align:right;padding:6px 8px">${r.exit_px}</td>
+          <td style="text-align:right;padding:6px 8px;color:var(--dim)">${r.hold_days}</td>
+          <td style="text-align:right;padding:6px 8px;font-weight:600;color:${c}">${r.net_ret>0?'+':''}${r.net_ret}%</td>
+          <td style="text-align:right;padding:6px 8px;font-weight:600;color:${c}">${twdStr}</td>
+          <td style="padding:6px 8px;color:var(--dim);font-size:12px">${r.reason}</td>
+        </tr>`;
+      }).join('');
+      html+=`</tbody></table></div>`;
+    }
 
-  const sm=PT.summary||{};
-  const positions=PT.positions||{};
-  const closed=PT.closed||[];
-  const posArr=Object.values(positions);
+    el.innerHTML=html;
 
-  const regimeC={bull:'var(--up)',bear:'var(--dn)',range:'var(--dim)'};
-  const regimeL={bull:'牛市',bear:'熊市（閘門關）',range:'盤整'};
-
-  html+=`<div style="background:var(--card);border-radius:10px;padding:16px 18px;margin-bottom:20px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <div style="font-weight:700;font-size:15px">模擬盤狀態</div>
-      <div style="font-size:12px;color:var(--dim)">更新 ${(sm.asof||'').replace(/(\d{4})(\d{2})(\d{2})/,'$1-$2-$3')}</div>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px">
-      ${[
-        ['Regime',`<span style="color:${regimeC[sm.regime]||'var(--dim)'}">${regimeL[sm.regime]||sm.regime||'-'}</span>`],
-        ['本金',`${((sm.capital||500000)/10000).toFixed(0)}萬`],
-        ['總資產',sm.total_equity?`<span style="color:${sm.total_ret_pct>=0?'var(--up)':'var(--dn)'}">${Math.round(sm.total_equity/10000)}萬</span>`:'—'],
-        ['總報酬',sm.total_ret_pct!=null?`<span style="color:${sm.total_ret_pct>=0?'var(--up)':'var(--dn)'}">${sm.total_ret_pct>=0?'+':''}${sm.total_ret_pct}%</span>`:'—'],
-        ['持倉',`${sm.open_positions||0} 支`],
-        ['已結交易',`${sm.closed_trades||0} 筆`],
-        ['模擬勝率',`${sm.win_rate||0}%`],
-        ['平均獲利',sm.avg_win?`<span style="color:var(--up)">+${sm.avg_win}%</span>`:'—'],
-        ['平均虧損',sm.avg_loss?`<span style="color:var(--dn)">${sm.avg_loss}%</span>`:'—'],
-      ].map(([k,v])=>`<div style="text-align:center">
-        <div style="font-size:11px;color:var(--dim)">${k}</div>
-        <div style="font-size:15px;font-weight:700;margin-top:2px">${v}</div>
-      </div>`).join('')}
-    </div>
-  </div>`;
-
-  // 當前持倉
-  html+=`<h3 style="margin:0 0 10px">當前持倉（${posArr.length} 支）</h3>`;
-  if(posArr.length===0){
-    html+=`<div class="note">${sm.regime==='bear'?'bear 模式，閘門關閉，等待 bull/range 再進場。':'暫無持倉。'}</div>`;
-  } else {
-    html+=posArr.map(pos=>{
-      const ret=pos.gross_ret||0;
-      const retC=ret>0?'var(--up)':ret<0?'var(--dn)':'var(--dim)';
-      const reasons=(pos.reasons||[]).slice(0,3).map(r=>`<span class="tg g">${r}</span>`).join('');
-      return `<div class="rank" onclick="tab(2);show('${pos.code}')">
-        <div style="min-width:36px;text-align:center;font-size:20px">${ret>3?'🟢':ret<-3?'🔴':'🟡'}</div>
-        <div class="info" style="flex:1">
-          <div class="t">${pos.code} ${pos.name}</div>
-          <div class="sub" style="margin-top:3px">進場 ${(pos.entry_date||'').replace(/(\d{4})(\d{2})(\d{2})/,'$1-$2-$3')}
-            @${pos.entry_px}　持 ${pos.hold_days} 日　分=${pos.entry_score}　配置≈${pos.allocated?Math.round(pos.allocated/10000)+'萬':'-'}</div>
-          <div class="tags" style="margin-top:4px">${reasons}</div>
-        </div>
-        <div style="text-align:right;min-width:70px">
-          <div style="font-size:18px;font-weight:700;color:${retC}">${ret>0?'+':''}${ret}%</div>
-          <div style="font-size:11px;color:var(--dim);margin-top:2px">未實現</div>
-        </div>
-      </div>`;
-    }).join('');
-  }
-
-  // 最近已結交易
-  const recent=closed.slice(-20).reverse();
-  if(recent.length>0){
-    html+=`<h3 style="margin:20px 0 10px">最近已結交易（${closed.length} 筆）</h3>`;
-    html+=`<table style="width:100%;border-collapse:collapse;font-size:13px">
-      <thead><tr style="color:var(--dim);font-size:11.5px;border-bottom:1px solid var(--line)">
-        <th style="text-align:left;padding:6px 8px">股票</th>
-        <th style="text-align:right;padding:6px 8px">進場</th>
-        <th style="text-align:right;padding:6px 8px">出場</th>
-        <th style="text-align:right;padding:6px 8px">報酬%</th>
-        <th style="text-align:right;padding:6px 8px">損益(元)</th>
-        <th style="text-align:left;padding:6px 8px;color:var(--dim2)">出場原因</th>
-      </tr></thead><tbody>`;
-    html+=recent.map(r=>{
-      const c=r.net_ret>0?'var(--up)':r.net_ret<0?'var(--dn)':'var(--dim)';
-      const twd=r.net_twd!=null?r.net_twd:null;
-      const twdStr=twd!=null?`${twd>=0?'+':''}${twd.toLocaleString()}`:'—';
-      return `<tr style="border-bottom:1px solid var(--line)">
-        <td style="padding:7px 8px"><span class="chip" onclick="tab(2);show('${r.code}')">${r.code} ${r.name}</span></td>
-        <td style="text-align:right;padding:7px 8px;color:var(--dim)">${(r.entry_date||'').replace(/(\d{4})(\d{2})(\d{2})/,'$1-$2-$3')}</td>
-        <td style="text-align:right;padding:7px 8px;color:var(--dim)">${(r.exit_date||'').replace(/(\d{4})(\d{2})(\d{2})/,'$1-$2-$3')}</td>
-        <td style="text-align:right;padding:7px 8px;font-weight:600;color:${c}">${r.net_ret>0?'+':''}${r.net_ret}%</td>
-        <td style="text-align:right;padding:7px 8px;font-weight:600;color:${c}">${twdStr}</td>
-        <td style="padding:7px 8px;color:var(--dim)">${r.reason||''}</td>
-      </tr>`;
-    }).join('');
-    html+='</tbody></table>';
-  }
-
-  // 操作日誌（最近5天）
-  const logs=(PT.log||[]).slice(-5).reverse();
-  if(logs.length>0){
-    html+=`<h3 style="margin:20px 0 8px">操作日誌</h3>`;
-    logs.forEach(l=>{
-      html+=`<div style="margin-bottom:8px">
-        <div style="font-size:12px;font-weight:600;color:var(--dim);margin-bottom:3px">
-          ${(l.date||'').replace(/(\d{4})(\d{2})(\d{2})/,'$1-$2-$3')}
-        </div>
-        ${(l.events||[]).map(e=>{
-          const isEntry=e.includes('[進場]'), isExit=e.includes('[出場]');
-          const color=isEntry?'var(--up)':isExit?'var(--dn)':'var(--dim)';
-          return `<div style="font-size:13px;padding:3px 0;color:${color}">${e}</div>`;
-        }).join('')}
-      </div>`;
-    });
-  }
-
-  html+=`<div class="note" style="margin-top:24px">
-    <b>模擬盤說明</b>：進場分≥10、最多持5支、bear閘門關。出場：分數跌至6 / 破MA60(-2%) / 外資連賣5日以上 / 持滿60日 / 停損-10%。
-    成本：買0.19% + 賣0.49%（含證交稅）。進場用當日收盤價，次日生效。
-  </div>`;
-
-  p.innerHTML=html;
+    // 搜尋過濾函數
+    window.filterBtTrades=function(q){
+      const kw=q.toLowerCase();
+      document.querySelectorAll('#btTbody tr').forEach(tr=>{
+        tr.style.display=!kw||tr.dataset.q.toLowerCase().includes(kw)?'':'none';
+      });
+    };
+  })();
 })();
 </script>
 </body></html>

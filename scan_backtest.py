@@ -62,6 +62,33 @@ for fp in sorted(glob.glob('data/margin/*.json')):
 _margin_dates = sorted(_margin)
 print(f"  margin 載入 {len(_margin_dates)} 天")
 
+# ─── 預載 shareholding_hist（外資持股趨勢，FinMind 每日落地）─────────────
+# {code: [(date_str, held_pct), ...]} 已排序
+_sh_hist = {}
+_sh_hist_fp = 'data/shareholding/shareholding_hist.json'
+if os.path.exists(_sh_hist_fp):
+    _raw_sh = json.load(open(_sh_hist_fp, encoding='utf-8'))
+    for code, rows in _raw_sh.items():
+        _sh_hist[code] = sorted([(r['date'].replace('-',''), r['held_pct'])
+                                  for r in rows if r.get('held_pct') is not None],
+                                 key=lambda x: x[0])
+    print(f"  shareholding 載入 {len(_sh_hist)} 檔")
+
+def _fh_chg(code, d):
+    """外資持股比率近3個月變化 pp（正=上升，負=下降）。Point-in-time: 只看 <=d 的資料。"""
+    rows = _sh_hist.get(code)
+    if not rows: return None
+    avail = [(ds, hp) for ds, hp in rows if ds <= d]
+    if len(avail) < 2: return None
+    latest_ds, pct_now = avail[-1]
+    # 找3個月前 (~63個交易日 ≈ 90天)
+    target = str(int(latest_ds[:6]) - 3).zfill(6) + latest_ds[6:]  # 粗略3月前
+    # 找最接近 target 且 <= latest_ds 的
+    older = [(ds, hp) for ds, hp in avail[:-1] if ds <= target]
+    if not older: return None
+    pct_3m = older[-1][1]
+    return round(pct_now - pct_3m, 2)
+
 # ─── 輔助函數 ─────────────────────────────────────────────────────────────
 def _streak(t86_dates_slice, code, field):
     streak = 0; direction = None
@@ -106,6 +133,7 @@ def compute_score(code, di, t86_window, m_now, margin_hist_30):
     """
     用 di 這天（含）及之前的資料計算分數。
     t86_window: 已篩到今日的 t86_dates 切片（最多120天）
+    新增因子: 外資持股趨勢 fh_chg（與 precompute.py scan_score v3 對齊）
     """
     s = B.DD[days[di]]['stocks'].get(code)
     if not s or not s.get('close'): return None, []
@@ -156,6 +184,9 @@ def compute_score(code, di, t86_window, m_now, margin_hist_30):
     rsi_v = rsi14()
     from_high = (close / max(px_full[-252:]) - 1)*100 if len(px_full) >= 252 else 0
 
+    # 外資持股趨勢（point-in-time）
+    fh_chg = _fh_chg(code, days[di])
+
     # 排雷
     riskscore = 0
     if close < ma60: riskscore -= 1
@@ -203,6 +234,10 @@ def compute_score(code, di, t86_window, m_now, margin_hist_30):
     if -10 <= from_high <= -2: pts += 1
     elif from_high < -20: pts -= 1
 
+    # 外資持股趨勢（非線性，絕對值大=有故事，±1pp持平最弱）
+    if fh_chg is not None and abs(fh_chg) >= 1:
+        pts += 1
+
     return pts, {'ma60_pct': round(ma60_pct,1), 'sm': sm, 'fs': fs, 'ts': ts, 'sr': sr}
 
 # ─── 建立前200大宇宙的快取（每天） ──────────────────────────────────────
@@ -226,276 +261,267 @@ for i, d in enumerate(days):
     r = _ma(i,60)/_ma(i-20,60) - 1
     regime_map[d] = 'bull' if r > 0.02 else 'bear' if r < -0.02 else 'range'
 
-# ─── 主回測循環（固定 LOT 資金模型）───────────────────────────────────────
-# 每筆固定 LOT_SIZE 元；現金不夠時追加注資，記錄累計成本曲線
-LOT_SIZE = 100_000   # 每支固定 10 萬元
-
+# ─── 主回測函數（可被 grid_search.py import 複用）───────────────────────
+LOT_SIZE  = 100_000
 START_IDX = 120
-portfolio = {}   # {code: {'entry_price','entry_di','entry_score','regime','lot'}}
-results   = []
 
-# 資金追蹤
-cash           = LOT_SIZE          # 初始現金（夠第一筆）
-total_invested = LOT_SIZE          # 累計注入成本
-equity_curve   = []                # [{date, cash, invested, equity, ret_pct}]
+def run_backtest(entry_score=ENTRY_SCORE, exit_score=EXIT_SCORE,
+                 stop_loss=STOP_LOSS, max_hold=MAX_HOLD,
+                 bear_gate=BEAR_GATE, verbose=True):
+    portfolio      = {}
+    results        = []
+    cash           = LOT_SIZE
+    total_invested = LOT_SIZE
+    equity_curve   = []
 
-print(f"\n開始回測: {days[START_IDX]} ~ {days[-1]}")
-print(f"進場門檻={ENTRY_SCORE}分  出場門檻={EXIT_SCORE}分  最長持有={MAX_HOLD}日  停損={STOP_LOSS*100:.0f}%")
-print(f"資金模式: 固定 {LOT_SIZE:,} 元/筆，現金不足自動注資\n")
+    if verbose:
+        print(f"\n開始回測: {days[START_IDX]} ~ {days[-1]}")
+        print(f"進場={entry_score}  出場={exit_score}  持有={max_hold}日  停損={stop_loss*100:.0f}%")
 
-for di in range(START_IDX, len(days)):
-    d = days[di]
+    for di in range(START_IDX, len(days)):
+        d = days[di]
+        t86_avail      = [x for x in _t86_dates    if x <= d][-120:]
+        m_dates_avail  = [x for x in _margin_dates if x <= d]
+        m_now          = _margin[m_dates_avail[-1]] if m_dates_avail else None
+        margin_hist_30 = [_margin[x] for x in m_dates_avail[-30:] if x in _margin]
 
-    t86_avail     = [x for x in _t86_dates if x <= d][-120:]
-    m_dates_avail = [x for x in _margin_dates if x <= d]
-    m_now         = _margin[m_dates_avail[-1]] if m_dates_avail else None
+        # 出場
+        to_exit = []
+        for code, pos in portfolio.items():
+            s = B.DD[d]['stocks'].get(code)
+            if not s or not s.get('close'): continue
+            cur_px = s['close']
+            ret    = adj_ret(code, days[pos['entry_di']], d)
+            score, _ = compute_score(code, di, t86_avail, m_now, margin_hist_30)
+            reason = None
+            if ret <= stop_loss:
+                reason = f'停損({ret*100:.1f}%)'
+            elif score is not None and score <= exit_score:
+                reason = f'分數跌至{score}'
+            elif di - pos['entry_di'] >= max_hold:
+                reason = f'持有{max_hold}日到期'
+            else:
+                px_all = [B.DD[days[k]]['stocks'].get(code, {}).get('close') for k in range(di+1)]
+                px_all = [v for v in px_all if v]
+                if len(px_all) >= 60:
+                    ma60_v = sum(px_all[-60:])/60
+                    if cur_px < ma60_v * 0.98:
+                        reason = f'破MA60({(cur_px/ma60_v-1)*100:.1f}%)'
+                if not reason:
+                    fs = _streak(t86_avail, code, 'f')
+                    if fs <= -5:
+                        reason = f'外資連賣{abs(fs)}日'
+            if reason:
+                to_exit.append((code, reason, cur_px, ret))
+
+        for code, reason, cur_px, gross_ret in to_exit:
+            pos     = portfolio.pop(code)
+            net_ret = gross_ret - BUY_C - SELL_C
+            lot     = pos['lot']
+            net_twd = round(lot * net_ret)
+            cash   += lot + net_twd
+            results.append({
+                'code': code,
+                'name': B.co.get(code, {}).get('name', code),
+                'entry_d': days[pos['entry_di']], 'exit_d': d,
+                'entry_px': pos['entry_price'], 'exit_px': round(cur_px, 2),
+                'gross_ret': round(gross_ret*100, 2),
+                'net_ret':   round(net_ret*100, 2),
+                'net_twd':   net_twd, 'lot': lot,
+                'hold_days': di - pos['entry_di'],
+                'reason': reason,
+                'regime': pos.get('regime', 'range'),
+                'entry_score': pos.get('entry_score'),
+            })
+
+        # 進場
+        cur_regime = regime_map.get(d, 'range')
+        if not (bear_gate and cur_regime == 'bear'):
+            candidates = []
+            for code in UNIVERSE:
+                if code in portfolio: continue
+                score, meta = compute_score(code, di, t86_avail, m_now, margin_hist_30)
+                if score is not None and score >= entry_score:
+                    candidates.append((score, code, meta))
+            candidates.sort(reverse=True)
+            for score, code, meta in candidates:
+                entry_px = B.DD[d]['stocks'].get(code, {}).get('close')
+                if not entry_px: continue
+                if cash < LOT_SIZE:
+                    add = LOT_SIZE - cash
+                    cash += add; total_invested += add
+                cash -= LOT_SIZE
+                portfolio[code] = {
+                    'entry_price': entry_px, 'entry_di': di,
+                    'entry_score': score, 'regime': cur_regime,
+                    'lot': LOT_SIZE,
+                }
+
+        # 每日淨值
+        pos_val    = sum(pos['lot'] * (1 + adj_ret(code, days[pos['entry_di']], d))
+                         for code, pos in portfolio.items())
+        equity_now = cash + pos_val
+        equity_curve.append({
+            'date': d, 'cash': round(cash), 'invested': total_invested,
+            'equity': round(equity_now),
+            'ret_pct': round((equity_now / total_invested - 1) * 100, 2),
+        })
+
+    # 強制平倉
+    di = len(days) - 1; d = days[di]
+    t86_avail      = [x for x in _t86_dates    if x <= d][-120:]
+    m_dates_avail  = [x for x in _margin_dates if x <= d]
+    m_now          = _margin[m_dates_avail[-1]] if m_dates_avail else None
     margin_hist_30 = [_margin[x] for x in m_dates_avail[-30:] if x in _margin]
-
-    # ── 出場 ──────────────────────────────────────────────────────────────
-    to_exit = []
-    for code, pos in portfolio.items():
-        s = B.DD[d]['stocks'].get(code)
-        if not s or not s.get('close'): continue
-        cur_px = s['close']
-        ret    = adj_ret(code, days[pos['entry_di']], d)
-        score, _ = compute_score(code, di, t86_avail, m_now, margin_hist_30)
-
-        reason = None
-        if ret <= STOP_LOSS:
-            reason = f'停損({ret*100:.1f}%)'
-        elif score is not None and score <= EXIT_SCORE:
-            reason = f'分數跌至{score}'
-        elif di - pos['entry_di'] >= MAX_HOLD:
-            reason = f'持有{MAX_HOLD}日到期'
-        else:
-            px_all = [B.DD[days[k]]['stocks'].get(code, {}).get('close') for k in range(di+1)]
-            px_all = [v for v in px_all if v]
-            if len(px_all) >= 60:
-                ma60 = sum(px_all[-60:])/60
-                if cur_px < ma60 * 0.98:
-                    reason = f'破MA60({(cur_px/ma60-1)*100:.1f}%)'
-            if not reason:
-                fs = _streak(t86_avail, code, 'f')
-                if fs <= -5:
-                    reason = f'外資連賣{abs(fs)}日'
-        if reason:
-            to_exit.append((code, reason, cur_px, ret))
-
-    for code, reason, cur_px, gross_ret in to_exit:
-        pos     = portfolio.pop(code)
-        net_ret = gross_ret - BUY_C - SELL_C
-        lot     = pos['lot']
-        net_twd = round(lot * net_ret)
-        cash   += lot + net_twd          # 本金回收 + 損益
+    for code, pos in list(portfolio.items()):
+        cur_px    = B.DD[d]['stocks'].get(code, {}).get('close') or pos['entry_price']
+        gross_ret = adj_ret(code, days[pos['entry_di']], d)
+        net_ret   = gross_ret - BUY_C - SELL_C
+        lot       = pos['lot']
+        net_twd   = round(lot * net_ret)
+        cash     += lot + net_twd
         results.append({
-            'code': code,
-            'name': B.co.get(code, {}).get('name', code),
+            'code': code, 'name': B.co.get(code, {}).get('name', code),
             'entry_d': days[pos['entry_di']], 'exit_d': d,
             'entry_px': pos['entry_price'], 'exit_px': round(cur_px, 2),
-            'gross_ret': round(gross_ret*100, 2),
-            'net_ret':   round(net_ret*100, 2),
-            'net_twd':   net_twd,
-            'lot':       lot,
+            'gross_ret': round(gross_ret*100, 2), 'net_ret': round(net_ret*100, 2),
+            'net_twd': net_twd, 'lot': lot,
             'hold_days': di - pos['entry_di'],
-            'reason': reason,
-            'regime': pos.get('regime', 'range'),
+            'reason': '回測結束', 'regime': pos.get('regime', 'range'),
             'entry_score': pos.get('entry_score'),
         })
 
-    # ── 進場 ──────────────────────────────────────────────────────────────
-    cur_regime = regime_map.get(d, 'range')
-    if not (BEAR_GATE and cur_regime == 'bear'):
-        candidates = []
-        for code in UNIVERSE:
-            if code in portfolio: continue
-            score, meta = compute_score(code, di, t86_avail, m_now, margin_hist_30)
-            if score is not None and score >= ENTRY_SCORE:
-                candidates.append((score, code, meta))
-        candidates.sort(reverse=True)
-        for score, code, meta in candidates:
-            entry_px = B.DD[d]['stocks'].get(code, {}).get('close')
-            if not entry_px: continue
-            if cash < LOT_SIZE:
-                add = LOT_SIZE - cash
-                cash += add
-                total_invested += add
-            cash -= LOT_SIZE
-            portfolio[code] = {
-                'entry_price': entry_px, 'entry_di': di,
-                'entry_score': score, 'regime': cur_regime,
-                'lot': LOT_SIZE,
+    # 統計
+    total_trades  = len(results)
+    wins          = [r for r in results if r['net_ret'] > 0]
+    losses        = [r for r in results if r['net_ret'] <= 0]
+    win_rate      = len(wins)/total_trades*100 if total_trades else 0
+    avg_win       = sum(r['net_ret'] for r in wins)/len(wins) if wins else 0
+    avg_loss      = sum(r['net_ret'] for r in losses)/len(losses) if losses else 0
+    avg_hold      = sum(r['hold_days'] for r in results)/total_trades if total_trades else 0
+    total_net_twd = sum(r.get('net_twd',0) for r in results)
+
+    eq_vals  = [e['equity']  for e in equity_curve]
+    inv_vals = [e['invested'] for e in equity_curve]
+    eq_dates = [e['date']     for e in equity_curve]
+    bm = [1.0]
+    for i in range(1, len(eq_dates)):
+        bm.append(bm[-1] * (1 + B.adj_ret('0050', eq_dates[i-1], eq_dates[i])))
+
+    def mdd(series):
+        peak = series[0]; worst = 0
+        for v in series:
+            if v > peak: peak = v
+            dd = (v - peak) / peak
+            if dd < worst: worst = dd
+        return worst * 100
+
+    eq_mult      = [eq_vals[i] / inv_vals[i] for i in range(len(eq_vals))]
+    strategy_mdd = mdd(eq_mult)
+    bm_mdd       = mdd(bm)
+    n_years      = len(eq_dates) / 252
+    ann_ret      = (eq_mult[-1] ** (1/n_years) - 1) * 100 if n_years > 0 else 0
+    bm_ann       = (bm[-1]      ** (1/n_years) - 1) * 100 if n_years > 0 else 0
+    total_return_pct = (eq_mult[-1] - 1) * 100
+    sharpe = (ann_ret - bm_ann) / (strategy_mdd if strategy_mdd != 0 else 1)
+
+    if verbose:
+        print("=" * 55)
+        print(f"  回測結果  scan_score ≥{entry_score} 進場 / ≤{exit_score} 出場")
+        print("=" * 55)
+        print(f"  累計注入:  {total_invested:,.0f} 元")
+        print(f"  最終資產:  {eq_vals[-1]:,.0f} 元  現金={cash:,.0f}")
+        print(f"  總報酬:    {total_return_pct:+.1f}%（vs 投入成本）")
+        print(f"  總交易筆數: {total_trades}")
+        print(f"  勝率:       {win_rate:.1f}%  (勝{len(wins)} / 負{len(losses)})")
+        print(f"  平均獲利:  +{avg_win:.2f}%  平均虧損: {avg_loss:.2f}%")
+        print(f"  盈虧比:    {abs(avg_win/avg_loss):.2f}" if avg_loss != 0 else "  盈虧比: N/A")
+        print(f"  平均持有:  {avg_hold:.1f} 交易日")
+        print(f"  策略年化:  {ann_ret:+.1f}%   MDD: {strategy_mdd:.1f}%")
+        print(f"  0050 年化: {bm_ann:+.1f}%   MDD: {bm_mdd:.1f}%")
+        print(f"  超額年化:  {ann_ret-bm_ann:+.1f}%")
+        print()
+
+        reason_counts = defaultdict(lambda: [0, 0, 0.0])
+        for r in results:
+            key = r['reason'].split('(')[0][:8]
+            reason_counts[key][0] += 1
+            if r['net_ret'] > 0: reason_counts[key][1] += 1
+            reason_counts[key][2] += r['net_ret']
+        print("出場原因分布:")
+        print(f"  {'原因':<10} {'次數':>5} {'勝率':>7} {'平均報酬':>9}")
+        for k, (cnt, w, tot) in sorted(reason_counts.items(), key=lambda x:-x[1][0]):
+            print(f"  {k:<10} {cnt:>5}  {w/cnt*100:>6.1f}%  {tot/cnt:>+8.2f}%")
+        print()
+
+        years = {}
+        for r in results:
+            yr = r['entry_d'][:4]
+            if yr not in years: years[yr] = []
+            years[yr].append(r['net_ret'])
+        print("年度勝率:")
+        print(f"  {'年':>5} {'筆數':>5} {'勝率':>7} {'平均報酬':>9}")
+        for yr in sorted(years):
+            rets = years[yr]
+            wr  = sum(1 for x in rets if x > 0)/len(rets)*100
+            avg = sum(rets)/len(rets)
+            print(f"  {yr:>5} {len(rets):>5}  {wr:>6.1f}%  {avg:>+8.2f}%")
+        print()
+
+        regime_stats = defaultdict(list)
+        for r in results: regime_stats[r.get('regime','?')].append(r['net_ret'])
+        print("Regime 分層:")
+        print(f"  {'Regime':<8} {'筆數':>5} {'勝率':>7} {'平均報酬':>9}")
+        for rg in ['bull', 'range', 'bear']:
+            rets = regime_stats[rg]
+            if not rets: print(f"  {rg:<8}     0  (無交易)"); continue
+            wr  = sum(1 for x in rets if x > 0)/len(rets)*100
+            avg = sum(rets)/len(rets)
+            print(f"  {rg:<8} {len(rets):>5}  {wr:>6.1f}%  {avg:>+8.2f}%")
+
+    regime_stats = defaultdict(list)
+    for r in results: regime_stats[r.get('regime','?')].append(r['net_ret'])
+
+    return {
+        'params': {
+            'entry_score': entry_score, 'exit_score': exit_score,
+            'max_hold': max_hold, 'stop_loss': stop_loss,
+            'lot_size': LOT_SIZE, 'bear_gate': bear_gate,
+        },
+        'summary': {
+            'total_trades': total_trades,
+            'win_rate': round(win_rate, 1),
+            'avg_win':  round(avg_win, 2),
+            'avg_loss': round(avg_loss, 2),
+            'avg_hold_days': round(avg_hold, 1),
+            'ann_ret':     round(ann_ret, 1),
+            'bm_ann_ret':  round(bm_ann, 1),
+            'excess_ann':  round(ann_ret - bm_ann, 1),
+            'total_return': round(total_return_pct, 1),
+            'bm_total_return': round((bm[-1]-1)*100, 1),
+            'strategy_mdd': round(strategy_mdd, 1),
+            'bm_mdd':       round(bm_mdd, 1),
+            'total_invested': total_invested,
+            'final_equity':   round(eq_vals[-1]),
+            'total_net_twd':  total_net_twd,
+            'sharpe_excess_per_mdd': round(sharpe, 3),
+        },
+        'regime_stats': {
+            rg: {
+                'n': len(rets),
+                'win_rate': round(sum(1 for x in rets if x>0)/len(rets)*100, 1) if rets else 0,
+                'avg_ret':  round(sum(rets)/len(rets), 2) if rets else 0,
             }
+            for rg, rets in regime_stats.items()
+        },
+        'equity_curve': equity_curve,
+        'bm': [[eq_dates[i], round(bm[i], 4)] for i in range(len(bm))],
+        'trades': results,
+    }
 
-    # ── 每日淨值快照 ───────────────────────────────────────────────────────
-    pos_val = sum(
-        pos['lot'] * (1 + adj_ret(code, days[pos['entry_di']], d))
-        for code, pos in portfolio.items()
-    )
-    equity_now = cash + pos_val
-    ret_pct    = round((equity_now / total_invested - 1) * 100, 2)
-    equity_curve.append({
-        'date': d, 'cash': round(cash), 'invested': total_invested,
-        'equity': round(equity_now), 'ret_pct': ret_pct,
-    })
 
-# ─── 強制平倉 ──────────────────────────────────────────────────────────────
-di = len(days) - 1
-d  = days[di]
-t86_avail     = [x for x in _t86_dates if x <= d][-120:]
-m_dates_avail = [x for x in _margin_dates if x <= d]
-m_now         = _margin[m_dates_avail[-1]] if m_dates_avail else None
-margin_hist_30 = [_margin[x] for x in m_dates_avail[-30:] if x in _margin]
-for code, pos in list(portfolio.items()):
-    cur_px    = B.DD[d]['stocks'].get(code, {}).get('close') or pos['entry_price']
-    gross_ret = adj_ret(code, days[pos['entry_di']], d)
-    net_ret   = gross_ret - BUY_C - SELL_C
-    lot       = pos['lot']
-    net_twd   = round(lot * net_ret)
-    cash     += lot + net_twd
-    results.append({
-        'code': code,
-        'name': B.co.get(code, {}).get('name', code),
-        'entry_d': days[pos['entry_di']], 'exit_d': d,
-        'entry_px': pos['entry_price'], 'exit_px': round(cur_px, 2),
-        'gross_ret': round(gross_ret*100, 2),
-        'net_ret':   round(net_ret*100, 2),
-        'net_twd':   net_twd, 'lot': lot,
-        'hold_days': di - pos['entry_di'],
-        'reason': '回測結束',
-        'regime': pos.get('regime', 'range'),
-        'entry_score': pos.get('entry_score'),
-    })
-
-# ─── 統計 ────────────────────────────────────────────────────────────────
-total_trades = len(results)
-wins   = [r for r in results if r['net_ret'] > 0]
-losses = [r for r in results if r['net_ret'] <= 0]
-win_rate  = len(wins)/total_trades*100 if total_trades else 0
-avg_win   = sum(r['net_ret'] for r in wins)/len(wins) if wins else 0
-avg_loss  = sum(r['net_ret'] for r in losses)/len(losses) if losses else 0
-avg_hold  = sum(r['hold_days'] for r in results)/total_trades if total_trades else 0
-total_net_twd = sum(r.get('net_twd',0) for r in results)
-
-# 從 equity_curve 提取序列做 MDD / 年化
-eq_vals  = [e['equity']   for e in equity_curve]
-inv_vals = [e['invested']  for e in equity_curve]
-eq_dates = [e['date']      for e in equity_curve]
-
-# 0050 benchmark（用倍數比較，起點 = 第一天 equity）
-bm = [1.0]
-for i in range(1, len(eq_dates)):
-    bm.append(bm[-1] * (1 + B.adj_ret('0050', eq_dates[i-1], eq_dates[i])))
-
-def mdd(series):
-    peak = series[0]; worst = 0
-    for v in series:
-        if v > peak: peak = v
-        dd = (v - peak) / peak
-        if dd < worst: worst = dd
-    return worst * 100
-
-# equity_curve 的 MDD 用相對投入成本的帳戶曲線（倍數）
-eq_mult = [eq_vals[i] / inv_vals[i] for i in range(len(eq_vals))]
-strategy_mdd = mdd(eq_mult)
-bm_mdd       = mdd(bm)
-
-n_years  = len(eq_dates) / 252
-ann_ret  = (eq_mult[-1] ** (1/n_years) - 1) * 100 if n_years > 0 else 0
-bm_ann   = (bm[-1]      ** (1/n_years) - 1) * 100 if n_years > 0 else 0
-total_return_pct = (eq_mult[-1] - 1) * 100
-
-print("=" * 55)
-print(f"  回測結果  scan_score ≥{ENTRY_SCORE} 進場 / ≤{EXIT_SCORE} 出場")
-print("=" * 55)
-print(f"  累計注入:  {total_invested:,.0f} 元")
-print(f"  最終資產:  {eq_vals[-1]:,.0f} 元  現金={cash:,.0f}")
-print(f"  總報酬:    {total_return_pct:+.1f}%（vs 投入成本）")
-print(f"  總交易筆數: {total_trades}")
-print(f"  勝率:       {win_rate:.1f}%  (勝{len(wins)} / 負{len(losses)})")
-print(f"  平均獲利:  +{avg_win:.2f}%  平均虧損: {avg_loss:.2f}%")
-print(f"  盈虧比:    {abs(avg_win/avg_loss):.2f}" if avg_loss != 0 else "  盈虧比: N/A")
-print(f"  平均持有:  {avg_hold:.1f} 交易日")
-print(f"  策略年化:  {ann_ret:+.1f}%   MDD: {strategy_mdd:.1f}%")
-print(f"  0050 年化: {bm_ann:+.1f}%   MDD: {bm_mdd:.1f}%")
-print(f"  超額年化:  {ann_ret-bm_ann:+.1f}%")
-print()
-
-# 出場原因統計
-reason_counts = defaultdict(lambda: [0, 0, 0.0])
-for r in results:
-    key = r['reason'].split('(')[0][:8]
-    reason_counts[key][0] += 1
-    if r['net_ret'] > 0: reason_counts[key][1] += 1
-    reason_counts[key][2] += r['net_ret']
-print("出場原因分布:")
-print(f"  {'原因':<10} {'次數':>5} {'勝率':>7} {'平均報酬':>9}")
-for k, (cnt, w, tot) in sorted(reason_counts.items(), key=lambda x:-x[1][0]):
-    print(f"  {k:<10} {cnt:>5}  {w/cnt*100:>6.1f}%  {tot/cnt:>+8.2f}%")
-print()
-
-# 年度統計
-years = {}
-for r in results:
-    yr = r['entry_d'][:4]
-    if yr not in years: years[yr] = []
-    years[yr].append(r['net_ret'])
-print("年度勝率:")
-print(f"  {'年':>5} {'筆數':>5} {'勝率':>7} {'平均報酬':>9}")
-for yr in sorted(years):
-    rets = years[yr]
-    wr  = sum(1 for x in rets if x > 0)/len(rets)*100
-    avg = sum(rets)/len(rets)
-    print(f"  {yr:>5} {len(rets):>5}  {wr:>6.1f}%  {avg:>+8.2f}%")
-print()
-
-# Regime 分層
-print("Regime 分層:")
-print(f"  {'Regime':<8} {'筆數':>5} {'勝率':>7} {'平均報酬':>9}")
-regime_stats = defaultdict(list)
-for r in results:
-    regime_stats[r.get('regime', '?')].append(r['net_ret'])
-for rg in ['bull', 'range', 'bear']:
-    rets = regime_stats[rg]
-    if not rets: print(f"  {rg:<8}     0  (無交易)"); continue
-    wr  = sum(1 for x in rets if x > 0)/len(rets)*100
-    avg = sum(rets)/len(rets)
-    print(f"  {rg:<8} {len(rets):>5}  {wr:>6.1f}%  {avg:>+8.2f}%")
-
-# 保存結果
-output = {
-    'params': {
-        'entry_score': ENTRY_SCORE, 'exit_score': EXIT_SCORE,
-        'max_hold': MAX_HOLD, 'stop_loss': STOP_LOSS,
-        'lot_size': LOT_SIZE, 'bear_gate': BEAR_GATE,
-    },
-    'summary': {
-        'total_trades': total_trades,
-        'win_rate': round(win_rate, 1),
-        'avg_win':  round(avg_win, 2),
-        'avg_loss': round(avg_loss, 2),
-        'avg_hold_days': round(avg_hold, 1),
-        'ann_ret':     round(ann_ret, 1),
-        'bm_ann_ret':  round(bm_ann, 1),
-        'excess_ann':  round(ann_ret - bm_ann, 1),
-        'total_return': round(total_return_pct, 1),
-        'bm_total_return': round((bm[-1]-1)*100, 1),
-        'strategy_mdd': round(strategy_mdd, 1),
-        'bm_mdd':       round(bm_mdd, 1),
-        'total_invested': total_invested,
-        'final_equity':   round(eq_vals[-1]),
-        'total_net_twd':  total_net_twd,
-    },
-    'regime_stats': {
-        rg: {
-            'n': len(rets),
-            'win_rate': round(sum(1 for x in rets if x>0)/len(rets)*100, 1) if rets else 0,
-            'avg_ret':  round(sum(rets)/len(rets), 2) if rets else 0,
-        }
-        for rg, rets in regime_stats.items()
-    },
-    'equity_curve': equity_curve,                         # 含 cash/invested/equity/ret_pct
-    'bm': [[eq_dates[i], round(bm[i], 4)] for i in range(len(bm))],
-    'trades': results,
-}
-json.dump(output, open('scan_bt_result.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
-print(f"\n結果已存 scan_bt_result.json  ({total_trades} 筆交易)")
+# ─── 直接執行時跑預設參數並存 JSON ───────────────────────────────────────
+if __name__ == '__main__':
+    output = run_backtest(verbose=True)
+    json.dump(output, open('scan_bt_result.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+    print(f"\n結果已存 scan_bt_result.json  ({output['summary']['total_trades']} 筆交易)")

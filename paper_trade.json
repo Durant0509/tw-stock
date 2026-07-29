@@ -7,7 +7,7 @@
       "entry_px": 41.5,
       "entry_score": 12,
       "cur_px": 41.5,
-      "hold_days": 1,
+      "hold_days": 2,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -21,9 +21,9 @@
         "距高甜蜜點(-7.7%)"
       ],
       "flags": [],
-      "score": 12,
+      "score": 10,
       "ma60_pct": 5.9,
-      "fstreak": 15,
+      "fstreak": 16,
       "stop_dist": 10.0
     },
     "2610": {
@@ -33,7 +33,7 @@
       "entry_px": 21.7,
       "entry_score": 11,
       "cur_px": 21.7,
-      "hold_days": 1,
+      "hold_days": 2,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -47,9 +47,9 @@
         "RSI健康(47)"
       ],
       "flags": [],
-      "score": 11,
+      "score": 10,
       "ma60_pct": 6.1,
-      "fstreak": 3,
+      "fstreak": 4,
       "stop_dist": 10.0
     },
     "6505": {
@@ -59,7 +59,7 @@
       "entry_px": 74.8,
       "entry_score": 10,
       "cur_px": 74.8,
-      "hold_days": 1,
+      "hold_days": 2,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -71,9 +71,9 @@
         "RSI健康(63)"
       ],
       "flags": [],
-      "score": 10,
+      "score": 9,
       "ma60_pct": 26.8,
-      "fstreak": 2,
+      "fstreak": -1,
       "stop_dist": 10.0
     },
     "2615": {
@@ -83,7 +83,7 @@
       "entry_px": 85.0,
       "entry_score": 10,
       "cur_px": 85.0,
-      "hold_days": 1,
+      "hold_days": 2,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -98,7 +98,7 @@
       "flags": [],
       "score": 10,
       "ma60_pct": 5.1,
-      "fstreak": 1,
+      "fstreak": 2,
       "stop_dist": 10.0
     },
     "2006": {
@@ -108,7 +108,7 @@
       "entry_px": 72.4,
       "entry_score": 10,
       "cur_px": 72.4,
-      "hold_days": 1,
+      "hold_days": 2,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -122,8 +122,28 @@
       "flags": [],
       "score": 10,
       "ma60_pct": 5.9,
-      "fstreak": 6,
+      "fstreak": 7,
       "stop_dist": 10.0
+    },
+    "2915": {
+      "code": "2915",
+      "name": "潤泰全",
+      "entry_date": "20260729",
+      "entry_px": 51.1,
+      "entry_score": 10,
+      "cur_px": 51.1,
+      "hold_days": 0,
+      "gross_ret": 0.0,
+      "lot": 100000,
+      "reasons": [
+        "族群動能強(5.3%)",
+        "站上MA60 +5.0%",
+        "外資連買 3日",
+        "外資持股大變動(-1.8pp)",
+        "RSI健康(47)",
+        "距高甜蜜點(-9.1%)"
+      ],
+      "flags": []
     }
   },
   "closed": [],
@@ -141,11 +161,18 @@
         "[注資] +100,000 元 → 累計投入 500,000",
         "[進場] 2006 東和鋼鐵  分=10  MA60=+5.9%  外資=+6日  配置=100,000元  現金剩=0"
       ]
+    },
+    {
+      "date": "20260729",
+      "events": [
+        "[注資] +100,000 元 → 累計投入 600,000",
+        "[進場] 2915 潤泰全  分=10  MA60=+5.0%  外資=+3日  配置=100,000元  現金剩=0"
+      ]
     }
   ],
   "start_date": "20260729",
   "cash": 0,
-  "total_invested": 500000,
+  "total_invested": 600000,
   "equity_curve": [
     {
       "date": "20260729",
@@ -160,17 +187,24 @@
       "equity": 500000,
       "invested": 500000,
       "ret_pct": 0.0
+    },
+    {
+      "date": "20260729",
+      "cash": 0,
+      "equity": 600000,
+      "invested": 600000,
+      "ret_pct": 0.0
     }
   ],
   "summary": {
     "asof": "20260729",
     "regime": "bull",
     "lot_size": 100000,
-    "total_invested": 500000,
+    "total_invested": 600000,
     "cash": 0,
-    "open_positions": 5,
-    "pos_market_val": 500000,
-    "total_equity": 500000,
+    "open_positions": 6,
+    "pos_market_val": 600000,
+    "total_equity": 600000,
     "total_ret_pct": 0.0,
     "closed_trades": 0,
     "win_rate": 0,
@@ -178,6 +212,6 @@
     "avg_loss": 0,
     "pnl_ratio": null,
     "realized_net_twd": 0,
-    "open_unreal_twd": -960
+    "open_unreal_twd": -1152
   }
 }

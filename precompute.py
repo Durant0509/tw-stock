@@ -308,11 +308,11 @@ print(f"預運算完成: {len(out['stocks'])} 檔 | regime={regime} gate={gate} 
 # ── 選股雷達評分 ──────────────────────────────────────────────────────
 def scan_score(s):
     """
-    綜合評分，使用所有可用資料：
-    核心：族群動能+MA60（回測驗證最強因子）
-    籌碼：外資連買/連賣、投信連買/連賣、三大法人合力、外資±2σ異常大單
-    基本面：月營收YoY加速
-    風險：融資擁擠（斷頭壓力）、RSI超買、排雷分數
+    綜合評分 v3（基於IC實證修正，2026-07）
+    依據：988日×200檔 IC/Pearson分析
+    有效因子（r>0.05）：距MA60(0.084) > 月周轉率(0.063，高轉手才好) > 外資連買(0.040)
+    有效排雷：外資連賣3+(勝率-5pp)、無融券(勝率48%)、族群動能弱
+    修正：移除融資百分位加減分（年度偏差）、月周轉率低不再加分、外資持股改非線性
     """
     pts=0; reasons=[]; flags=[]
     sm    = s.get('sector_mom') or 0
@@ -321,52 +321,54 @@ def scan_score(s):
     fs    = s.get('fstreak') or 0
     ts    = s.get('tstreak') or 0
     a3    = s.get('a3streak') or 0
-    fz    = s.get('fzscore')           # 可為 None
+    fz    = s.get('fzscore')
     rs    = s.get('riskscore') or 0
     rsi_v = s.get('rsi') or 50
     fh    = s.get('from_high') or 0
-    yoy   = s.get('rev_yoy')           # 可為 None
-    fp    = s.get('fin_pctl')          # 可為 None
-    fh_chg = s.get('fh_chg')          # 外資持股近3月變化pp，可為 None
-    turn   = s.get('turnover')        # 月周轉率%，可為 None
+    yoy   = s.get('rev_yoy')
+    fh_chg = s.get('fh_chg')
+    turn   = s.get('turnover')
+    sr     = s.get('short_ratio')  # 券資比
 
-    # ① 族群動能（核心，回測驗證最強）
+    # ① 族群動能（核心，回測最強，Pearson間接支撐）
     if sm>=1.5:   pts+=3; reasons.append(f'族群動能強({sm:.1f}%)')
     elif sm>=0.5: pts+=2; reasons.append(f'族群動能正({sm:.1f}%)')
     elif sm>=0:   pts+=1; reasons.append(f'族群動能平({sm:.1f}%)')
     else:         pts-=2; flags.append(f'族群動能弱({sm:.1f}%)')
 
-    # ② MA60站穩
-    if ma60>=5:   pts+=2; reasons.append(f'站上MA60 +{ma60:.1f}%')
+    # ② MA60站穩（Pearson r=+0.084，最強單因子）
+    if ma60>=5:   pts+=3; reasons.append(f'站上MA60 +{ma60:.1f}%')
     elif ma60>=0: pts+=1; reasons.append(f'站上MA60 +{ma60:.1f}%')
     else:         pts-=2; flags.append(f'破MA60 {ma60:.1f}%')
 
-    # ③ 量能
-    if vr>=1.3:   pts+=2; reasons.append(f'量能放大 {vr:.1f}×')
-    elif vr>=1.0: pts+=1; reasons.append(f'量能正常 {vr:.1f}×')
+    # ③ 量能（高周轉率r=+0.063，大型股活躍=好訊號）
+    if vr>=1.5:   pts+=2; reasons.append(f'量能爆大 {vr:.1f}×')
+    elif vr>=1.2: pts+=1; reasons.append(f'量能放大 {vr:.1f}×')
+    # 不再因低量扣分（低量本身IC接近零）
 
-    # ④ 外資籌碼（連賣≥3日=有效危險訊號，回測驗證）
-    if fs>=5:    pts+=3; reasons.append(f'外資連買 {fs}日 ★')
-    elif fs>=3:  pts+=2; reasons.append(f'外資連買 {fs}日')
-    elif fs>=1:  pts+=1; reasons.append(f'外資買超 {fs}日')
+    # ④ 外資連買/連賣（IC分析：連賣效果>連買效果）
+    # 連買加分保守，連賣扣分強化
+    if fs>=5:    pts+=2; reasons.append(f'外資連買 {fs}日')
+    elif fs>=3:  pts+=1; reasons.append(f'外資連買 {fs}日')
     elif fs<=-5: pts-=4; flags.append(f'外資連賣 {abs(fs)}日 ⚠⚠')
     elif fs<=-3: pts-=3; flags.append(f'外資連賣 {abs(fs)}日 ⚠')
-    elif fs<0:   pts-=1; flags.append(f'外資賣超 {abs(fs)}日')
+    elif fs<=-1: pts-=1; flags.append(f'外資賣超 {abs(fs)}日')
+    # 連買1~2日：IC≈連賣組差距不大，不加分
 
-    # ⑤ 投信籌碼（連賣≥3日=危險訊號，加入排雷）
-    if ts>=3:    pts+=2; reasons.append(f'投信連買 {ts}日')
-    elif ts>=1:  pts+=1; reasons.append(f'投信買超 {ts}日')
+    # ⑤ 融券/融資比（IC r=+0.034；有融券=市場活躍博弈，無融券=死水）
+    if sr is not None:
+        if sr >= 0.2:   pts+=2; reasons.append(f'高券資比({sr:.2f})，市場博弈活躍')
+        elif sr >= 0.05:pts+=1; reasons.append(f'有融券({sr:.2f})')
+        elif sr == 0:   pts-=1; flags.append(f'無融券，流動性死水')
+
+    # ⑥ 投信籌碼（連賣≥3日有效危險，連買加分保守）
+    if ts>=3:    pts+=1; reasons.append(f'投信連買 {ts}日')
     elif ts<=-3: pts-=2; flags.append(f'投信連賣 {abs(ts)}日 ⚠')
-    elif ts<0:   pts-=1; flags.append(f'投信賣超 {abs(ts)}日')
+    elif ts<=-1: pts-=1; flags.append(f'投信賣超 {abs(ts)}日')
 
-    # ⑥ 三大法人合力（外資+投信+自營同向更強）
-    if a3>=5:    pts+=2; reasons.append(f'三大合力連買 {a3}日 ★')
-    elif a3>=3:  pts+=1; reasons.append(f'三大合力買 {a3}日')
-    elif a3<=-3: pts-=2; flags.append(f'三大合力連賣 {abs(a3)}日 ⚠')
-
-    # ⑦ 外資±2σ 異常大買/大賣（單日劇變）
+    # ⑦ 外資±2σ 異常大買/大賣
     if fz is not None:
-        if fz>=2:   pts+=1; reasons.append(f'外資異常大買(z={fz:.1f})')
+        if fz>=2:    pts+=1; reasons.append(f'外資異常大買(z={fz:.1f})')
         elif fz<=-2: pts-=2; flags.append(f'外資異常大賣(z={fz:.1f}) ⚠')
 
     # ⑧ 月營收 YoY（基本面動能）
@@ -375,13 +377,13 @@ def scan_score(s):
         elif yoy>=20: pts+=1; reasons.append(f'月營收YoY +{yoy:.0f}%')
         elif yoy<-10: pts-=1; flags.append(f'月營收YoY {yoy:.0f}%')
 
-    # ⑨ 融資擁擠（散戶斷頭壓力）
-    if fp is not None:
-        if fp>=90:   pts-=2; flags.append(f'融資高位({fp}pctl) 斷頭壓力⚠')
-        elif fp>=75: pts-=1; flags.append(f'融資偏高({fp}pctl)')
-        elif fp<=20: pts+=1; reasons.append(f'融資低位({fp}pctl) 乾淨')
+    # ⑨ 外資持股趨勢（非線性！大幅變化=有故事，持平=無聊）
+    # 實證：+1~3pp勝率58%、-3pp以上勝率61%，±1pp持平勝率最低
+    if fh_chg is not None:
+        if abs(fh_chg) >= 1: pts+=1; reasons.append(f'外資持股大變動({fh_chg:+.1f}pp)')
+        # 不再區分增減方向，只看絕對值大小
 
-    # ⑩ 排雷分數（負值=有風險訊號）
+    # ⑩ 排雷分數
     if rs<0: pts+=rs*2; flags.append(f'排雷警示 {abs(rs)}項')
 
     # ⑪ RSI
@@ -392,18 +394,6 @@ def scan_score(s):
     # ⑫ 距高點甜蜜點
     if -10<=fh<=-2: pts+=1; reasons.append(f'距高甜蜜點({fh:.1f}%)')
     elif fh<-20:    pts-=1; flags.append(f'距高點過遠({fh:.1f}%)')
-
-    # ⑬ 外資持股比率趨勢（近3個月上升=籌碼流入，下降=流出）
-    if fh_chg is not None:
-        if fh_chg >= 2:    pts+=2; reasons.append(f'外資持股↑{fh_chg:+.1f}pp(3月)')
-        elif fh_chg >= 0.5:pts+=1; reasons.append(f'外資持股↑{fh_chg:+.1f}pp(3月)')
-        elif fh_chg <= -3: pts-=2; flags.append(f'外資持股↓{fh_chg:.1f}pp(3月) ⚠')
-        elif fh_chg <= -1: pts-=1; flags.append(f'外資持股↓{fh_chg:.1f}pp(3月)')
-
-    # ⑭ 月周轉率（低=籌碼沉澱，高=散戶活躍/換手頻繁）
-    if turn is not None:
-        if turn <= 5:    pts+=1; reasons.append(f'月周轉率低({turn}%，籌碼沉澱)')
-        elif turn >= 40: pts-=1; flags.append(f'月周轉率高({turn}%，換手頻繁)')
 
     return pts, reasons, flags
 

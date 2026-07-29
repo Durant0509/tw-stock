@@ -57,6 +57,7 @@ def main():
     if os.path.exists("chips.py"): run("chips.py","法人筹码计算")
     if os.path.exists("chips_backtest.py"): run("chips_backtest.py","筹码因子回测")
     ok&=run("precompute.py","个股体检",required=True)
+    if os.path.exists("paper_trade.py"): run("paper_trade.py","模擬盤更新")
     # 3) 组合网页
     run("build_warroom.py","生成作战台网页",required=True)
     # 4) git push (只推程式+网页+成果JSON, data/ 被 gitignore 挡)

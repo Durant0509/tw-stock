@@ -25,6 +25,8 @@ desktop.ini
 !ls_backtest_data.json
 !chips_data.json
 !chips_backtest_data.json
+!paper_trade.json
+!scan_bt_result.json
 
 # 私人记忆/排程 (不上公开 repo)
 .claude/

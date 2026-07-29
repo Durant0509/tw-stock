@@ -16,8 +16,10 @@ stocks=json.load(open('stocks_data.json',encoding='utf-8'))
 chips=json.load(open('chips_data.json',encoding='utf-8')) if os.path.exists('chips_data.json') else None
 chips_bt=json.load(open('chips_backtest_data.json',encoding='utf-8')) if os.path.exists('chips_backtest_data.json') else None
 scan=json.load(open('scan_data.json',encoding='utf-8')) if os.path.exists('scan_data.json') else None
+paper=json.load(open('paper_trade.json',encoding='utf-8')) if os.path.exists('paper_trade.json') else None
+scan_bt=json.load(open('scan_bt_result.json',encoding='utf-8')) if os.path.exists('scan_bt_result.json') else None
 dash_slim={'current':dash['current'],'engine':ds(dash['engine']),'cheap':ds(dash['cheap']),'retail':ds(dash['retail'])}
-merged={'dash':dash_slim,'gate':gate,'stocks':stocks,'chips':chips,'chips_bt':chips_bt,'scan':scan}
+merged={'dash':dash_slim,'gate':gate,'stocks':stocks,'chips':chips,'chips_bt':chips_bt,'scan':scan,'paper':paper,'scan_bt':scan_bt}
 data_js=json.dumps(merged,ensure_ascii=False)
 
 tmpl=open('warroom_template.html',encoding='utf-8').read()

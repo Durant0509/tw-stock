@@ -44,7 +44,9 @@ def main():
         for s,d in [("pull_data.py","个股量价/PE"),("pull_meta.py","公司资料+殖利率/PB"),
                     ("pull_margin.py","融资融券"),
                     ("pull_finmind.py","台指期法人"),("pull_t86.py","三大法人现货"),
-                    ("pull_chips.py","法人筹码快报")]:
+                    ("pull_chips.py","法人筹码快报"),
+                    ("pull_shareholding.py","外资持股比率"),
+                    ("pull_turnover.py","月周转率+BWIBBU历史")]:
             if os.path.exists(s): run(s,d)
     else:
         log("周末, 跳过抓取")

@@ -7,7 +7,7 @@
       "entry_px": 41.5,
       "entry_score": 12,
       "cur_px": 41.8,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": 0.72,
       "lot": 100000,
       "reasons": [
@@ -23,7 +23,7 @@
       "flags": [],
       "score": 10,
       "ma60_pct": 6.4,
-      "fstreak": 16,
+      "fstreak": 17,
       "stop_dist": 10.72
     },
     "2610": {
@@ -33,7 +33,7 @@
       "entry_px": 21.7,
       "entry_score": 11,
       "cur_px": 21.7,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -47,9 +47,9 @@
         "RSI健康(47)"
       ],
       "flags": [],
-      "score": 10,
+      "score": 11,
       "ma60_pct": 5.8,
-      "fstreak": 4,
+      "fstreak": 5,
       "stop_dist": 10.0
     },
     "6505": {
@@ -59,7 +59,7 @@
       "entry_px": 74.8,
       "entry_score": 10,
       "cur_px": 71.6,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": -4.28,
       "lot": 100000,
       "reasons": [
@@ -71,9 +71,9 @@
         "RSI健康(63)"
       ],
       "flags": [],
-      "score": 7,
+      "score": 8,
       "ma60_pct": 20.8,
-      "fstreak": -1,
+      "fstreak": -2,
       "stop_dist": 5.72
     },
     "2615": {
@@ -83,7 +83,7 @@
       "entry_px": 85.0,
       "entry_score": 10,
       "cur_px": 84.4,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": -0.71,
       "lot": 100000,
       "reasons": [
@@ -96,9 +96,9 @@
         "距高甜蜜點(-8.9%)"
       ],
       "flags": [],
-      "score": 7,
+      "score": 8,
       "ma60_pct": 4.2,
-      "fstreak": 2,
+      "fstreak": 3,
       "stop_dist": 9.29
     },
     "2006": {
@@ -108,7 +108,7 @@
       "entry_px": 72.4,
       "entry_score": 10,
       "cur_px": 73.4,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": 1.38,
       "lot": 100000,
       "reasons": [
@@ -122,7 +122,7 @@
       "flags": [],
       "score": 9,
       "ma60_pct": 7.2,
-      "fstreak": 7,
+      "fstreak": 8,
       "stop_dist": 11.38
     },
     "2915": {
@@ -132,7 +132,7 @@
       "entry_px": 51.1,
       "entry_score": 10,
       "cur_px": 51.4,
-      "hold_days": 1,
+      "hold_days": 2,
       "gross_ret": 0.59,
       "lot": 100000,
       "reasons": [
@@ -146,7 +146,7 @@
       "flags": [],
       "score": 10,
       "ma60_pct": 5.3,
-      "fstreak": 3,
+      "fstreak": 4,
       "stop_dist": 10.59
     },
     "5876": {
@@ -156,7 +156,7 @@
       "entry_px": 44.8,
       "entry_score": 12,
       "cur_px": 44.8,
-      "hold_days": 0,
+      "hold_days": 1,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -169,7 +169,11 @@
         "RSI健康(60)",
         "距高甜蜜點(-4.7%)"
       ],
-      "flags": []
+      "flags": [],
+      "score": 11,
+      "ma60_pct": 6.7,
+      "fstreak": 5,
+      "stop_dist": 10.0
     },
     "2867": {
       "code": "2867",
@@ -178,7 +182,7 @@
       "entry_px": 9.6,
       "entry_score": 12,
       "cur_px": 9.6,
-      "hold_days": 0,
+      "hold_days": 1,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -189,7 +193,11 @@
         "月營收YoY +187% ★",
         "外資持股大變動(+8.7pp)"
       ],
-      "flags": []
+      "flags": [],
+      "score": 13,
+      "ma60_pct": 14.6,
+      "fstreak": 6,
+      "stop_dist": 10.0
     },
     "2890": {
       "code": "2890",
@@ -198,7 +206,7 @@
       "entry_px": 38.9,
       "entry_score": 11,
       "cur_px": 38.9,
-      "hold_days": 0,
+      "hold_days": 1,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -209,7 +217,11 @@
         "外資持股大變動(+2.4pp)",
         "距高甜蜜點(-7.3%)"
       ],
-      "flags": []
+      "flags": [],
+      "score": 11,
+      "ma60_pct": 9.5,
+      "fstreak": 2,
+      "stop_dist": 10.0
     },
     "5880": {
       "code": "5880",
@@ -218,7 +230,7 @@
       "entry_px": 27.0,
       "entry_score": 10,
       "cur_px": 27.0,
-      "hold_days": 0,
+      "hold_days": 1,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -230,7 +242,11 @@
       ],
       "flags": [
         "RSI超買(88)"
-      ]
+      ],
+      "score": 11,
+      "ma60_pct": 11.7,
+      "fstreak": 6,
+      "stop_dist": 10.0
     },
     "2884": {
       "code": "2884",
@@ -239,7 +255,7 @@
       "entry_px": 37.7,
       "entry_score": 10,
       "cur_px": 37.7,
-      "hold_days": 0,
+      "hold_days": 1,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -249,6 +265,30 @@
         "投信連買 5日",
         "月營收YoY +25%",
         "外資持股大變動(+1.1pp)"
+      ],
+      "flags": [],
+      "score": 11,
+      "ma60_pct": 11.6,
+      "fstreak": 5,
+      "stop_dist": 10.0
+    },
+    "2845": {
+      "code": "2845",
+      "name": "遠東銀",
+      "entry_date": "20260730",
+      "entry_px": 13.4,
+      "entry_score": 10,
+      "cur_px": 13.4,
+      "hold_days": 0,
+      "gross_ret": 0.0,
+      "lot": 100000,
+      "reasons": [
+        "族群動能強(1.5%)",
+        "站上MA60 +5.6%",
+        "投信連買 4日",
+        "月營收YoY +20%",
+        "RSI健康(59)",
+        "距高甜蜜點(-4.3%)"
       ],
       "flags": []
     }
@@ -290,11 +330,18 @@
         "[注資] +100,000 元 → 累計投入 1,100,000",
         "[進場] 2884 玉山金  分=10  MA60=+11.6%  外資=+4日  配置=100,000元  現金剩=0"
       ]
+    },
+    {
+      "date": "20260730",
+      "events": [
+        "[注資] +100,000 元 → 累計投入 1,200,000",
+        "[進場] 2845 遠東銀  分=10  MA60=+5.6%  外資=+1日  配置=100,000元  現金剩=0"
+      ]
     }
   ],
   "start_date": "20260729",
   "cash": 0,
-  "total_invested": 1100000,
+  "total_invested": 1200000,
   "equity_curve": [
     {
       "date": "20260729",
@@ -323,24 +370,31 @@
       "equity": 1097700,
       "invested": 1100000,
       "ret_pct": -0.21
+    },
+    {
+      "date": "20260730",
+      "cash": 0,
+      "equity": 1197700,
+      "invested": 1200000,
+      "ret_pct": -0.19
     }
   ],
   "summary": {
     "asof": "20260730",
     "regime": "bull",
     "lot_size": 100000,
-    "total_invested": 1100000,
+    "total_invested": 1200000,
     "cash": 0,
-    "open_positions": 11,
-    "pos_market_val": 1097700,
-    "total_equity": 1097700,
-    "total_ret_pct": -0.21,
+    "open_positions": 12,
+    "pos_market_val": 1197700,
+    "total_equity": 1197700,
+    "total_ret_pct": -0.19,
     "closed_trades": 0,
     "win_rate": 0,
     "avg_win": 0,
     "avg_loss": 0,
     "pnl_ratio": null,
     "realized_net_twd": 0,
-    "open_unreal_twd": -4413
+    "open_unreal_twd": -4605
   }
 }

@@ -6,9 +6,9 @@
       "entry_date": "20260729",
       "entry_px": 41.5,
       "entry_score": 12,
-      "cur_px": 41.5,
-      "hold_days": 2,
-      "gross_ret": 0.0,
+      "cur_px": 41.8,
+      "hold_days": 3,
+      "gross_ret": 0.72,
       "lot": 100000,
       "reasons": [
         "族群動能正(1.0%)",
@@ -22,9 +22,9 @@
       ],
       "flags": [],
       "score": 10,
-      "ma60_pct": 5.9,
+      "ma60_pct": 6.4,
       "fstreak": 16,
-      "stop_dist": 10.0
+      "stop_dist": 10.72
     },
     "2610": {
       "code": "2610",
@@ -33,7 +33,7 @@
       "entry_px": 21.7,
       "entry_score": 11,
       "cur_px": 21.7,
-      "hold_days": 2,
+      "hold_days": 3,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -48,7 +48,7 @@
       ],
       "flags": [],
       "score": 10,
-      "ma60_pct": 6.1,
+      "ma60_pct": 5.8,
       "fstreak": 4,
       "stop_dist": 10.0
     },
@@ -58,9 +58,9 @@
       "entry_date": "20260729",
       "entry_px": 74.8,
       "entry_score": 10,
-      "cur_px": 74.8,
-      "hold_days": 2,
-      "gross_ret": 0.0,
+      "cur_px": 71.6,
+      "hold_days": 3,
+      "gross_ret": -4.28,
       "lot": 100000,
       "reasons": [
         "族群動能強(27.2%)",
@@ -71,10 +71,10 @@
         "RSI健康(63)"
       ],
       "flags": [],
-      "score": 9,
-      "ma60_pct": 26.8,
+      "score": 7,
+      "ma60_pct": 20.8,
       "fstreak": -1,
-      "stop_dist": 10.0
+      "stop_dist": 5.72
     },
     "2615": {
       "code": "2615",
@@ -82,9 +82,9 @@
       "entry_date": "20260729",
       "entry_px": 85.0,
       "entry_score": 10,
-      "cur_px": 85.0,
-      "hold_days": 2,
-      "gross_ret": 0.0,
+      "cur_px": 84.4,
+      "hold_days": 3,
+      "gross_ret": -0.71,
       "lot": 100000,
       "reasons": [
         "族群動能正(1.0%)",
@@ -96,10 +96,10 @@
         "距高甜蜜點(-8.9%)"
       ],
       "flags": [],
-      "score": 10,
-      "ma60_pct": 5.1,
+      "score": 7,
+      "ma60_pct": 4.2,
       "fstreak": 2,
-      "stop_dist": 10.0
+      "stop_dist": 9.29
     },
     "2006": {
       "code": "2006",
@@ -107,9 +107,9 @@
       "entry_date": "20260729",
       "entry_px": 72.4,
       "entry_score": 10,
-      "cur_px": 72.4,
-      "hold_days": 2,
-      "gross_ret": 0.0,
+      "cur_px": 73.4,
+      "hold_days": 3,
+      "gross_ret": 1.38,
       "lot": 100000,
       "reasons": [
         "族群動能正(0.7%)",
@@ -120,10 +120,10 @@
         "RSI健康(67)"
       ],
       "flags": [],
-      "score": 10,
-      "ma60_pct": 5.9,
+      "score": 9,
+      "ma60_pct": 7.2,
       "fstreak": 7,
-      "stop_dist": 10.0
+      "stop_dist": 11.38
     },
     "2915": {
       "code": "2915",
@@ -131,9 +131,9 @@
       "entry_date": "20260729",
       "entry_px": 51.1,
       "entry_score": 10,
-      "cur_px": 51.1,
-      "hold_days": 0,
-      "gross_ret": 0.0,
+      "cur_px": 51.4,
+      "hold_days": 1,
+      "gross_ret": 0.59,
       "lot": 100000,
       "reasons": [
         "族群動能強(5.3%)",
@@ -142,6 +142,113 @@
         "外資持股大變動(-1.8pp)",
         "RSI健康(47)",
         "距高甜蜜點(-9.1%)"
+      ],
+      "flags": [],
+      "score": 10,
+      "ma60_pct": 5.3,
+      "fstreak": 3,
+      "stop_dist": 10.59
+    },
+    "5876": {
+      "code": "5876",
+      "name": "上海商銀",
+      "entry_date": "20260730",
+      "entry_px": 44.8,
+      "entry_score": 12,
+      "cur_px": 44.8,
+      "hold_days": 0,
+      "gross_ret": 0.0,
+      "lot": 100000,
+      "reasons": [
+        "族群動能強(1.5%)",
+        "站上MA60 +6.7%",
+        "量能放大 1.2×",
+        "外資連買 4日",
+        "投信連買 4日",
+        "外資持股大變動(-1.2pp)",
+        "RSI健康(60)",
+        "距高甜蜜點(-4.7%)"
+      ],
+      "flags": []
+    },
+    "2867": {
+      "code": "2867",
+      "name": "三商壽",
+      "entry_date": "20260730",
+      "entry_px": 9.6,
+      "entry_score": 12,
+      "cur_px": 9.6,
+      "hold_days": 0,
+      "gross_ret": 0.0,
+      "lot": 100000,
+      "reasons": [
+        "族群動能強(1.5%)",
+        "站上MA60 +14.6%",
+        "量能放大 1.4×",
+        "外資連買 5日",
+        "月營收YoY +187% ★",
+        "外資持股大變動(+8.7pp)"
+      ],
+      "flags": []
+    },
+    "2890": {
+      "code": "2890",
+      "name": "永豐金",
+      "entry_date": "20260730",
+      "entry_px": 38.9,
+      "entry_score": 11,
+      "cur_px": 38.9,
+      "hold_days": 0,
+      "gross_ret": 0.0,
+      "lot": 100000,
+      "reasons": [
+        "族群動能強(1.5%)",
+        "站上MA60 +9.5%",
+        "投信連買 9日",
+        "月營收YoY +51% ★",
+        "外資持股大變動(+2.4pp)",
+        "距高甜蜜點(-7.3%)"
+      ],
+      "flags": []
+    },
+    "5880": {
+      "code": "5880",
+      "name": "合庫金",
+      "entry_date": "20260730",
+      "entry_px": 27.0,
+      "entry_score": 10,
+      "cur_px": 27.0,
+      "hold_days": 0,
+      "gross_ret": 0.0,
+      "lot": 100000,
+      "reasons": [
+        "族群動能強(1.5%)",
+        "站上MA60 +11.7%",
+        "量能爆大 1.5×",
+        "外資連買 5日",
+        "投信連買 4日"
+      ],
+      "flags": [
+        "RSI超買(88)"
+      ]
+    },
+    "2884": {
+      "code": "2884",
+      "name": "玉山金",
+      "entry_date": "20260730",
+      "entry_px": 37.7,
+      "entry_score": 10,
+      "cur_px": 37.7,
+      "hold_days": 0,
+      "gross_ret": 0.0,
+      "lot": 100000,
+      "reasons": [
+        "族群動能強(1.5%)",
+        "站上MA60 +11.6%",
+        "外資連買 4日",
+        "投信連買 5日",
+        "月營收YoY +25%",
+        "外資持股大變動(+1.1pp)"
       ],
       "flags": []
     }
@@ -168,11 +275,26 @@
         "[注資] +100,000 元 → 累計投入 600,000",
         "[進場] 2915 潤泰全  分=10  MA60=+5.0%  外資=+3日  配置=100,000元  現金剩=0"
       ]
+    },
+    {
+      "date": "20260730",
+      "events": [
+        "[注資] +100,000 元 → 累計投入 700,000",
+        "[進場] 5876 上海商銀  分=12  MA60=+6.7%  外資=+4日  配置=100,000元  現金剩=0",
+        "[注資] +100,000 元 → 累計投入 800,000",
+        "[進場] 2867 三商壽  分=12  MA60=+14.6%  外資=+5日  配置=100,000元  現金剩=0",
+        "[注資] +100,000 元 → 累計投入 900,000",
+        "[進場] 2890 永豐金  分=11  MA60=+9.5%  外資=+1日  配置=100,000元  現金剩=0",
+        "[注資] +100,000 元 → 累計投入 1,000,000",
+        "[進場] 5880 合庫金  分=10  MA60=+11.7%  外資=+5日  配置=100,000元  現金剩=0",
+        "[注資] +100,000 元 → 累計投入 1,100,000",
+        "[進場] 2884 玉山金  分=10  MA60=+11.6%  外資=+4日  配置=100,000元  現金剩=0"
+      ]
     }
   ],
   "start_date": "20260729",
   "cash": 0,
-  "total_invested": 600000,
+  "total_invested": 1100000,
   "equity_curve": [
     {
       "date": "20260729",
@@ -194,24 +316,31 @@
       "equity": 600000,
       "invested": 600000,
       "ret_pct": 0.0
+    },
+    {
+      "date": "20260730",
+      "cash": 0,
+      "equity": 1097700,
+      "invested": 1100000,
+      "ret_pct": -0.21
     }
   ],
   "summary": {
-    "asof": "20260729",
+    "asof": "20260730",
     "regime": "bull",
     "lot_size": 100000,
-    "total_invested": 600000,
+    "total_invested": 1100000,
     "cash": 0,
-    "open_positions": 6,
-    "pos_market_val": 600000,
-    "total_equity": 600000,
-    "total_ret_pct": 0.0,
+    "open_positions": 11,
+    "pos_market_val": 1097700,
+    "total_equity": 1097700,
+    "total_ret_pct": -0.21,
     "closed_trades": 0,
     "win_rate": 0,
     "avg_win": 0,
     "avg_loss": 0,
     "pnl_ratio": null,
     "realized_net_twd": 0,
-    "open_unreal_twd": -1152
+    "open_unreal_twd": -4413
   }
 }

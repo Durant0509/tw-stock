@@ -7,7 +7,7 @@
       "entry_px": 41.5,
       "entry_score": 12,
       "cur_px": 44.4,
-      "hold_days": 21,
+      "hold_days": 22,
       "gross_ret": 6.99,
       "lot": 100000,
       "reasons": [
@@ -33,7 +33,7 @@
       "entry_px": 21.7,
       "entry_score": 11,
       "cur_px": 22.5,
-      "hold_days": 21,
+      "hold_days": 22,
       "gross_ret": 3.69,
       "lot": 100000,
       "reasons": [
@@ -59,7 +59,7 @@
       "entry_px": 27.0,
       "entry_score": 10,
       "cur_px": 26.2,
-      "hold_days": 18,
+      "hold_days": 19,
       "gross_ret": -2.96,
       "lot": 100000,
       "reasons": [
@@ -84,7 +84,7 @@
       "entry_px": 64.8,
       "entry_score": 10,
       "cur_px": 64.8,
-      "hold_days": 16,
+      "hold_days": 17,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -112,7 +112,7 @@
       "entry_px": 83.0,
       "entry_score": 11,
       "cur_px": 87.9,
-      "hold_days": 10,
+      "hold_days": 11,
       "gross_ret": 5.9,
       "lot": 100000,
       "reasons": [
@@ -137,7 +137,7 @@
       "entry_px": 436.5,
       "entry_score": 12,
       "cur_px": 474.0,
-      "hold_days": 8,
+      "hold_days": 9,
       "gross_ret": 8.59,
       "lot": 100000,
       "reasons": [
@@ -161,7 +161,7 @@
       "entry_px": 2600.0,
       "entry_score": 11,
       "cur_px": 2785.0,
-      "hold_days": 8,
+      "hold_days": 9,
       "gross_ret": 7.12,
       "lot": 100000,
       "reasons": [
@@ -185,7 +185,7 @@
       "entry_px": 806.0,
       "entry_score": 10,
       "cur_px": 817.0,
-      "hold_days": 8,
+      "hold_days": 9,
       "gross_ret": 1.36,
       "lot": 100000,
       "reasons": [
@@ -211,7 +211,7 @@
       "entry_px": 252.0,
       "entry_score": 13,
       "cur_px": 247.0,
-      "hold_days": 7,
+      "hold_days": 8,
       "gross_ret": -1.98,
       "lot": 100000,
       "reasons": [
@@ -237,7 +237,7 @@
       "entry_px": 195.0,
       "entry_score": 10,
       "cur_px": 183.5,
-      "hold_days": 7,
+      "hold_days": 8,
       "gross_ret": -5.9,
       "lot": 100000,
       "reasons": [
@@ -263,7 +263,7 @@
       "entry_px": 37.0,
       "entry_score": 10,
       "cur_px": 37.0,
-      "hold_days": 7,
+      "hold_days": 8,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -291,7 +291,7 @@
       "entry_px": 97.1,
       "entry_score": 10,
       "cur_px": 93.4,
-      "hold_days": 6,
+      "hold_days": 7,
       "gross_ret": -3.81,
       "lot": 100000,
       "reasons": [
@@ -314,7 +314,7 @@
       "entry_px": 342.0,
       "entry_score": 10,
       "cur_px": 344.0,
-      "hold_days": 5,
+      "hold_days": 6,
       "gross_ret": 0.58,
       "lot": 100000,
       "reasons": [
@@ -339,7 +339,7 @@
       "entry_px": 61.0,
       "entry_score": 11,
       "cur_px": 61.8,
-      "hold_days": 4,
+      "hold_days": 5,
       "gross_ret": 1.31,
       "lot": 100000,
       "reasons": [
@@ -365,7 +365,7 @@
       "entry_px": 92.9,
       "entry_score": 10,
       "cur_px": 92.9,
-      "hold_days": 4,
+      "hold_days": 5,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -388,7 +388,7 @@
       "entry_px": 46.1,
       "entry_score": 10,
       "cur_px": 46.6,
-      "hold_days": 4,
+      "hold_days": 5,
       "gross_ret": 1.08,
       "lot": 100000,
       "reasons": [
@@ -412,7 +412,7 @@
       "entry_px": 9.8,
       "entry_score": 12,
       "cur_px": 9.8,
-      "hold_days": 2,
+      "hold_days": 3,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -436,7 +436,7 @@
       "entry_px": 735.0,
       "entry_score": 11,
       "cur_px": 735.0,
-      "hold_days": 2,
+      "hold_days": 3,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -460,7 +460,7 @@
       "entry_px": 91.2,
       "entry_score": 10,
       "cur_px": 91.2,
-      "hold_days": 2,
+      "hold_days": 3,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -487,7 +487,7 @@
       "entry_px": 6100.0,
       "entry_score": 10,
       "cur_px": 6100.0,
-      "hold_days": 2,
+      "hold_days": 3,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -514,7 +514,7 @@
       "entry_px": 387.0,
       "entry_score": 10,
       "cur_px": 387.0,
-      "hold_days": 2,
+      "hold_days": 3,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -538,7 +538,7 @@
       "entry_px": 35.1,
       "entry_score": 11,
       "cur_px": 35.1,
-      "hold_days": 1,
+      "hold_days": 2,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -562,7 +562,7 @@
       "entry_px": 67.7,
       "entry_score": 10,
       "cur_px": 67.7,
-      "hold_days": 1,
+      "hold_days": 2,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -585,7 +585,7 @@
       "entry_px": 38.1,
       "entry_score": 10,
       "cur_px": 38.1,
-      "hold_days": 1,
+      "hold_days": 2,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -609,7 +609,7 @@
       "entry_px": 67.5,
       "entry_score": 10,
       "cur_px": 67.5,
-      "hold_days": 1,
+      "hold_days": 2,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -637,7 +637,7 @@
       "entry_px": 634.0,
       "entry_score": 10,
       "cur_px": 634.0,
-      "hold_days": 1,
+      "hold_days": 2,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1327,6 +1327,13 @@
       "equity": 2701674,
       "invested": 2704955,
       "ret_pct": -0.12
+    },
+    {
+      "date": "20260807",
+      "cash": 78010,
+      "equity": 2699980,
+      "invested": 2704955,
+      "ret_pct": -0.18
     },
     {
       "date": "20260807",

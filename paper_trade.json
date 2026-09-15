@@ -6,9 +6,9 @@
       "entry_date": "20260817",
       "entry_px": 54.7,
       "entry_score": 11,
-      "cur_px": 59.3,
-      "hold_days": 57,
-      "gross_ret": 8.41,
+      "cur_px": 58.8,
+      "hold_days": 58,
+      "gross_ret": 7.5,
       "lot": 100000,
       "reasons": [
         "族群動能強(9.2%)",
@@ -20,9 +20,9 @@
       ],
       "flags": [],
       "score": 10,
-      "ma60_pct": 10.4,
-      "fstreak": -1,
-      "stop_dist": 18.41
+      "ma60_pct": 9.3,
+      "fstreak": 1,
+      "stop_dist": 17.5
     },
     "2027": {
       "code": "2027",
@@ -31,7 +31,7 @@
       "entry_px": 50.5,
       "entry_score": 10,
       "cur_px": 50.5,
-      "hold_days": 50,
+      "hold_days": 51,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -55,7 +55,7 @@
       "entry_px": 551.0,
       "entry_score": 13,
       "cur_px": 551.0,
-      "hold_days": 49,
+      "hold_days": 50,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -80,7 +80,7 @@
       "entry_px": 5395.0,
       "entry_score": 12,
       "cur_px": 5395.0,
-      "hold_days": 49,
+      "hold_days": 50,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -104,7 +104,7 @@
       "entry_px": 30.4,
       "entry_score": 12,
       "cur_px": 30.4,
-      "hold_days": 49,
+      "hold_days": 50,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -122,31 +122,6 @@
       "fstreak": 0,
       "stop_dist": 10.0
     },
-    "2301": {
-      "code": "2301",
-      "name": "光寶科",
-      "entry_date": "20260821",
-      "entry_px": 261.0,
-      "entry_score": 11,
-      "cur_px": 261.0,
-      "hold_days": 49,
-      "gross_ret": 0.0,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(6.6%)",
-        "站上MA60 +14.9%",
-        "投信連買 4日",
-        "月營收YoY +38%",
-        "外資持股大變動(+11.7pp)",
-        "RSI健康(64)",
-        "距高甜蜜點(-4.6%)"
-      ],
-      "flags": [],
-      "score": null,
-      "ma60_pct": 0,
-      "fstreak": 0,
-      "stop_dist": 10.0
-    },
     "2408": {
       "code": "2408",
       "name": "南亞科",
@@ -154,7 +129,7 @@
       "entry_px": 528.0,
       "entry_score": 10,
       "cur_px": 528.0,
-      "hold_days": 49,
+      "hold_days": 50,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -176,9 +151,9 @@
       "entry_date": "20260824",
       "entry_px": 97.1,
       "entry_score": 11,
-      "cur_px": 101.0,
-      "hold_days": 43,
-      "gross_ret": 4.02,
+      "cur_px": 96.9,
+      "hold_days": 44,
+      "gross_ret": -0.21,
       "lot": 100000,
       "reasons": [
         "族群動能強(16.4%)",
@@ -194,65 +169,10 @@
         "投信賣超 1日",
         "排雷警示 1項"
       ],
-      "score": 10,
-      "ma60_pct": 17.3,
-      "fstreak": -1,
-      "stop_dist": 14.02
-    },
-    "3443": {
-      "code": "3443",
-      "name": "創意",
-      "entry_date": "20260824",
-      "entry_px": 5365.0,
-      "entry_score": 11,
-      "cur_px": 6400.0,
-      "hold_days": 42,
-      "gross_ret": 19.29,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(1.5%)",
-        "站上MA60 +17.4%",
-        "量能放大 1.2×",
-        "投信連買 3日",
-        "月營收YoY +158% ★",
-        "RSI健康(70)",
-        "距高甜蜜點(-8.3%)"
-      ],
-      "flags": [
-        "外資賣超 1日"
-      ],
-      "score": 7,
-      "ma60_pct": 29.8,
+      "score": 9,
+      "ma60_pct": 12.1,
       "fstreak": -2,
-      "stop_dist": 29.29
-    },
-    "3532": {
-      "code": "3532",
-      "name": "台勝科",
-      "entry_date": "20260824",
-      "entry_px": 376.5,
-      "entry_score": 10,
-      "cur_px": 376.5,
-      "hold_days": 42,
-      "gross_ret": 0.0,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(1.5%)",
-        "站上MA60 +4.5%",
-        "量能爆大 1.6×",
-        "有融券(0.05)",
-        "投信連買 3日",
-        "月營收YoY +29%",
-        "外資持股大變動(-4.9pp)",
-        "RSI健康(70)"
-      ],
-      "flags": [
-        "距高點過遠(-28.0%)"
-      ],
-      "score": null,
-      "ma60_pct": 0,
-      "fstreak": 0,
-      "stop_dist": 10.0
+      "stop_dist": 9.79
     },
     "3023": {
       "code": "3023",
@@ -261,7 +181,7 @@
       "entry_px": 320.5,
       "entry_score": 10,
       "cur_px": 320.5,
-      "hold_days": 41,
+      "hold_days": 42,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -286,7 +206,7 @@
       "entry_px": 26.3,
       "entry_score": 10,
       "cur_px": 26.3,
-      "hold_days": 41,
+      "hold_days": 42,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -311,7 +231,7 @@
       "entry_px": 5895.0,
       "entry_score": 11,
       "cur_px": 5895.0,
-      "hold_days": 39,
+      "hold_days": 40,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -337,7 +257,7 @@
       "entry_px": 2025.0,
       "entry_score": 10,
       "cur_px": 2025.0,
-      "hold_days": 39,
+      "hold_days": 40,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -361,7 +281,7 @@
       "entry_px": 117.0,
       "entry_score": 10,
       "cur_px": 117.0,
-      "hold_days": 39,
+      "hold_days": 40,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -379,33 +299,6 @@
       "fstreak": 0,
       "stop_dist": 10.0
     },
-    "2455": {
-      "code": "2455",
-      "name": "全新",
-      "entry_date": "20260826",
-      "entry_px": 428.0,
-      "entry_score": 10,
-      "cur_px": 428.0,
-      "hold_days": 39,
-      "gross_ret": 0.0,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(3.7%)",
-        "站上MA60 +19.0%",
-        "外資連買 3日",
-        "有融券(0.06)",
-        "月營收YoY +45%",
-        "RSI健康(63)",
-        "距高甜蜜點(-3.6%)"
-      ],
-      "flags": [
-        "投信賣超 1日"
-      ],
-      "score": null,
-      "ma60_pct": 0,
-      "fstreak": 0,
-      "stop_dist": 10.0
-    },
     "2486": {
       "code": "2486",
       "name": "一詮",
@@ -413,7 +306,7 @@
       "entry_px": 259.0,
       "entry_score": 10,
       "cur_px": 259.0,
-      "hold_days": 37,
+      "hold_days": 38,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -440,7 +333,7 @@
       "entry_px": 244.0,
       "entry_score": 10,
       "cur_px": 244.0,
-      "hold_days": 36,
+      "hold_days": 37,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -464,7 +357,7 @@
       "entry_px": 163.5,
       "entry_score": 11,
       "cur_px": 163.5,
-      "hold_days": 35,
+      "hold_days": 36,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -488,7 +381,7 @@
       "entry_px": 77.7,
       "entry_score": 10,
       "cur_px": 77.7,
-      "hold_days": 35,
+      "hold_days": 36,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -512,7 +405,7 @@
       "entry_px": 1230.0,
       "entry_score": 10,
       "cur_px": 1230.0,
-      "hold_days": 29,
+      "hold_days": 30,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -538,7 +431,7 @@
       "entry_px": 613.0,
       "entry_score": 10,
       "cur_px": 613.0,
-      "hold_days": 29,
+      "hold_days": 30,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -564,7 +457,7 @@
       "entry_px": 358.0,
       "entry_score": 10,
       "cur_px": 358.0,
-      "hold_days": 29,
+      "hold_days": 30,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -588,7 +481,7 @@
       "entry_px": 95.7,
       "entry_score": 10,
       "cur_px": 95.7,
-      "hold_days": 27,
+      "hold_days": 28,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -612,7 +505,7 @@
       "entry_px": 4275.0,
       "entry_score": 10,
       "cur_px": 4275.0,
-      "hold_days": 27,
+      "hold_days": 28,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -639,9 +532,9 @@
       "entry_date": "20260901",
       "entry_px": 1005.0,
       "entry_score": 11,
-      "cur_px": 954.0,
-      "hold_days": 26,
-      "gross_ret": -5.07,
+      "cur_px": 915.0,
+      "hold_days": 27,
+      "gross_ret": -8.96,
       "lot": 100000,
       "reasons": [
         "族群動能強(30.5%)",
@@ -656,9 +549,9 @@
         "RSI超買(91)"
       ],
       "score": 11,
-      "ma60_pct": 38.8,
-      "fstreak": 1,
-      "stop_dist": 4.93
+      "ma60_pct": 32.6,
+      "fstreak": 2,
+      "stop_dist": 1.04
     },
     "2882": {
       "code": "2882",
@@ -666,9 +559,9 @@
       "entry_date": "20260902",
       "entry_px": 109.0,
       "entry_score": 11,
-      "cur_px": 112.5,
-      "hold_days": 24,
-      "gross_ret": 3.21,
+      "cur_px": 110.0,
+      "hold_days": 25,
+      "gross_ret": 0.92,
       "lot": 100000,
       "reasons": [
         "族群動能強(5.5%)",
@@ -684,10 +577,10 @@
         "外資賣超 2日",
         "月營收YoY -70%"
       ],
-      "score": 10,
-      "ma60_pct": 10.6,
-      "fstreak": 3,
-      "stop_dist": 13.21
+      "score": 9,
+      "ma60_pct": 8.2,
+      "fstreak": -1,
+      "stop_dist": 10.92
     },
     "6531": {
       "code": "6531",
@@ -695,9 +588,9 @@
       "entry_date": "20260902",
       "entry_px": 957.0,
       "entry_score": 10,
-      "cur_px": 962.0,
-      "hold_days": 24,
-      "gross_ret": 0.52,
+      "cur_px": 957.0,
+      "hold_days": 25,
+      "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
         "族群動能正(0.7%)",
@@ -708,10 +601,10 @@
         "RSI健康(61)"
       ],
       "flags": [],
-      "score": 7,
-      "ma60_pct": 6.9,
-      "fstreak": 1,
-      "stop_dist": 10.52
+      "score": null,
+      "ma60_pct": 0,
+      "fstreak": 0,
+      "stop_dist": 10.0
     },
     "2889": {
       "code": "2889",
@@ -719,9 +612,9 @@
       "entry_date": "20260903",
       "entry_px": 16.4,
       "entry_score": 10,
-      "cur_px": 17.1,
-      "hold_days": 23,
-      "gross_ret": 4.27,
+      "cur_px": 16.9,
+      "hold_days": 24,
+      "gross_ret": 3.05,
       "lot": 100000,
       "reasons": [
         "族群動能強(10.2%)",
@@ -736,9 +629,9 @@
         "排雷警示 1項"
       ],
       "score": 10,
-      "ma60_pct": 9.0,
-      "fstreak": 2,
-      "stop_dist": 14.27
+      "ma60_pct": 7.5,
+      "fstreak": -1,
+      "stop_dist": 13.05
     },
     "6446": {
       "code": "6446",
@@ -747,7 +640,7 @@
       "entry_px": 1350.0,
       "entry_score": 10,
       "cur_px": 1350.0,
-      "hold_days": 22,
+      "hold_days": 23,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -769,9 +662,9 @@
       "entry_date": "20260903",
       "entry_px": 46.0,
       "entry_score": 10,
-      "cur_px": 49.9,
-      "hold_days": 22,
-      "gross_ret": 8.48,
+      "cur_px": 49.8,
+      "hold_days": 23,
+      "gross_ret": 8.26,
       "lot": 100000,
       "reasons": [
         "族群動能強(10.2%)",
@@ -781,10 +674,10 @@
         "距高甜蜜點(-2.2%)"
       ],
       "flags": [],
-      "score": 8,
-      "ma60_pct": 13.0,
-      "fstreak": 10,
-      "stop_dist": 18.48
+      "score": 7,
+      "ma60_pct": 12.5,
+      "fstreak": 11,
+      "stop_dist": 18.26
     },
     "3714": {
       "code": "3714",
@@ -793,7 +686,7 @@
       "entry_px": 66.8,
       "entry_score": 11,
       "cur_px": 66.8,
-      "hold_days": 21,
+      "hold_days": 22,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -817,7 +710,7 @@
       "entry_px": 1755.0,
       "entry_score": 10,
       "cur_px": 1755.0,
-      "hold_days": 21,
+      "hold_days": 22,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -845,9 +738,9 @@
       "entry_date": "20260907",
       "entry_px": 44.4,
       "entry_score": 10,
-      "cur_px": 46.3,
-      "hold_days": 15,
-      "gross_ret": 4.28,
+      "cur_px": 46.9,
+      "hold_days": 16,
+      "gross_ret": 5.63,
       "lot": 100000,
       "reasons": [
         "族群動能強(9.4%)",
@@ -857,34 +750,10 @@
         "外資持股大變動(-2.3pp)"
       ],
       "flags": [],
-      "score": 9,
-      "ma60_pct": 13.5,
-      "fstreak": 13,
-      "stop_dist": 14.28
-    },
-    "2606": {
-      "code": "2606",
-      "name": "裕民",
-      "entry_date": "20260908",
-      "entry_px": 77.8,
-      "entry_score": 10,
-      "cur_px": 76.2,
-      "hold_days": 13,
-      "gross_ret": -2.06,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(7.8%)",
-        "站上MA60 +17.8%",
-        "有融券(0.06)",
-        "月營收YoY +26%",
-        "外資持股大變動(+17.6pp)",
-        "RSI健康(64)"
-      ],
-      "flags": [],
-      "score": 9,
-      "ma60_pct": 13.7,
-      "fstreak": 1,
-      "stop_dist": 7.94
+      "score": 8,
+      "ma60_pct": 14.6,
+      "fstreak": 14,
+      "stop_dist": 15.63
     },
     "2382": {
       "code": "2382",
@@ -893,7 +762,7 @@
       "entry_px": 342.0,
       "entry_score": 10,
       "cur_px": 342.0,
-      "hold_days": 11,
+      "hold_days": 12,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -911,40 +780,15 @@
       "fstreak": 0,
       "stop_dist": 10.0
     },
-    "1303": {
-      "code": "1303",
-      "name": "南亞",
-      "entry_date": "20260910",
-      "entry_px": 244.0,
-      "entry_score": 11,
-      "cur_px": 234.0,
-      "hold_days": 9,
-      "gross_ret": -4.1,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(24.0%)",
-        "站上MA60 +28.7%",
-        "有融券(0.05)",
-        "投信連買 4日",
-        "月營收YoY +44%",
-        "外資持股大變動(+3.4pp)",
-        "RSI健康(69)"
-      ],
-      "flags": [],
-      "score": 10,
-      "ma60_pct": 21.3,
-      "fstreak": -2,
-      "stop_dist": 5.9
-    },
     "2603": {
       "code": "2603",
       "name": "長榮",
       "entry_date": "20260911",
       "entry_px": 234.5,
       "entry_score": 10,
-      "cur_px": 237.0,
-      "hold_days": 6,
-      "gross_ret": 1.07,
+      "cur_px": 233.5,
+      "hold_days": 7,
+      "gross_ret": -0.43,
       "lot": 100000,
       "reasons": [
         "族群動能強(7.9%)",
@@ -955,10 +799,10 @@
         "距高甜蜜點(-6.8%)"
       ],
       "flags": [],
-      "score": 9,
-      "ma60_pct": 11.6,
-      "fstreak": -1,
-      "stop_dist": 11.07
+      "score": 8,
+      "ma60_pct": 9.6,
+      "fstreak": -2,
+      "stop_dist": 9.57
     },
     "2855": {
       "code": "2855",
@@ -966,9 +810,9 @@
       "entry_date": "20260914",
       "entry_px": 52.9,
       "entry_score": 10,
-      "cur_px": 52.9,
-      "hold_days": 1,
-      "gross_ret": 0.0,
+      "cur_px": 51.5,
+      "hold_days": 2,
+      "gross_ret": -2.65,
       "lot": 100000,
       "reasons": [
         "族群動能強(14.9%)",
@@ -982,9 +826,51 @@
         "RSI超買(89)"
       ],
       "score": 10,
-      "ma60_pct": 10.8,
-      "fstreak": 2,
-      "stop_dist": 10.0
+      "ma60_pct": 7.9,
+      "fstreak": -1,
+      "stop_dist": 7.35
+    },
+    "6214": {
+      "code": "6214",
+      "name": "精誠",
+      "entry_date": "20260915",
+      "entry_px": 190.0,
+      "entry_score": 10,
+      "cur_px": 190.0,
+      "hold_days": 0,
+      "gross_ret": 0.0,
+      "lot": 100000,
+      "reasons": [
+        "族群動能強(5.9%)",
+        "站上MA60 +21.5%",
+        "有融券(0.12)",
+        "月營收YoY +62% ★",
+        "外資持股大變動(+5.1pp)"
+      ],
+      "flags": []
+    },
+    "2395": {
+      "code": "2395",
+      "name": "研華",
+      "entry_date": "20260915",
+      "entry_px": 685.0,
+      "entry_score": 10,
+      "cur_px": 685.0,
+      "hold_days": 0,
+      "gross_ret": 0.0,
+      "lot": 100000,
+      "reasons": [
+        "族群動能正(1.0%)",
+        "站上MA60 +13.9%",
+        "外資連買 4日",
+        "月營收YoY +88% ★",
+        "外資持股大變動(+3.4pp)",
+        "RSI健康(49)",
+        "距高甜蜜點(-3.7%)"
+      ],
+      "flags": [
+        "投信賣超 1日"
+      ]
     }
   },
   "closed": [
@@ -2832,6 +2718,96 @@
       "hold_days": 10,
       "reason": "分數降至 6",
       "entry_score": 11
+    },
+    {
+      "code": "2301",
+      "name": "光寶科",
+      "entry_date": "20260821",
+      "exit_date": "20260915",
+      "entry_px": 261.0,
+      "exit_px": 274.0,
+      "gross_ret": 4.98,
+      "net_ret": 4.3,
+      "lot": 100000,
+      "net_twd": 4296,
+      "hold_days": 50,
+      "reason": "分數降至 6",
+      "entry_score": 11
+    },
+    {
+      "code": "3443",
+      "name": "創意",
+      "entry_date": "20260824",
+      "exit_date": "20260915",
+      "entry_px": 5365.0,
+      "exit_px": 6035.0,
+      "gross_ret": 12.49,
+      "net_ret": 11.8,
+      "lot": 100000,
+      "net_twd": 11803,
+      "hold_days": 43,
+      "reason": "分數降至 5",
+      "entry_score": 11
+    },
+    {
+      "code": "3532",
+      "name": "台勝科",
+      "entry_date": "20260824",
+      "exit_date": "20260915",
+      "entry_px": 376.5,
+      "exit_px": 407.0,
+      "gross_ret": 8.1,
+      "net_ret": 7.42,
+      "lot": 100000,
+      "net_twd": 7416,
+      "hold_days": 43,
+      "reason": "分數降至 2",
+      "entry_score": 10
+    },
+    {
+      "code": "2455",
+      "name": "全新",
+      "entry_date": "20260826",
+      "exit_date": "20260915",
+      "entry_px": 428.0,
+      "exit_px": 520.0,
+      "gross_ret": 21.5,
+      "net_ret": 20.81,
+      "lot": 100000,
+      "net_twd": 20810,
+      "hold_days": 40,
+      "reason": "分數降至 2",
+      "entry_score": 10
+    },
+    {
+      "code": "2606",
+      "name": "裕民",
+      "entry_date": "20260908",
+      "exit_date": "20260915",
+      "entry_px": 77.8,
+      "exit_px": 74.6,
+      "gross_ret": -4.11,
+      "net_ret": -4.8,
+      "lot": 100000,
+      "net_twd": -4798,
+      "hold_days": 14,
+      "reason": "分數降至 6",
+      "entry_score": 10
+    },
+    {
+      "code": "1303",
+      "name": "南亞",
+      "entry_date": "20260910",
+      "exit_date": "20260915",
+      "entry_px": 244.0,
+      "exit_px": 221.5,
+      "gross_ret": -9.22,
+      "net_ret": -9.91,
+      "lot": 100000,
+      "net_twd": -9906,
+      "hold_days": 10,
+      "reason": "分數降至 6",
+      "entry_score": 11
     }
   ],
   "log": [
@@ -3555,10 +3531,23 @@
         "[出場] 6505 台塑化 分數降至 6  net=-6.1%  (-6,056 元)  現金=4,553,204",
         "[進場] 2855 統一證  分=10  MA60=+10.8%  外資=+2日  配置=100,000元  現金剩=4,453,204"
       ]
+    },
+    {
+      "date": "20260915",
+      "events": [
+        "[出場] 2301 光寶科 分數降至 6  net=+4.3%  (+4,296 元)  現金=4,557,500",
+        "[出場] 3443 創意 分數降至 5  net=+11.8%  (+11,803 元)  現金=4,669,303",
+        "[出場] 3532 台勝科 分數降至 2  net=+7.4%  (+7,416 元)  現金=4,776,719",
+        "[出場] 2455 全新 分數降至 2  net=+20.8%  (+20,810 元)  現金=4,897,529",
+        "[出場] 2606 裕民 分數降至 6  net=-4.8%  (-4,798 元)  現金=4,992,731",
+        "[出場] 1303 南亞 分數降至 6  net=-9.9%  (-9,906 元)  現金=5,082,825",
+        "[進場] 6214 精誠  分=10  MA60=+21.5%  外資=+1日  配置=100,000元  現金剩=4,982,825",
+        "[進場] 2395 研華  分=10  MA60=+13.9%  外資=+4日  配置=100,000元  現金剩=4,882,825"
+      ]
     }
   ],
   "start_date": "20260729",
-  "cash": 4453204,
+  "cash": 4882825,
   "total_invested": 8329723,
   "equity_curve": [
     {
@@ -4239,24 +4228,31 @@
       "equity": 8395524,
       "invested": 8329723,
       "ret_pct": 0.79
+    },
+    {
+      "date": "20260915",
+      "cash": 4882825,
+      "equity": 8395935,
+      "invested": 8329723,
+      "ret_pct": 0.79
     }
   ],
   "summary": {
-    "asof": "20260914",
+    "asof": "20260915",
     "regime": "range",
     "lot_size": 100000,
     "total_invested": 8329723,
-    "cash": 4453204,
-    "open_positions": 39,
-    "pos_market_val": 3942320,
-    "total_equity": 8395524,
+    "cash": 4882825,
+    "open_positions": 35,
+    "pos_market_val": 3513110,
+    "total_equity": 8395935,
     "total_ret_pct": 0.79,
-    "closed_trades": 123,
-    "win_rate": 38.2,
-    "avg_win": 5.81,
-    "avg_loss": -3.28,
-    "pnl_ratio": 1.77,
-    "realized_net_twd": 23481,
-    "open_unreal_twd": 34829
+    "closed_trades": 129,
+    "win_rate": 39.5,
+    "avg_win": 6.22,
+    "avg_loss": -3.39,
+    "pnl_ratio": 1.84,
+    "realized_net_twd": 53102,
+    "open_unreal_twd": 6389
   }
 }

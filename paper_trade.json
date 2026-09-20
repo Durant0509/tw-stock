@@ -1,102 +1,5 @@
 {
   "positions": {
-    "3450": {
-      "code": "3450",
-      "name": "聯鈞",
-      "entry_date": "20260821",
-      "entry_px": 551.0,
-      "entry_score": 13,
-      "cur_px": 538.0,
-      "hold_days": 59,
-      "gross_ret": -2.36,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(2.7%)",
-        "站上MA60 +11.5%",
-        "量能爆大 1.6×",
-        "月營收YoY +98% ★",
-        "外資持股大變動(+12.7pp)",
-        "RSI健康(70)",
-        "距高甜蜜點(-10.0%)"
-      ],
-      "flags": [],
-      "score": 8,
-      "ma60_pct": 6.4,
-      "fstreak": -2,
-      "stop_dist": 7.64
-    },
-    "3653": {
-      "code": "3653",
-      "name": "健策",
-      "entry_date": "20260821",
-      "entry_px": 5395.0,
-      "entry_score": 12,
-      "cur_px": 5395.0,
-      "hold_days": 59,
-      "gross_ret": 0.0,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(9.9%)",
-        "站上MA60 +41.3%",
-        "量能爆大 1.5×",
-        "投信連買 4日",
-        "月營收YoY +91% ★",
-        "距高甜蜜點(-3.7%)"
-      ],
-      "flags": [],
-      "score": null,
-      "ma60_pct": 0,
-      "fstreak": 0,
-      "stop_dist": 10.0
-    },
-    "1402": {
-      "code": "1402",
-      "name": "遠東新",
-      "entry_date": "20260821",
-      "entry_px": 30.4,
-      "entry_score": 12,
-      "cur_px": 30.4,
-      "hold_days": 59,
-      "gross_ret": 0.0,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(2.2%)",
-        "站上MA60 +9.9%",
-        "量能放大 1.2×",
-        "外資連買 5日",
-        "投信連買 13日",
-        "月營收YoY +21%",
-        "外資持股大變動(-1.9pp)"
-      ],
-      "flags": [],
-      "score": null,
-      "ma60_pct": 0,
-      "fstreak": 0,
-      "stop_dist": 10.0
-    },
-    "2408": {
-      "code": "2408",
-      "name": "南亞科",
-      "entry_date": "20260821",
-      "entry_px": 528.0,
-      "entry_score": 10,
-      "cur_px": 525.0,
-      "hold_days": 59,
-      "gross_ret": -0.57,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(2.7%)",
-        "站上MA60 +23.8%",
-        "投信連買 4日",
-        "月營收YoY +720% ★",
-        "外資持股大變動(+1.9pp)"
-      ],
-      "flags": [],
-      "score": 13,
-      "ma60_pct": 13.3,
-      "fstreak": 3,
-      "stop_dist": 9.43
-    },
     "2637": {
       "code": "2637",
       "name": "慧洋-KY",
@@ -104,7 +7,7 @@
       "entry_px": 97.1,
       "entry_score": 11,
       "cur_px": 97.1,
-      "hold_days": 53,
+      "hold_days": 54,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -133,7 +36,7 @@
       "entry_px": 320.5,
       "entry_score": 10,
       "cur_px": 320.5,
-      "hold_days": 51,
+      "hold_days": 52,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -158,7 +61,7 @@
       "entry_px": 26.3,
       "entry_score": 10,
       "cur_px": 26.3,
-      "hold_days": 51,
+      "hold_days": 52,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -183,7 +86,7 @@
       "entry_px": 5895.0,
       "entry_score": 11,
       "cur_px": 5895.0,
-      "hold_days": 49,
+      "hold_days": 50,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -209,7 +112,7 @@
       "entry_px": 2025.0,
       "entry_score": 10,
       "cur_px": 2025.0,
-      "hold_days": 49,
+      "hold_days": 50,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -233,7 +136,7 @@
       "entry_px": 117.0,
       "entry_score": 10,
       "cur_px": 117.0,
-      "hold_days": 49,
+      "hold_days": 50,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -258,7 +161,7 @@
       "entry_px": 259.0,
       "entry_score": 10,
       "cur_px": 259.0,
-      "hold_days": 47,
+      "hold_days": 48,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -285,7 +188,7 @@
       "entry_px": 244.0,
       "entry_score": 10,
       "cur_px": 244.0,
-      "hold_days": 46,
+      "hold_days": 47,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -309,7 +212,7 @@
       "entry_px": 163.5,
       "entry_score": 11,
       "cur_px": 163.5,
-      "hold_days": 45,
+      "hold_days": 46,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -333,7 +236,7 @@
       "entry_px": 77.7,
       "entry_score": 10,
       "cur_px": 77.7,
-      "hold_days": 45,
+      "hold_days": 46,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -357,7 +260,7 @@
       "entry_px": 1230.0,
       "entry_score": 10,
       "cur_px": 1230.0,
-      "hold_days": 39,
+      "hold_days": 40,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -383,7 +286,7 @@
       "entry_px": 613.0,
       "entry_score": 10,
       "cur_px": 613.0,
-      "hold_days": 39,
+      "hold_days": 40,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -409,7 +312,7 @@
       "entry_px": 358.0,
       "entry_score": 10,
       "cur_px": 356.0,
-      "hold_days": 39,
+      "hold_days": 40,
       "gross_ret": -0.56,
       "lot": 100000,
       "reasons": [
@@ -433,7 +336,7 @@
       "entry_px": 95.7,
       "entry_score": 10,
       "cur_px": 95.7,
-      "hold_days": 37,
+      "hold_days": 38,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -457,7 +360,7 @@
       "entry_px": 4275.0,
       "entry_score": 10,
       "cur_px": 4275.0,
-      "hold_days": 37,
+      "hold_days": 38,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -485,7 +388,7 @@
       "entry_px": 1005.0,
       "entry_score": 11,
       "cur_px": 1005.0,
-      "hold_days": 36,
+      "hold_days": 37,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -512,7 +415,7 @@
       "entry_px": 109.0,
       "entry_score": 11,
       "cur_px": 110.5,
-      "hold_days": 34,
+      "hold_days": 35,
       "gross_ret": 1.38,
       "lot": 100000,
       "reasons": [
@@ -541,7 +444,7 @@
       "entry_px": 957.0,
       "entry_score": 10,
       "cur_px": 968.0,
-      "hold_days": 34,
+      "hold_days": 35,
       "gross_ret": 1.15,
       "lot": 100000,
       "reasons": [
@@ -565,7 +468,7 @@
       "entry_px": 1350.0,
       "entry_score": 10,
       "cur_px": 1350.0,
-      "hold_days": 32,
+      "hold_days": 33,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -588,7 +491,7 @@
       "entry_px": 46.0,
       "entry_score": 10,
       "cur_px": 46.0,
-      "hold_days": 32,
+      "hold_days": 33,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -611,7 +514,7 @@
       "entry_px": 1755.0,
       "entry_score": 10,
       "cur_px": 1755.0,
-      "hold_days": 31,
+      "hold_days": 32,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -640,7 +543,7 @@
       "entry_px": 342.0,
       "entry_score": 10,
       "cur_px": 343.0,
-      "hold_days": 21,
+      "hold_days": 22,
       "gross_ret": 0.29,
       "lot": 100000,
       "reasons": [
@@ -665,7 +568,7 @@
       "entry_px": 234.5,
       "entry_score": 10,
       "cur_px": 234.5,
-      "hold_days": 16,
+      "hold_days": 17,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -689,7 +592,7 @@
       "entry_px": 52.9,
       "entry_score": 10,
       "cur_px": 53.3,
-      "hold_days": 11,
+      "hold_days": 12,
       "gross_ret": 0.76,
       "lot": 100000,
       "reasons": [
@@ -715,7 +618,7 @@
       "entry_px": 190.0,
       "entry_score": 10,
       "cur_px": 194.5,
-      "hold_days": 9,
+      "hold_days": 10,
       "gross_ret": 2.37,
       "lot": 100000,
       "reasons": [
@@ -738,7 +641,7 @@
       "entry_px": 440.0,
       "entry_score": 10,
       "cur_px": 447.5,
-      "hold_days": 7,
+      "hold_days": 8,
       "gross_ret": 1.7,
       "lot": 100000,
       "reasons": [
@@ -762,7 +665,7 @@
       "entry_px": 60.2,
       "entry_score": 10,
       "cur_px": 60.2,
-      "hold_days": 7,
+      "hold_days": 8,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -789,7 +692,7 @@
       "entry_px": 939.0,
       "entry_score": 10,
       "cur_px": 960.0,
-      "hold_days": 7,
+      "hold_days": 8,
       "gross_ret": 2.24,
       "lot": 100000,
       "reasons": [
@@ -816,7 +719,7 @@
       "entry_px": 281.0,
       "entry_score": 11,
       "cur_px": 291.0,
-      "hold_days": 6,
+      "hold_days": 7,
       "gross_ret": 3.56,
       "lot": 100000,
       "reasons": [
@@ -840,7 +743,7 @@
       "entry_px": 29.4,
       "entry_score": 10,
       "cur_px": 29.4,
-      "hold_days": 6,
+      "hold_days": 7,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -863,7 +766,7 @@
       "entry_px": 120.5,
       "entry_score": 13,
       "cur_px": 120.5,
-      "hold_days": 5,
+      "hold_days": 6,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -889,7 +792,7 @@
       "entry_px": 86.2,
       "entry_score": 11,
       "cur_px": 86.5,
-      "hold_days": 5,
+      "hold_days": 6,
       "gross_ret": 0.35,
       "lot": 100000,
       "reasons": [
@@ -913,7 +816,7 @@
       "entry_px": 186.5,
       "entry_score": 11,
       "cur_px": 186.5,
-      "hold_days": 5,
+      "hold_days": 6,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -937,7 +840,7 @@
       "entry_px": 71.2,
       "entry_score": 10,
       "cur_px": 69.5,
-      "hold_days": 5,
+      "hold_days": 6,
       "gross_ret": -2.39,
       "lot": 100000,
       "reasons": [
@@ -963,7 +866,7 @@
       "entry_px": 68.6,
       "entry_score": 10,
       "cur_px": 68.1,
-      "hold_days": 5,
+      "hold_days": 6,
       "gross_ret": -0.73,
       "lot": 100000,
       "reasons": [
@@ -987,7 +890,7 @@
       "entry_px": 691.0,
       "entry_score": 12,
       "cur_px": 691.0,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1015,7 +918,7 @@
       "entry_px": 244.5,
       "entry_score": 12,
       "cur_px": 244.5,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1041,7 +944,7 @@
       "entry_px": 70.0,
       "entry_score": 11,
       "cur_px": 70.0,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1068,7 +971,7 @@
       "entry_px": 558.0,
       "entry_score": 10,
       "cur_px": 558.0,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1092,7 +995,7 @@
       "entry_px": 556.0,
       "entry_score": 10,
       "cur_px": 556.0,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1111,6 +1014,28 @@
       "ma60_pct": 40.8,
       "fstreak": -1,
       "stop_dist": 10.0
+    },
+    "2408": {
+      "code": "2408",
+      "name": "南亞科",
+      "entry_date": "20260918",
+      "entry_px": 525.0,
+      "entry_score": 13,
+      "cur_px": 525.0,
+      "hold_days": 0,
+      "gross_ret": 0.0,
+      "lot": 100000,
+      "reasons": [
+        "族群動能強(4.9%)",
+        "站上MA60 +13.3%",
+        "外資連買 3日",
+        "投信連買 3日",
+        "月營收YoY +561% ★",
+        "外資持股大變動(+3.1pp)",
+        "RSI健康(46)",
+        "距高甜蜜點(-3.3%)"
+      ],
+      "flags": []
     }
   },
   "closed": [
@@ -3138,6 +3063,66 @@
       "hold_days": 60,
       "reason": "持有 60 日到期",
       "entry_score": 10
+    },
+    {
+      "code": "3450",
+      "name": "聯鈞",
+      "entry_date": "20260821",
+      "exit_date": "20260918",
+      "entry_px": 551.0,
+      "exit_px": 538.0,
+      "gross_ret": -2.36,
+      "net_ret": -3.04,
+      "lot": 100000,
+      "net_twd": -3044,
+      "hold_days": 60,
+      "reason": "持有 60 日到期",
+      "entry_score": 13
+    },
+    {
+      "code": "3653",
+      "name": "健策",
+      "entry_date": "20260821",
+      "exit_date": "20260918",
+      "entry_px": 5395.0,
+      "exit_px": 5395.0,
+      "gross_ret": 0.0,
+      "net_ret": -0.69,
+      "lot": 100000,
+      "net_twd": -685,
+      "hold_days": 60,
+      "reason": "持有 60 日到期",
+      "entry_score": 12
+    },
+    {
+      "code": "1402",
+      "name": "遠東新",
+      "entry_date": "20260821",
+      "exit_date": "20260918",
+      "entry_px": 30.4,
+      "exit_px": 30.4,
+      "gross_ret": 0.0,
+      "net_ret": -0.69,
+      "lot": 100000,
+      "net_twd": -685,
+      "hold_days": 60,
+      "reason": "持有 60 日到期",
+      "entry_score": 12
+    },
+    {
+      "code": "2408",
+      "name": "南亞科",
+      "entry_date": "20260821",
+      "exit_date": "20260918",
+      "entry_px": 528.0,
+      "exit_px": 525.0,
+      "gross_ret": -0.57,
+      "net_ret": -1.25,
+      "lot": 100000,
+      "net_twd": -1253,
+      "hold_days": 60,
+      "reason": "持有 60 日到期",
+      "entry_score": 10
     }
   ],
   "log": [
@@ -3925,10 +3910,20 @@
       "events": [
         "[出場] 2027 大成鋼 持有 60 日到期  net=-0.7%  (-685 元)  現金=3,999,128"
       ]
+    },
+    {
+      "date": "20260918",
+      "events": [
+        "[出場] 3450 聯鈞 持有 60 日到期  net=-3.0%  (-3,044 元)  現金=4,096,084",
+        "[出場] 3653 健策 持有 60 日到期  net=-0.7%  (-685 元)  現金=4,195,399",
+        "[出場] 1402 遠東新 持有 60 日到期  net=-0.7%  (-685 元)  現金=4,294,714",
+        "[出場] 2408 南亞科 持有 60 日到期  net=-1.3%  (-1,253 元)  現金=4,393,461",
+        "[進場] 2408 南亞科  分=13  MA60=+13.3%  外資=+3日  配置=100,000元  現金剩=4,293,461"
+      ]
     }
   ],
   "start_date": "20260729",
-  "cash": 3999128,
+  "cash": 4293461,
   "total_invested": 8329723,
   "equity_curve": [
     {
@@ -4679,6 +4674,13 @@
       "equity": 8406318,
       "invested": 8329723,
       "ret_pct": 0.92
+    },
+    {
+      "date": "20260918",
+      "cash": 4293461,
+      "equity": 8403581,
+      "invested": 8329723,
+      "ret_pct": 0.89
     }
   ],
   "summary": {
@@ -4686,17 +4688,17 @@
     "regime": "range",
     "lot_size": 100000,
     "total_invested": 8329723,
-    "cash": 3999128,
-    "open_positions": 44,
-    "pos_market_val": 4407190,
-    "total_equity": 8406318,
-    "total_ret_pct": 0.92,
-    "closed_trades": 135,
-    "win_rate": 40.7,
+    "cash": 4293461,
+    "open_positions": 41,
+    "pos_market_val": 4110120,
+    "total_equity": 8403581,
+    "total_ret_pct": 0.89,
+    "closed_trades": 139,
+    "win_rate": 39.6,
     "avg_win": 6.16,
-    "avg_loss": -3.37,
-    "pnl_ratio": 1.83,
-    "realized_net_twd": 69405,
-    "open_unreal_twd": -1260
+    "avg_loss": -3.27,
+    "pnl_ratio": 1.88,
+    "realized_net_twd": 63738,
+    "open_unreal_twd": 2246
   }
 }

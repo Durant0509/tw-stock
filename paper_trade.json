@@ -1,78 +1,5 @@
 {
   "positions": {
-    "2404": {
-      "code": "2404",
-      "name": "漢唐",
-      "entry_date": "20260923",
-      "entry_px": 1250.0,
-      "entry_score": 12,
-      "cur_px": 1250.0,
-      "hold_days": 59,
-      "gross_ret": 0.0,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(6.1%)",
-        "站上MA60 +10.9%",
-        "量能爆大 1.7×",
-        "月營收YoY +59% ★",
-        "外資持股大變動(+4.7pp)",
-        "距高甜蜜點(-9.7%)"
-      ],
-      "flags": [],
-      "score": null,
-      "ma60_pct": 0,
-      "fstreak": 0,
-      "stop_dist": 10.0
-    },
-    "6278": {
-      "code": "6278",
-      "name": "台表科",
-      "entry_date": "20260923",
-      "entry_px": 209.0,
-      "entry_score": 10,
-      "cur_px": 290.5,
-      "hold_days": 59,
-      "gross_ret": 39.0,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(4.5%)",
-        "站上MA60 +16.0%",
-        "量能爆大 1.6×",
-        "外資持股大變動(-2.9pp)",
-        "RSI健康(61)"
-      ],
-      "flags": [],
-      "score": 10,
-      "ma60_pct": 43.1,
-      "fstreak": 1,
-      "stop_dist": 49.0
-    },
-    "2354": {
-      "code": "2354",
-      "name": "鴻準",
-      "entry_date": "20260923",
-      "entry_px": 65.9,
-      "entry_score": 10,
-      "cur_px": 65.9,
-      "hold_days": 59,
-      "gross_ret": 0.0,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(6.1%)",
-        "站上MA60 +9.2%",
-        "月營收YoY +58% ★",
-        "外資持股大變動(+1.2pp)",
-        "RSI健康(61)",
-        "距高甜蜜點(-10.0%)"
-      ],
-      "flags": [
-        "投信賣超 1日"
-      ],
-      "score": null,
-      "ma60_pct": 0,
-      "fstreak": 0,
-      "stop_dist": 10.0
-    },
     "2889": {
       "code": "2889",
       "name": "國票金",
@@ -80,7 +7,7 @@
       "entry_px": 16.8,
       "entry_score": 11,
       "cur_px": 16.9,
-      "hold_days": 58,
+      "hold_days": 59,
       "gross_ret": 0.6,
       "lot": 100000,
       "reasons": [
@@ -104,7 +31,7 @@
       "entry_px": 810.0,
       "entry_score": 11,
       "cur_px": 810.0,
-      "hold_days": 56,
+      "hold_days": 57,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -129,7 +56,7 @@
       "entry_px": 172.5,
       "entry_score": 11,
       "cur_px": 172.5,
-      "hold_days": 47,
+      "hold_days": 48,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -157,7 +84,7 @@
       "entry_px": 2445.0,
       "entry_score": 13,
       "cur_px": 2445.0,
-      "hold_days": 46,
+      "hold_days": 47,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -182,7 +109,7 @@
       "entry_px": 72.3,
       "entry_score": 10,
       "cur_px": 72.3,
-      "hold_days": 46,
+      "hold_days": 47,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -205,7 +132,7 @@
       "entry_px": 719.0,
       "entry_score": 11,
       "cur_px": 719.0,
-      "hold_days": 44,
+      "hold_days": 45,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -232,7 +159,7 @@
       "entry_px": 114.0,
       "entry_score": 11,
       "cur_px": 119.5,
-      "hold_days": 44,
+      "hold_days": 45,
       "gross_ret": 4.82,
       "lot": 100000,
       "reasons": [
@@ -257,7 +184,7 @@
       "entry_px": 519.0,
       "entry_score": 11,
       "cur_px": 519.0,
-      "hold_days": 44,
+      "hold_days": 45,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -281,7 +208,7 @@
       "entry_px": 26.3,
       "entry_score": 11,
       "cur_px": 27.9,
-      "hold_days": 44,
+      "hold_days": 45,
       "gross_ret": 6.08,
       "lot": 100000,
       "reasons": [
@@ -305,7 +232,7 @@
       "entry_px": 45.4,
       "entry_score": 10,
       "cur_px": 50.3,
-      "hold_days": 44,
+      "hold_days": 45,
       "gross_ret": 10.79,
       "lot": 100000,
       "reasons": [
@@ -329,7 +256,7 @@
       "entry_px": 503.0,
       "entry_score": 10,
       "cur_px": 503.0,
-      "hold_days": 42,
+      "hold_days": 43,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -354,7 +281,7 @@
       "entry_px": 1000.0,
       "entry_score": 10,
       "cur_px": 1000.0,
-      "hold_days": 40,
+      "hold_days": 41,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -377,7 +304,7 @@
       "entry_px": 561.0,
       "entry_score": 10,
       "cur_px": 561.0,
-      "hold_days": 40,
+      "hold_days": 41,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -405,7 +332,7 @@
       "entry_px": 122.0,
       "entry_score": 10,
       "cur_px": 133.0,
-      "hold_days": 40,
+      "hold_days": 41,
       "gross_ret": 9.02,
       "lot": 100000,
       "reasons": [
@@ -430,7 +357,7 @@
       "entry_px": 111.5,
       "entry_score": 10,
       "cur_px": 113.5,
-      "hold_days": 40,
+      "hold_days": 41,
       "gross_ret": 1.79,
       "lot": 100000,
       "reasons": [
@@ -456,7 +383,7 @@
       "entry_px": 166.0,
       "entry_score": 10,
       "cur_px": 166.0,
-      "hold_days": 40,
+      "hold_days": 41,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -480,7 +407,7 @@
       "entry_px": 767.0,
       "entry_score": 11,
       "cur_px": 767.0,
-      "hold_days": 35,
+      "hold_days": 36,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -504,7 +431,7 @@
       "entry_px": 1040.0,
       "entry_score": 11,
       "cur_px": 1040.0,
-      "hold_days": 35,
+      "hold_days": 36,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -530,7 +457,7 @@
       "entry_px": 180.5,
       "entry_score": 10,
       "cur_px": 180.5,
-      "hold_days": 35,
+      "hold_days": 36,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -556,7 +483,7 @@
       "entry_px": 577.0,
       "entry_score": 11,
       "cur_px": 577.0,
-      "hold_days": 34,
+      "hold_days": 35,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -580,7 +507,7 @@
       "entry_px": 2575.0,
       "entry_score": 10,
       "cur_px": 2575.0,
-      "hold_days": 34,
+      "hold_days": 35,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -603,7 +530,7 @@
       "entry_px": 252.0,
       "entry_score": 12,
       "cur_px": 252.0,
-      "hold_days": 32,
+      "hold_days": 33,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -628,7 +555,7 @@
       "entry_px": 310.5,
       "entry_score": 11,
       "cur_px": 310.5,
-      "hold_days": 32,
+      "hold_days": 33,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -652,7 +579,7 @@
       "entry_px": 119.0,
       "entry_score": 10,
       "cur_px": 114.5,
-      "hold_days": 32,
+      "hold_days": 33,
       "gross_ret": -3.78,
       "lot": 100000,
       "reasons": [
@@ -675,7 +602,7 @@
       "entry_px": 4180.0,
       "entry_score": 10,
       "cur_px": 4180.0,
-      "hold_days": 32,
+      "hold_days": 33,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -701,7 +628,7 @@
       "entry_px": 5995.0,
       "entry_score": 10,
       "cur_px": 5995.0,
-      "hold_days": 32,
+      "hold_days": 33,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -724,7 +651,7 @@
       "entry_px": 65.7,
       "entry_score": 11,
       "cur_px": 67.1,
-      "hold_days": 31,
+      "hold_days": 32,
       "gross_ret": 2.13,
       "lot": 100000,
       "reasons": [
@@ -748,7 +675,7 @@
       "entry_px": 44.6,
       "entry_score": 10,
       "cur_px": 46.4,
-      "hold_days": 31,
+      "hold_days": 32,
       "gross_ret": 4.04,
       "lot": 100000,
       "reasons": [
@@ -775,7 +702,7 @@
       "entry_px": 155.5,
       "entry_score": 10,
       "cur_px": 158.5,
-      "hold_days": 31,
+      "hold_days": 32,
       "gross_ret": 1.93,
       "lot": 100000,
       "reasons": [
@@ -802,7 +729,7 @@
       "entry_px": 73.3,
       "entry_score": 10,
       "cur_px": 73.3,
-      "hold_days": 31,
+      "hold_days": 32,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -828,7 +755,7 @@
       "entry_px": 2400.0,
       "entry_score": 13,
       "cur_px": 2400.0,
-      "hold_days": 30,
+      "hold_days": 31,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -853,7 +780,7 @@
       "entry_px": 210.5,
       "entry_score": 11,
       "cur_px": 210.5,
-      "hold_days": 30,
+      "hold_days": 31,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -877,7 +804,7 @@
       "entry_px": 39.9,
       "entry_score": 11,
       "cur_px": 39.9,
-      "hold_days": 30,
+      "hold_days": 31,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -901,7 +828,7 @@
       "entry_px": 241.5,
       "entry_score": 10,
       "cur_px": 241.5,
-      "hold_days": 30,
+      "hold_days": 31,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -925,7 +852,7 @@
       "entry_px": 3440.0,
       "entry_score": 11,
       "cur_px": 3440.0,
-      "hold_days": 29,
+      "hold_days": 30,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -953,7 +880,7 @@
       "entry_px": 146.5,
       "entry_score": 11,
       "cur_px": 158.0,
-      "hold_days": 29,
+      "hold_days": 30,
       "gross_ret": 7.85,
       "lot": 100000,
       "reasons": [
@@ -980,7 +907,7 @@
       "entry_px": 74.4,
       "entry_score": 10,
       "cur_px": 74.4,
-      "hold_days": 28,
+      "hold_days": 29,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1003,7 +930,7 @@
       "entry_px": 255.5,
       "entry_score": 12,
       "cur_px": 260.0,
-      "hold_days": 21,
+      "hold_days": 22,
       "gross_ret": 1.76,
       "lot": 100000,
       "reasons": [
@@ -1030,7 +957,7 @@
       "entry_px": 1540.0,
       "entry_score": 10,
       "cur_px": 1540.0,
-      "hold_days": 21,
+      "hold_days": 22,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1057,7 +984,7 @@
       "entry_px": 77.3,
       "entry_score": 10,
       "cur_px": 72.8,
-      "hold_days": 21,
+      "hold_days": 22,
       "gross_ret": -5.82,
       "lot": 100000,
       "reasons": [
@@ -1081,7 +1008,7 @@
       "entry_px": 103.0,
       "entry_score": 11,
       "cur_px": 100.5,
-      "hold_days": 18,
+      "hold_days": 19,
       "gross_ret": -2.43,
       "lot": 100000,
       "reasons": [
@@ -1106,7 +1033,7 @@
       "entry_px": 48.8,
       "entry_score": 10,
       "cur_px": 50.6,
-      "hold_days": 18,
+      "hold_days": 19,
       "gross_ret": 3.69,
       "lot": 100000,
       "reasons": [
@@ -1131,7 +1058,7 @@
       "entry_px": 60.2,
       "entry_score": 11,
       "cur_px": 55.0,
-      "hold_days": 17,
+      "hold_days": 18,
       "gross_ret": -8.64,
       "lot": 100000,
       "reasons": [
@@ -1158,7 +1085,7 @@
       "entry_px": 29.6,
       "entry_score": 12,
       "cur_px": 28.9,
-      "hold_days": 16,
+      "hold_days": 17,
       "gross_ret": -2.36,
       "lot": 100000,
       "reasons": [
@@ -1183,7 +1110,7 @@
       "entry_px": 168.5,
       "entry_score": 10,
       "cur_px": 168.5,
-      "hold_days": 16,
+      "hold_days": 17,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1208,7 +1135,7 @@
       "entry_px": 78.2,
       "entry_score": 10,
       "cur_px": 78.2,
-      "hold_days": 16,
+      "hold_days": 17,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1233,7 +1160,7 @@
       "entry_px": 283.5,
       "entry_score": 10,
       "cur_px": 283.5,
-      "hold_days": 15,
+      "hold_days": 16,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1259,7 +1186,7 @@
       "entry_px": 19.2,
       "entry_score": 12,
       "cur_px": 19.6,
-      "hold_days": 14,
+      "hold_days": 15,
       "gross_ret": 2.08,
       "lot": 100000,
       "reasons": [
@@ -1285,7 +1212,7 @@
       "entry_px": 405.5,
       "entry_score": 11,
       "cur_px": 405.5,
-      "hold_days": 14,
+      "hold_days": 15,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1312,7 +1239,7 @@
       "entry_px": 64.7,
       "entry_score": 14,
       "cur_px": 61.9,
-      "hold_days": 13,
+      "hold_days": 14,
       "gross_ret": -4.33,
       "lot": 100000,
       "reasons": [
@@ -1340,7 +1267,7 @@
       "entry_px": 29.7,
       "entry_score": 10,
       "cur_px": 29.7,
-      "hold_days": 13,
+      "hold_days": 14,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1364,7 +1291,7 @@
       "entry_px": 21.1,
       "entry_score": 10,
       "cur_px": 21.1,
-      "hold_days": 12,
+      "hold_days": 13,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1389,7 +1316,7 @@
       "entry_px": 778.0,
       "entry_score": 10,
       "cur_px": 778.0,
-      "hold_days": 12,
+      "hold_days": 13,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1413,7 +1340,7 @@
       "entry_px": 78.7,
       "entry_score": 10,
       "cur_px": 73.0,
-      "hold_days": 11,
+      "hold_days": 12,
       "gross_ret": -7.24,
       "lot": 100000,
       "reasons": [
@@ -1440,7 +1367,7 @@
       "entry_px": 577.0,
       "entry_score": 12,
       "cur_px": 577.0,
-      "hold_days": 9,
+      "hold_days": 10,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1466,7 +1393,7 @@
       "entry_px": 92.2,
       "entry_score": 10,
       "cur_px": 93.2,
-      "hold_days": 7,
+      "hold_days": 8,
       "gross_ret": 1.08,
       "lot": 100000,
       "reasons": [
@@ -1492,7 +1419,7 @@
       "entry_px": 106.5,
       "entry_score": 10,
       "cur_px": 106.5,
-      "hold_days": 5,
+      "hold_days": 6,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1519,7 +1446,7 @@
       "entry_px": 99.7,
       "entry_score": 11,
       "cur_px": 99.3,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": -0.4,
       "lot": 100000,
       "reasons": [
@@ -1546,7 +1473,7 @@
       "entry_px": 583.0,
       "entry_score": 10,
       "cur_px": 583.0,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -1574,7 +1501,7 @@
       "entry_px": 31.9,
       "entry_score": 10,
       "cur_px": 32.0,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": 0.31,
       "lot": 100000,
       "reasons": [
@@ -1598,7 +1525,7 @@
       "entry_px": 320.5,
       "entry_score": 13,
       "cur_px": 301.0,
-      "hold_days": 2,
+      "hold_days": 3,
       "gross_ret": -6.08,
       "lot": 100000,
       "reasons": [
@@ -1624,7 +1551,7 @@
       "entry_px": 53.8,
       "entry_score": 10,
       "cur_px": 54.6,
-      "hold_days": 2,
+      "hold_days": 3,
       "gross_ret": 1.49,
       "lot": 100000,
       "reasons": [
@@ -1639,6 +1566,27 @@
       "ma60_pct": 15.9,
       "fstreak": 2,
       "stop_dist": 11.49
+    },
+    "6278": {
+      "code": "6278",
+      "name": "台表科",
+      "entry_date": "20261022",
+      "entry_px": 290.5,
+      "entry_score": 10,
+      "cur_px": 290.5,
+      "hold_days": 0,
+      "gross_ret": 0.0,
+      "lot": 100000,
+      "reasons": [
+        "族群動能正(1.0%)",
+        "站上MA60 +43.1%",
+        "量能放大 1.4×",
+        "有融券(0.05)",
+        "投信連買 6日",
+        "外資持股大變動(+9.9pp)",
+        "距高甜蜜點(-8.2%)"
+      ],
+      "flags": []
     }
   },
   "closed": [
@@ -5106,6 +5054,51 @@
       "hold_days": 12,
       "reason": "分數降至 6",
       "entry_score": 10
+    },
+    {
+      "code": "2404",
+      "name": "漢唐",
+      "entry_date": "20260923",
+      "exit_date": "20261022",
+      "entry_px": 1250.0,
+      "exit_px": 1250.0,
+      "gross_ret": 0.0,
+      "net_ret": -0.69,
+      "lot": 100000,
+      "net_twd": -685,
+      "hold_days": 60,
+      "reason": "持有 60 日到期",
+      "entry_score": 12
+    },
+    {
+      "code": "6278",
+      "name": "台表科",
+      "entry_date": "20260923",
+      "exit_date": "20261022",
+      "entry_px": 209.0,
+      "exit_px": 290.5,
+      "gross_ret": 39.0,
+      "net_ret": 38.31,
+      "lot": 100000,
+      "net_twd": 38310,
+      "hold_days": 60,
+      "reason": "持有 60 日到期",
+      "entry_score": 10
+    },
+    {
+      "code": "2354",
+      "name": "鴻準",
+      "entry_date": "20260923",
+      "exit_date": "20261022",
+      "entry_px": 65.9,
+      "exit_px": 65.9,
+      "gross_ret": 0.0,
+      "net_ret": -0.69,
+      "lot": 100000,
+      "net_twd": -685,
+      "hold_days": 60,
+      "reason": "持有 60 日到期",
+      "entry_score": 10
     }
   ],
   "log": [
@@ -6368,10 +6361,19 @@
         "[出場] 2912 統一超 分數降至 4  net=+0.2%  (+208 元)  現金=2,951,592",
         "[出場] 2409 友達 分數降至 6  net=-2.1%  (-2,078 元)  現金=3,049,514"
       ]
+    },
+    {
+      "date": "20261022",
+      "events": [
+        "[出場] 2404 漢唐 持有 60 日到期  net=-0.7%  (-685 元)  現金=3,148,829",
+        "[出場] 6278 台表科 持有 60 日到期  net=+38.3%  (+38,310 元)  現金=3,287,139",
+        "[出場] 2354 鴻準 持有 60 日到期  net=-0.7%  (-685 元)  現金=3,386,454",
+        "[進場] 6278 台表科  分=10  MA60=+43.1%  外資=+1日  配置=100,000元  現金剩=3,286,454"
+      ]
     }
   ],
   "start_date": "20260729",
-  "cash": 3049514,
+  "cash": 3286454,
   "total_invested": 9309909,
   "equity_curve": [
     {
@@ -7584,6 +7586,13 @@
       "equity": 9606894,
       "invested": 9309909,
       "ret_pct": 3.19
+    },
+    {
+      "date": "20261022",
+      "cash": 3286454,
+      "equity": 9604834,
+      "invested": 9309909,
+      "ret_pct": 3.17
     }
   ],
   "summary": {
@@ -7591,17 +7600,17 @@
     "regime": "bull",
     "lot_size": 100000,
     "total_invested": 9309909,
-    "cash": 3049514,
-    "open_positions": 65,
-    "pos_market_val": 6557380,
-    "total_equity": 9606894,
-    "total_ret_pct": 3.19,
-    "closed_trades": 231,
+    "cash": 3286454,
+    "open_positions": 63,
+    "pos_market_val": 6318380,
+    "total_equity": 9604834,
+    "total_ret_pct": 3.17,
+    "closed_trades": 234,
     "win_rate": 38.5,
-    "avg_win": 7.53,
-    "avg_loss": -3.03,
-    "pnl_ratio": 2.48,
-    "realized_net_twd": 239605,
-    "open_unreal_twd": 44898
+    "avg_win": 7.87,
+    "avg_loss": -3.0,
+    "pnl_ratio": 2.62,
+    "realized_net_twd": 276545,
+    "open_unreal_twd": 6282
   }
 }

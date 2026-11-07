@@ -1,28 +1,5 @@
 {
   "positions": {
-    "1717": {
-      "code": "1717",
-      "name": "長興",
-      "entry_date": "20261008",
-      "entry_px": 74.4,
-      "entry_score": 10,
-      "cur_px": 74.4,
-      "hold_days": 59,
-      "gross_ret": 0.0,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(7.3%)",
-        "站上MA60 +5.9%",
-        "量能放大 1.4×",
-        "外資連買 5日",
-        "月營收YoY +21%"
-      ],
-      "flags": [],
-      "score": null,
-      "ma60_pct": 0,
-      "fstreak": 0,
-      "stop_dist": 10.0
-    },
     "5269": {
       "code": "5269",
       "name": "祥碩",
@@ -30,7 +7,7 @@
       "entry_px": 1540.0,
       "entry_score": 10,
       "cur_px": 1540.0,
-      "hold_days": 52,
+      "hold_days": 53,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -57,7 +34,7 @@
       "entry_px": 168.5,
       "entry_score": 10,
       "cur_px": 168.5,
-      "hold_days": 47,
+      "hold_days": 48,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -82,7 +59,7 @@
       "entry_px": 283.5,
       "entry_score": 10,
       "cur_px": 283.5,
-      "hold_days": 46,
+      "hold_days": 47,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -108,7 +85,7 @@
       "entry_px": 583.0,
       "entry_score": 10,
       "cur_px": 583.0,
-      "hold_days": 34,
+      "hold_days": 35,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -136,7 +113,7 @@
       "entry_px": 43.1,
       "entry_score": 10,
       "cur_px": 43.6,
-      "hold_days": 9,
+      "hold_days": 10,
       "gross_ret": 1.16,
       "lot": 100000,
       "reasons": [
@@ -162,7 +139,7 @@
       "entry_px": 27.2,
       "entry_score": 10,
       "cur_px": 26.8,
-      "hold_days": 5,
+      "hold_days": 6,
       "gross_ret": -1.47,
       "lot": 100000,
       "reasons": [
@@ -186,7 +163,7 @@
       "entry_px": 21.6,
       "entry_score": 13,
       "cur_px": 21.2,
-      "hold_days": 4,
+      "hold_days": 5,
       "gross_ret": -1.85,
       "lot": 100000,
       "reasons": [
@@ -211,7 +188,7 @@
       "entry_px": 214.5,
       "entry_score": 11,
       "cur_px": 213.0,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": -0.7,
       "lot": 100000,
       "reasons": [
@@ -239,7 +216,7 @@
       "entry_px": 192.0,
       "entry_score": 12,
       "cur_px": 192.0,
-      "hold_days": 2,
+      "hold_days": 3,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -4894,6 +4871,21 @@
       "hold_days": 60,
       "reason": "持有 60 日到期",
       "entry_score": 11
+    },
+    {
+      "code": "1717",
+      "name": "長興",
+      "entry_date": "20261008",
+      "exit_date": "20261106",
+      "entry_px": 74.4,
+      "exit_px": 74.4,
+      "gross_ret": 0.0,
+      "net_ret": -0.69,
+      "lot": 100000,
+      "net_twd": -685,
+      "hold_days": 60,
+      "reason": "持有 60 日到期",
+      "entry_score": 10
     }
   ],
   "log": [
@@ -6377,10 +6369,16 @@
       "events": [
         "[出場] 3017 奇鋐 持有 60 日到期  net=-0.7%  (-685 元)  現金=8,465,540"
       ]
+    },
+    {
+      "date": "20261106",
+      "events": [
+        "[出場] 1717 長興 持有 60 日到期  net=-0.7%  (-685 元)  現金=8,564,855"
+      ]
     }
   ],
   "start_date": "20260729",
-  "cash": 8465540,
+  "cash": 8564855,
   "total_invested": 9309909,
   "equity_curve": [
     {
@@ -7810,6 +7808,13 @@
       "equity": 9462680,
       "invested": 9309909,
       "ret_pct": 1.64
+    },
+    {
+      "date": "20261106",
+      "cash": 8564855,
+      "equity": 9461995,
+      "invested": 9309909,
+      "ret_pct": 1.63
     }
   ],
   "summary": {
@@ -7817,17 +7822,17 @@
     "regime": "range",
     "lot_size": 100000,
     "total_invested": 9309909,
-    "cash": 8465540,
-    "open_positions": 10,
-    "pos_market_val": 997140,
-    "total_equity": 9462680,
-    "total_ret_pct": 1.64,
-    "closed_trades": 309,
-    "win_rate": 33.7,
+    "cash": 8564855,
+    "open_positions": 9,
+    "pos_market_val": 897140,
+    "total_equity": 9461995,
+    "total_ret_pct": 1.63,
+    "closed_trades": 310,
+    "win_rate": 33.5,
     "avg_win": 7.36,
-    "avg_loss": -2.97,
-    "pnl_ratio": 2.47,
-    "realized_net_twd": 155631,
-    "open_unreal_twd": -4781
+    "avg_loss": -2.96,
+    "pnl_ratio": 2.48,
+    "realized_net_twd": 154946,
+    "open_unreal_twd": -4589
   }
 }

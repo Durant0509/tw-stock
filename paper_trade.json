@@ -7,7 +7,7 @@
       "entry_px": 1540.0,
       "entry_score": 10,
       "cur_px": 1540.0,
-      "hold_days": 53,
+      "hold_days": 54,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -34,7 +34,7 @@
       "entry_px": 168.5,
       "entry_score": 10,
       "cur_px": 168.5,
-      "hold_days": 48,
+      "hold_days": 49,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -59,7 +59,7 @@
       "entry_px": 283.5,
       "entry_score": 10,
       "cur_px": 283.5,
-      "hold_days": 47,
+      "hold_days": 48,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -85,7 +85,7 @@
       "entry_px": 583.0,
       "entry_score": 10,
       "cur_px": 583.0,
-      "hold_days": 35,
+      "hold_days": 36,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -113,7 +113,7 @@
       "entry_px": 43.1,
       "entry_score": 10,
       "cur_px": 43.6,
-      "hold_days": 10,
+      "hold_days": 11,
       "gross_ret": 1.16,
       "lot": 100000,
       "reasons": [
@@ -139,7 +139,7 @@
       "entry_px": 27.2,
       "entry_score": 10,
       "cur_px": 26.8,
-      "hold_days": 6,
+      "hold_days": 7,
       "gross_ret": -1.47,
       "lot": 100000,
       "reasons": [
@@ -163,7 +163,7 @@
       "entry_px": 21.6,
       "entry_score": 13,
       "cur_px": 21.2,
-      "hold_days": 5,
+      "hold_days": 6,
       "gross_ret": -1.85,
       "lot": 100000,
       "reasons": [
@@ -188,7 +188,7 @@
       "entry_px": 214.5,
       "entry_score": 11,
       "cur_px": 213.0,
-      "hold_days": 4,
+      "hold_days": 5,
       "gross_ret": -0.7,
       "lot": 100000,
       "reasons": [
@@ -216,7 +216,7 @@
       "entry_px": 192.0,
       "entry_score": 12,
       "cur_px": 192.0,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -7808,6 +7808,13 @@
       "equity": 9462680,
       "invested": 9309909,
       "ret_pct": 1.64
+    },
+    {
+      "date": "20261106",
+      "cash": 8564855,
+      "equity": 9461995,
+      "invested": 9309909,
+      "ret_pct": 1.63
     },
     {
       "date": "20261106",

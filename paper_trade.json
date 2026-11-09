@@ -7,7 +7,7 @@
       "entry_px": 1540.0,
       "entry_score": 10,
       "cur_px": 1540.0,
-      "hold_days": 55,
+      "hold_days": 56,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -34,7 +34,7 @@
       "entry_px": 168.5,
       "entry_score": 10,
       "cur_px": 168.5,
-      "hold_days": 50,
+      "hold_days": 51,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -59,7 +59,7 @@
       "entry_px": 283.5,
       "entry_score": 10,
       "cur_px": 283.5,
-      "hold_days": 49,
+      "hold_days": 50,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -85,7 +85,7 @@
       "entry_px": 583.0,
       "entry_score": 10,
       "cur_px": 583.0,
-      "hold_days": 37,
+      "hold_days": 38,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -112,9 +112,9 @@
       "entry_date": "20261102",
       "entry_px": 43.1,
       "entry_score": 10,
-      "cur_px": 43.6,
-      "hold_days": 12,
-      "gross_ret": 1.16,
+      "cur_px": 43.9,
+      "hold_days": 13,
+      "gross_ret": 1.86,
       "lot": 100000,
       "reasons": [
         "族群動能強(5.2%)",
@@ -128,9 +128,9 @@
       ],
       "flags": [],
       "score": 8,
-      "ma60_pct": 2.9,
+      "ma60_pct": 3.6,
       "fstreak": 7,
-      "stop_dist": 11.16
+      "stop_dist": 11.86
     },
     "1101": {
       "code": "1101",
@@ -139,7 +139,7 @@
       "entry_px": 27.2,
       "entry_score": 10,
       "cur_px": 26.8,
-      "hold_days": 8,
+      "hold_days": 9,
       "gross_ret": -1.47,
       "lot": 100000,
       "reasons": [
@@ -151,7 +151,7 @@
         "距高甜蜜點(-3.9%)"
       ],
       "flags": [],
-      "score": 9,
+      "score": 8,
       "ma60_pct": 5.0,
       "fstreak": 1,
       "stop_dist": 8.53
@@ -162,9 +162,9 @@
       "entry_date": "20261105",
       "entry_px": 21.6,
       "entry_score": 13,
-      "cur_px": 21.2,
-      "hold_days": 7,
-      "gross_ret": -1.85,
+      "cur_px": 21.8,
+      "hold_days": 8,
+      "gross_ret": 0.93,
       "lot": 100000,
       "reasons": [
         "族群動能強(3.1%)",
@@ -176,64 +176,31 @@
         "RSI健康(64)"
       ],
       "flags": [],
-      "score": 7,
-      "ma60_pct": 4.0,
+      "score": 9,
+      "ma60_pct": 6.6,
       "fstreak": 7,
-      "stop_dist": 8.15
+      "stop_dist": 10.93
     },
-    "1477": {
-      "code": "1477",
-      "name": "聚陽",
-      "entry_date": "20261105",
-      "entry_px": 214.5,
+    "6446": {
+      "code": "6446",
+      "name": "藥華藥",
+      "entry_date": "20261109",
+      "entry_px": 1370.0,
       "entry_score": 11,
-      "cur_px": 213.0,
-      "hold_days": 6,
-      "gross_ret": -0.7,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(2.7%)",
-        "站上MA60 +6.3%",
-        "量能放大 1.2×",
-        "外資連買 3日",
-        "外資異常大買(z=3.1)",
-        "月營收YoY +24%",
-        "外資持股大變動(-1.6pp)",
-        "RSI健康(65)"
-      ],
-      "flags": [
-        "距高點過遠(-36.6%)"
-      ],
-      "score": 10,
-      "ma60_pct": 5.7,
-      "fstreak": 4,
-      "stop_dist": 9.3
-    },
-    "6214": {
-      "code": "6214",
-      "name": "精誠",
-      "entry_date": "20261106",
-      "entry_px": 192.0,
-      "entry_score": 12,
-      "cur_px": 192.0,
-      "hold_days": 5,
+      "cur_px": 1370.0,
+      "hold_days": 0,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
-        "族群動能正(0.6%)",
-        "站上MA60 +3.2%",
-        "量能爆大 1.6×",
-        "高券資比(0.22)，市場博弈活躍",
-        "月營收YoY +56% ★",
-        "外資持股大變動(+6.1pp)",
-        "RSI健康(45)",
-        "距高甜蜜點(-5.4%)"
+        "族群動能平(0.4%)",
+        "站上MA60 +6.9%",
+        "量能爆大 1.8×",
+        "投信連買 4日",
+        "月營收YoY +100% ★",
+        "外資持股大變動(+2.9pp)",
+        "RSI健康(61)"
       ],
-      "flags": [],
-      "score": 11,
-      "ma60_pct": 3.2,
-      "fstreak": 2,
-      "stop_dist": 10.0
+      "flags": []
     }
   },
   "closed": [
@@ -4886,6 +4853,36 @@
       "hold_days": 60,
       "reason": "持有 60 日到期",
       "entry_score": 10
+    },
+    {
+      "code": "1477",
+      "name": "聚陽",
+      "entry_date": "20261105",
+      "exit_date": "20261109",
+      "entry_px": 214.5,
+      "exit_px": 216.0,
+      "gross_ret": 0.7,
+      "net_ret": 0.01,
+      "lot": 100000,
+      "net_twd": 14,
+      "hold_days": 7,
+      "reason": "分數降至 6",
+      "entry_score": 11
+    },
+    {
+      "code": "6214",
+      "name": "精誠",
+      "entry_date": "20261106",
+      "exit_date": "20261109",
+      "entry_px": 192.0,
+      "exit_px": 179.0,
+      "gross_ret": -6.77,
+      "net_ret": -7.46,
+      "lot": 100000,
+      "net_twd": -7456,
+      "hold_days": 6,
+      "reason": "分數降至 -1",
+      "entry_score": 12
     }
   ],
   "log": [
@@ -6375,10 +6372,18 @@
       "events": [
         "[出場] 1717 長興 持有 60 日到期  net=-0.7%  (-685 元)  現金=8,564,855"
       ]
+    },
+    {
+      "date": "20261109",
+      "events": [
+        "[出場] 1477 聚陽 分數降至 6  net=+0.0%  (+14 元)  現金=8,664,869",
+        "[出場] 6214 精誠 分數降至 -1  net=-7.5%  (-7,456 元)  現金=8,757,413",
+        "[進場] 6446 藥華藥  分=11  MA60=+6.9%  外資=+1日  配置=100,000元  現金剩=8,657,413"
+      ]
     }
   ],
   "start_date": "20260729",
-  "cash": 8564855,
+  "cash": 8657413,
   "total_invested": 9309909,
   "equity_curve": [
     {
@@ -7829,24 +7834,31 @@
       "equity": 9461995,
       "invested": 9309909,
       "ret_pct": 1.63
+    },
+    {
+      "date": "20261109",
+      "cash": 8657413,
+      "equity": 9458733,
+      "invested": 9309909,
+      "ret_pct": 1.6
     }
   ],
   "summary": {
-    "asof": "20261106",
+    "asof": "20261109",
     "regime": "range",
     "lot_size": 100000,
     "total_invested": 9309909,
-    "cash": 8564855,
-    "open_positions": 9,
-    "pos_market_val": 897140,
-    "total_equity": 9461995,
-    "total_ret_pct": 1.63,
-    "closed_trades": 310,
-    "win_rate": 33.5,
-    "avg_win": 7.36,
-    "avg_loss": -2.96,
-    "pnl_ratio": 2.48,
-    "realized_net_twd": 154946,
-    "open_unreal_twd": -4589
+    "cash": 8657413,
+    "open_positions": 8,
+    "pos_market_val": 801320,
+    "total_equity": 9458733,
+    "total_ret_pct": 1.6,
+    "closed_trades": 312,
+    "win_rate": 33.7,
+    "avg_win": 7.29,
+    "avg_loss": -2.98,
+    "pnl_ratio": 2.44,
+    "realized_net_twd": 147504,
+    "open_unreal_twd": -216
   }
 }

@@ -7,7 +7,7 @@
       "entry_px": 1540.0,
       "entry_score": 10,
       "cur_px": 1540.0,
-      "hold_days": 56,
+      "hold_days": 57,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -34,7 +34,7 @@
       "entry_px": 168.5,
       "entry_score": 10,
       "cur_px": 168.5,
-      "hold_days": 51,
+      "hold_days": 52,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -59,7 +59,7 @@
       "entry_px": 283.5,
       "entry_score": 10,
       "cur_px": 283.5,
-      "hold_days": 50,
+      "hold_days": 51,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -85,7 +85,7 @@
       "entry_px": 583.0,
       "entry_score": 10,
       "cur_px": 583.0,
-      "hold_days": 38,
+      "hold_days": 39,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -113,7 +113,7 @@
       "entry_px": 43.1,
       "entry_score": 10,
       "cur_px": 43.9,
-      "hold_days": 13,
+      "hold_days": 14,
       "gross_ret": 1.86,
       "lot": 100000,
       "reasons": [
@@ -127,9 +127,9 @@
         "距高甜蜜點(-3.9%)"
       ],
       "flags": [],
-      "score": 8,
+      "score": 7,
       "ma60_pct": 3.6,
-      "fstreak": 7,
+      "fstreak": 8,
       "stop_dist": 11.86
     },
     "1101": {
@@ -139,7 +139,7 @@
       "entry_px": 27.2,
       "entry_score": 10,
       "cur_px": 26.8,
-      "hold_days": 9,
+      "hold_days": 10,
       "gross_ret": -1.47,
       "lot": 100000,
       "reasons": [
@@ -151,35 +151,10 @@
         "距高甜蜜點(-3.9%)"
       ],
       "flags": [],
-      "score": 8,
+      "score": 7,
       "ma60_pct": 5.0,
-      "fstreak": 1,
+      "fstreak": 2,
       "stop_dist": 8.53
-    },
-    "2610": {
-      "code": "2610",
-      "name": "華航",
-      "entry_date": "20261105",
-      "entry_px": 21.6,
-      "entry_score": 13,
-      "cur_px": 21.8,
-      "hold_days": 8,
-      "gross_ret": 0.93,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(3.1%)",
-        "站上MA60 +6.1%",
-        "量能爆大 1.8×",
-        "外資連買 5日",
-        "月營收YoY +32%",
-        "外資持股大變動(+3.2pp)",
-        "RSI健康(64)"
-      ],
-      "flags": [],
-      "score": 9,
-      "ma60_pct": 6.6,
-      "fstreak": 7,
-      "stop_dist": 10.93
     },
     "6446": {
       "code": "6446",
@@ -188,7 +163,7 @@
       "entry_px": 1370.0,
       "entry_score": 11,
       "cur_px": 1370.0,
-      "hold_days": 0,
+      "hold_days": 1,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -200,7 +175,11 @@
         "外資持股大變動(+2.9pp)",
         "RSI健康(61)"
       ],
-      "flags": []
+      "flags": [],
+      "score": 11,
+      "ma60_pct": 6.9,
+      "fstreak": 2,
+      "stop_dist": 10.0
     }
   },
   "closed": [
@@ -4883,6 +4862,21 @@
       "hold_days": 6,
       "reason": "分數降至 -1",
       "entry_score": 12
+    },
+    {
+      "code": "2610",
+      "name": "華航",
+      "entry_date": "20261105",
+      "exit_date": "20261109",
+      "entry_px": 21.6,
+      "exit_px": 21.8,
+      "gross_ret": 0.93,
+      "net_ret": 0.24,
+      "lot": 100000,
+      "net_twd": 241,
+      "hold_days": 9,
+      "reason": "分數降至 5",
+      "entry_score": 13
     }
   ],
   "log": [
@@ -6380,10 +6374,16 @@
         "[出場] 6214 精誠 分數降至 -1  net=-7.5%  (-7,456 元)  現金=8,757,413",
         "[進場] 6446 藥華藥  分=11  MA60=+6.9%  外資=+1日  配置=100,000元  現金剩=8,657,413"
       ]
+    },
+    {
+      "date": "20261109",
+      "events": [
+        "[出場] 2610 華航 分數降至 5  net=+0.2%  (+241 元)  現金=8,757,654"
+      ]
     }
   ],
   "start_date": "20260729",
-  "cash": 8657413,
+  "cash": 8757654,
   "total_invested": 9309909,
   "equity_curve": [
     {
@@ -7841,6 +7841,13 @@
       "equity": 9458733,
       "invested": 9309909,
       "ret_pct": 1.6
+    },
+    {
+      "date": "20261109",
+      "cash": 8757654,
+      "equity": 9458044,
+      "invested": 9309909,
+      "ret_pct": 1.59
     }
   ],
   "summary": {
@@ -7848,17 +7855,17 @@
     "regime": "range",
     "lot_size": 100000,
     "total_invested": 9309909,
-    "cash": 8657413,
-    "open_positions": 8,
-    "pos_market_val": 801320,
-    "total_equity": 9458733,
-    "total_ret_pct": 1.6,
-    "closed_trades": 312,
-    "win_rate": 33.7,
-    "avg_win": 7.29,
+    "cash": 8757654,
+    "open_positions": 7,
+    "pos_market_val": 700390,
+    "total_equity": 9458044,
+    "total_ret_pct": 1.59,
+    "closed_trades": 313,
+    "win_rate": 33.9,
+    "avg_win": 7.22,
     "avg_loss": -2.98,
-    "pnl_ratio": 2.44,
-    "realized_net_twd": 147504,
-    "open_unreal_twd": -216
+    "pnl_ratio": 2.42,
+    "realized_net_twd": 147745,
+    "open_unreal_twd": -954
   }
 }

@@ -7,7 +7,7 @@
       "entry_px": 168.5,
       "entry_score": 10,
       "cur_px": 168.5,
-      "hold_days": 57,
+      "hold_days": 58,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -32,7 +32,7 @@
       "entry_px": 283.5,
       "entry_score": 10,
       "cur_px": 283.5,
-      "hold_days": 56,
+      "hold_days": 57,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -58,7 +58,7 @@
       "entry_px": 583.0,
       "entry_score": 10,
       "cur_px": 583.0,
-      "hold_days": 44,
+      "hold_days": 45,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -86,7 +86,7 @@
       "entry_px": 53.0,
       "entry_score": 10,
       "cur_px": 54.4,
-      "hold_days": 4,
+      "hold_days": 5,
       "gross_ret": 2.64,
       "lot": 100000,
       "reasons": [
@@ -101,7 +101,7 @@
       "flags": [],
       "score": 7,
       "ma60_pct": 7.3,
-      "fstreak": 3,
+      "fstreak": 4,
       "stop_dist": 12.64
     },
     "1802": {
@@ -111,7 +111,7 @@
       "entry_px": 69.8,
       "entry_score": 10,
       "cur_px": 81.7,
-      "hold_days": 4,
+      "hold_days": 5,
       "gross_ret": 17.05,
       "lot": 100000,
       "reasons": [
@@ -123,9 +123,9 @@
         "距高甜蜜點(-8.9%)"
       ],
       "flags": [],
-      "score": 15,
+      "score": 17,
       "ma60_pct": 32.5,
-      "fstreak": 4,
+      "fstreak": 5,
       "stop_dist": 27.05
     },
     "6214": {
@@ -135,7 +135,7 @@
       "entry_px": 193.5,
       "entry_score": 10,
       "cur_px": 189.5,
-      "hold_days": 2,
+      "hold_days": 3,
       "gross_ret": -2.07,
       "lot": 100000,
       "reasons": [
@@ -151,9 +151,9 @@
       "flags": [
         "外資賣超 2日"
       ],
-      "score": 7,
+      "score": 8,
       "ma60_pct": 0.4,
-      "fstreak": 1,
+      "fstreak": 2,
       "stop_dist": 7.93
     },
     "6446": {
@@ -163,7 +163,7 @@
       "entry_px": 1365.0,
       "entry_score": 12,
       "cur_px": 1365.0,
-      "hold_days": 0,
+      "hold_days": 1,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -174,7 +174,11 @@
         "外資持股大變動(+3.0pp)",
         "RSI健康(65)"
       ],
-      "flags": []
+      "flags": [],
+      "score": 12,
+      "ma60_pct": 7.0,
+      "fstreak": 2,
+      "stop_dist": 10.0
     }
   },
   "closed": [
@@ -8008,6 +8012,13 @@
       "date": "20261111",
       "cash": 8548665,
       "equity": 9475685,
+      "invested": 9309909,
+      "ret_pct": 1.78
+    },
+    {
+      "date": "20261112",
+      "cash": 8757734,
+      "equity": 9475354,
       "invested": 9309909,
       "ret_pct": 1.78
     },

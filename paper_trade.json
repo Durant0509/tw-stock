@@ -7,7 +7,7 @@
       "entry_px": 168.5,
       "entry_score": 10,
       "cur_px": 168.5,
-      "hold_days": 56,
+      "hold_days": 57,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -32,7 +32,7 @@
       "entry_px": 283.5,
       "entry_score": 10,
       "cur_px": 283.5,
-      "hold_days": 55,
+      "hold_days": 56,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -58,7 +58,7 @@
       "entry_px": 583.0,
       "entry_score": 10,
       "cur_px": 583.0,
-      "hold_days": 43,
+      "hold_days": 44,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -79,66 +79,15 @@
       "fstreak": 0,
       "stop_dist": 10.0
     },
-    "2618": {
-      "code": "2618",
-      "name": "長榮航",
-      "entry_date": "20261102",
-      "entry_px": 43.1,
-      "entry_score": 10,
-      "cur_px": 47.6,
-      "hold_days": 18,
-      "gross_ret": 10.44,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(5.2%)",
-        "站上MA60 +1.9%",
-        "外資連買 3日",
-        "有融券(0.07)",
-        "月營收YoY +33%",
-        "外資持股大變動(+12.7pp)",
-        "RSI健康(64)",
-        "距高甜蜜點(-3.9%)"
-      ],
-      "flags": [],
-      "score": 8,
-      "ma60_pct": 11.9,
-      "fstreak": 10,
-      "stop_dist": 20.44
-    },
-    "2891": {
-      "code": "2891",
-      "name": "中信金",
-      "entry_date": "20261110",
-      "entry_px": 73.7,
-      "entry_score": 10,
-      "cur_px": 74.7,
-      "hold_days": 3,
-      "gross_ret": 1.36,
-      "lot": 100000,
-      "reasons": [
-        "族群動能正(1.3%)",
-        "站上MA60 +6.3%",
-        "有融券(0.09)",
-        "投信連買 7日",
-        "外資持股大變動(+1.2pp)",
-        "RSI健康(51)",
-        "距高甜蜜點(-2.9%)"
-      ],
-      "flags": [],
-      "score": 8,
-      "ma60_pct": 7.5,
-      "fstreak": -2,
-      "stop_dist": 11.36
-    },
     "2886": {
       "code": "2886",
       "name": "兆豐金",
       "entry_date": "20261110",
       "entry_px": 53.0,
       "entry_score": 10,
-      "cur_px": 54.2,
-      "hold_days": 3,
-      "gross_ret": 2.26,
+      "cur_px": 54.4,
+      "hold_days": 4,
+      "gross_ret": 2.64,
       "lot": 100000,
       "reasons": [
         "族群動能正(1.3%)",
@@ -150,38 +99,10 @@
         "距高甜蜜點(-4.0%)"
       ],
       "flags": [],
-      "score": 8,
-      "ma60_pct": 7.2,
+      "score": 7,
+      "ma60_pct": 7.3,
       "fstreak": 3,
-      "stop_dist": 12.26
-    },
-    "2610": {
-      "code": "2610",
-      "name": "華航",
-      "entry_date": "20261110",
-      "entry_px": 22.8,
-      "entry_score": 10,
-      "cur_px": 23.5,
-      "hold_days": 3,
-      "gross_ret": 3.07,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(3.0%)",
-        "站上MA60 +11.5%",
-        "量能爆大 2.1×",
-        "外資連買 8日",
-        "月營收YoY +32%",
-        "外資持股大變動(+3.2pp)",
-        "距高甜蜜點(-5.8%)"
-      ],
-      "flags": [
-        "投信賣超 1日",
-        "排雷警示 1項"
-      ],
-      "score": 8,
-      "ma60_pct": 14.6,
-      "fstreak": 10,
-      "stop_dist": 13.07
+      "stop_dist": 12.64
     },
     "1802": {
       "code": "1802",
@@ -189,9 +110,9 @@
       "entry_date": "20261110",
       "entry_px": 69.8,
       "entry_score": 10,
-      "cur_px": 76.7,
-      "hold_days": 3,
-      "gross_ret": 9.89,
+      "cur_px": 81.7,
+      "hold_days": 4,
+      "gross_ret": 17.05,
       "lot": 100000,
       "reasons": [
         "族群動能強(7.7%)",
@@ -202,10 +123,10 @@
         "距高甜蜜點(-8.9%)"
       ],
       "flags": [],
-      "score": 13,
-      "ma60_pct": 25.2,
+      "score": 15,
+      "ma60_pct": 32.5,
       "fstreak": 4,
-      "stop_dist": 19.89
+      "stop_dist": 27.05
     },
     "6214": {
       "code": "6214",
@@ -213,9 +134,9 @@
       "entry_date": "20261111",
       "entry_px": 193.5,
       "entry_score": 10,
-      "cur_px": 193.5,
-      "hold_days": 1,
-      "gross_ret": 0.0,
+      "cur_px": 189.5,
+      "hold_days": 2,
+      "gross_ret": -2.07,
       "lot": 100000,
       "reasons": [
         "族群動能強(4.1%)",
@@ -230,10 +151,30 @@
       "flags": [
         "外資賣超 2日"
       ],
-      "score": 10,
-      "ma60_pct": 2.8,
+      "score": 7,
+      "ma60_pct": 0.4,
       "fstreak": 1,
-      "stop_dist": 10.0
+      "stop_dist": 7.93
+    },
+    "6446": {
+      "code": "6446",
+      "name": "藥華藥",
+      "entry_date": "20261112",
+      "entry_px": 1365.0,
+      "entry_score": 12,
+      "cur_px": 1365.0,
+      "hold_days": 0,
+      "gross_ret": 0.0,
+      "lot": 100000,
+      "reasons": [
+        "族群動能強(3.3%)",
+        "站上MA60 +7.0%",
+        "量能爆大 1.9×",
+        "月營收YoY +102% ★",
+        "外資持股大變動(+3.0pp)",
+        "RSI健康(65)"
+      ],
+      "flags": []
     }
   },
   "closed": [
@@ -4991,6 +4932,51 @@
       "hold_days": 14,
       "reason": "分數降至 5",
       "entry_score": 10
+    },
+    {
+      "code": "2618",
+      "name": "長榮航",
+      "entry_date": "20261102",
+      "exit_date": "20261112",
+      "entry_px": 43.1,
+      "exit_px": 46.9,
+      "gross_ret": 8.82,
+      "net_ret": 8.13,
+      "lot": 100000,
+      "net_twd": 8132,
+      "hold_days": 19,
+      "reason": "分數降至 6",
+      "entry_score": 10
+    },
+    {
+      "code": "2891",
+      "name": "中信金",
+      "entry_date": "20261110",
+      "exit_date": "20261112",
+      "entry_px": 73.7,
+      "exit_px": 75.4,
+      "gross_ret": 2.31,
+      "net_ret": 1.62,
+      "lot": 100000,
+      "net_twd": 1622,
+      "hold_days": 4,
+      "reason": "分數降至 6",
+      "entry_score": 10
+    },
+    {
+      "code": "2610",
+      "name": "華航",
+      "entry_date": "20261110",
+      "exit_date": "20261112",
+      "entry_px": 22.8,
+      "exit_px": 22.8,
+      "gross_ret": 0.0,
+      "net_ret": -0.69,
+      "lot": 100000,
+      "net_twd": -685,
+      "hold_days": 4,
+      "reason": "分數降至 6",
+      "entry_score": 10
     }
   ],
   "log": [
@@ -6519,10 +6505,19 @@
       "events": [
         "[出場] 1101 台泥 分數降至 5  net=+1.2%  (+1,153 元)  現金=8,548,665"
       ]
+    },
+    {
+      "date": "20261112",
+      "events": [
+        "[出場] 2618 長榮航 分數降至 6  net=+8.1%  (+8,132 元)  現金=8,656,797",
+        "[出場] 2891 中信金 分數降至 6  net=+1.6%  (+1,622 元)  現金=8,758,419",
+        "[出場] 2610 華航 分數降至 6  net=-0.7%  (-685 元)  現金=8,857,734",
+        "[進場] 6446 藥華藥  分=12  MA60=+7.0%  外資=+1日  配置=100,000元  現金剩=8,757,734"
+      ]
     }
   ],
   "start_date": "20260729",
-  "cash": 8548665,
+  "cash": 8757734,
   "total_invested": 9309909,
   "equity_curve": [
     {
@@ -8015,24 +8010,31 @@
       "equity": 9475685,
       "invested": 9309909,
       "ret_pct": 1.78
+    },
+    {
+      "date": "20261112",
+      "cash": 8757734,
+      "equity": 9475354,
+      "invested": 9309909,
+      "ret_pct": 1.78
     }
   ],
   "summary": {
-    "asof": "20261111",
+    "asof": "20261112",
     "regime": "range",
     "lot_size": 100000,
     "total_invested": 9309909,
-    "cash": 8548665,
-    "open_positions": 9,
-    "pos_market_val": 927020,
-    "total_equity": 9475685,
+    "cash": 8757734,
+    "open_positions": 7,
+    "pos_market_val": 717620,
+    "total_equity": 9475354,
     "total_ret_pct": 1.78,
-    "closed_trades": 317,
-    "win_rate": 33.8,
-    "avg_win": 7.16,
-    "avg_loss": -2.99,
-    "pnl_ratio": 2.4,
-    "realized_net_twd": 138756,
-    "open_unreal_twd": 25292
+    "closed_trades": 320,
+    "win_rate": 34.1,
+    "avg_win": 7.12,
+    "avg_loss": -2.98,
+    "pnl_ratio": 2.39,
+    "realized_net_twd": 147825,
+    "open_unreal_twd": 16276
   }
 }

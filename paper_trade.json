@@ -7,7 +7,7 @@
       "entry_px": 168.5,
       "entry_score": 10,
       "cur_px": 168.5,
-      "hold_days": 58,
+      "hold_days": 59,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -32,7 +32,7 @@
       "entry_px": 283.5,
       "entry_score": 10,
       "cur_px": 283.5,
-      "hold_days": 57,
+      "hold_days": 58,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -58,7 +58,7 @@
       "entry_px": 583.0,
       "entry_score": 10,
       "cur_px": 583.0,
-      "hold_days": 45,
+      "hold_days": 46,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -79,40 +79,15 @@
       "fstreak": 0,
       "stop_dist": 10.0
     },
-    "2886": {
-      "code": "2886",
-      "name": "兆豐金",
-      "entry_date": "20261110",
-      "entry_px": 53.0,
-      "entry_score": 10,
-      "cur_px": 54.4,
-      "hold_days": 5,
-      "gross_ret": 2.64,
-      "lot": 100000,
-      "reasons": [
-        "族群動能正(1.3%)",
-        "站上MA60 +5.0%",
-        "量能放大 1.3×",
-        "有融券(0.05)",
-        "投信連買 5日",
-        "RSI健康(45)",
-        "距高甜蜜點(-4.0%)"
-      ],
-      "flags": [],
-      "score": 7,
-      "ma60_pct": 7.3,
-      "fstreak": 4,
-      "stop_dist": 12.64
-    },
     "1802": {
       "code": "1802",
       "name": "台玻",
       "entry_date": "20261110",
       "entry_px": 69.8,
       "entry_score": 10,
-      "cur_px": 81.7,
-      "hold_days": 5,
-      "gross_ret": 17.05,
+      "cur_px": 85.1,
+      "hold_days": 6,
+      "gross_ret": 21.92,
       "lot": 100000,
       "reasons": [
         "族群動能強(7.7%)",
@@ -123,38 +98,10 @@
         "距高甜蜜點(-8.9%)"
       ],
       "flags": [],
-      "score": 17,
-      "ma60_pct": 32.5,
+      "score": 18,
+      "ma60_pct": 37.0,
       "fstreak": 5,
-      "stop_dist": 27.05
-    },
-    "6214": {
-      "code": "6214",
-      "name": "精誠",
-      "entry_date": "20261111",
-      "entry_px": 193.5,
-      "entry_score": 10,
-      "cur_px": 189.5,
-      "hold_days": 3,
-      "gross_ret": -2.07,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(4.1%)",
-        "站上MA60 +2.8%",
-        "量能放大 1.3×",
-        "有融券(0.13)",
-        "月營收YoY +56% ★",
-        "外資持股大變動(+6.1pp)",
-        "RSI健康(48)",
-        "距高甜蜜點(-4.7%)"
-      ],
-      "flags": [
-        "外資賣超 2日"
-      ],
-      "score": 8,
-      "ma60_pct": 0.4,
-      "fstreak": 2,
-      "stop_dist": 7.93
+      "stop_dist": 31.92
     },
     "6446": {
       "code": "6446",
@@ -162,9 +109,9 @@
       "entry_date": "20261112",
       "entry_px": 1365.0,
       "entry_score": 12,
-      "cur_px": 1365.0,
-      "hold_days": 1,
-      "gross_ret": 0.0,
+      "cur_px": 1380.0,
+      "hold_days": 2,
+      "gross_ret": 1.1,
       "lot": 100000,
       "reasons": [
         "族群動能強(3.3%)",
@@ -176,9 +123,9 @@
       ],
       "flags": [],
       "score": 12,
-      "ma60_pct": 7.0,
+      "ma60_pct": 8.3,
       "fstreak": 2,
-      "stop_dist": 10.0
+      "stop_dist": 11.1
     }
   },
   "closed": [
@@ -4981,6 +4928,36 @@
       "hold_days": 4,
       "reason": "分數降至 6",
       "entry_score": 10
+    },
+    {
+      "code": "2886",
+      "name": "兆豐金",
+      "entry_date": "20261110",
+      "exit_date": "20261113",
+      "entry_px": 53.0,
+      "exit_px": 55.4,
+      "gross_ret": 4.53,
+      "net_ret": 3.84,
+      "lot": 100000,
+      "net_twd": 3843,
+      "hold_days": 6,
+      "reason": "分數降至 6",
+      "entry_score": 10
+    },
+    {
+      "code": "6214",
+      "name": "精誠",
+      "entry_date": "20261111",
+      "exit_date": "20261113",
+      "entry_px": 193.5,
+      "exit_px": 179.0,
+      "gross_ret": -7.49,
+      "net_ret": -8.18,
+      "lot": 100000,
+      "net_twd": -8179,
+      "hold_days": 4,
+      "reason": "分數降至 1",
+      "entry_score": 10
     }
   ],
   "log": [
@@ -6518,10 +6495,17 @@
         "[出場] 2610 華航 分數降至 6  net=-0.7%  (-685 元)  現金=8,857,734",
         "[進場] 6446 藥華藥  分=12  MA60=+7.0%  外資=+1日  配置=100,000元  現金剩=8,757,734"
       ]
+    },
+    {
+      "date": "20261113",
+      "events": [
+        "[出場] 2886 兆豐金 分數降至 6  net=+3.8%  (+3,843 元)  現金=8,861,577",
+        "[出場] 6214 精誠 分數降至 1  net=-8.2%  (-8,179 元)  現金=8,953,398"
+      ]
     }
   ],
   "start_date": "20260729",
-  "cash": 8757734,
+  "cash": 8953398,
   "total_invested": 9309909,
   "equity_curve": [
     {
@@ -8028,24 +8012,31 @@
       "equity": 9475354,
       "invested": 9309909,
       "ret_pct": 1.78
+    },
+    {
+      "date": "20261113",
+      "cash": 8953398,
+      "equity": 9476418,
+      "invested": 9309909,
+      "ret_pct": 1.79
     }
   ],
   "summary": {
-    "asof": "20261112",
+    "asof": "20261113",
     "regime": "range",
     "lot_size": 100000,
     "total_invested": 9309909,
-    "cash": 8757734,
-    "open_positions": 7,
-    "pos_market_val": 717620,
-    "total_equity": 9475354,
-    "total_ret_pct": 1.78,
-    "closed_trades": 320,
-    "win_rate": 34.1,
-    "avg_win": 7.12,
-    "avg_loss": -2.98,
-    "pnl_ratio": 2.39,
-    "realized_net_twd": 147825,
-    "open_unreal_twd": 16276
+    "cash": 8953398,
+    "open_positions": 5,
+    "pos_market_val": 523020,
+    "total_equity": 9476418,
+    "total_ret_pct": 1.79,
+    "closed_trades": 322,
+    "win_rate": 34.2,
+    "avg_win": 7.09,
+    "avg_loss": -3.0,
+    "pnl_ratio": 2.36,
+    "realized_net_twd": 143489,
+    "open_unreal_twd": 22060
   }
 }

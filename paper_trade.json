@@ -1,30 +1,5 @@
 {
   "positions": {
-    "1513": {
-      "code": "1513",
-      "name": "中興電",
-      "entry_date": "20261014",
-      "entry_px": 168.5,
-      "entry_score": 10,
-      "cur_px": 168.5,
-      "hold_days": 59,
-      "gross_ret": 0.0,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(2.1%)",
-        "站上MA60 +2.9%",
-        "量能爆大 1.5×",
-        "投信連買 8日",
-        "外資持股大變動(-1.7pp)",
-        "RSI健康(56)",
-        "距高甜蜜點(-9.9%)"
-      ],
-      "flags": [],
-      "score": null,
-      "ma60_pct": 0,
-      "fstreak": 0,
-      "stop_dist": 10.0
-    },
     "8039": {
       "code": "8039",
       "name": "台虹",
@@ -32,7 +7,7 @@
       "entry_px": 283.5,
       "entry_score": 10,
       "cur_px": 283.5,
-      "hold_days": 58,
+      "hold_days": 59,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -58,7 +33,7 @@
       "entry_px": 583.0,
       "entry_score": 10,
       "cur_px": 583.0,
-      "hold_days": 46,
+      "hold_days": 47,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -86,7 +61,7 @@
       "entry_px": 69.8,
       "entry_score": 10,
       "cur_px": 85.1,
-      "hold_days": 6,
+      "hold_days": 7,
       "gross_ret": 21.92,
       "lot": 100000,
       "reasons": [
@@ -98,9 +73,9 @@
         "距高甜蜜點(-8.9%)"
       ],
       "flags": [],
-      "score": 18,
+      "score": 14,
       "ma60_pct": 37.0,
-      "fstreak": 5,
+      "fstreak": -1,
       "stop_dist": 31.92
     },
     "6446": {
@@ -110,7 +85,7 @@
       "entry_px": 1365.0,
       "entry_score": 12,
       "cur_px": 1380.0,
-      "hold_days": 2,
+      "hold_days": 3,
       "gross_ret": 1.1,
       "lot": 100000,
       "reasons": [
@@ -124,8 +99,50 @@
       "flags": [],
       "score": 12,
       "ma60_pct": 8.3,
-      "fstreak": 2,
+      "fstreak": -1,
       "stop_dist": 11.1
+    },
+    "7799": {
+      "code": "7799",
+      "name": "禾榮科",
+      "entry_date": "20261113",
+      "entry_px": 478.0,
+      "entry_score": 10,
+      "cur_px": 478.0,
+      "hold_days": 0,
+      "gross_ret": 0.0,
+      "lot": 100000,
+      "reasons": [
+        "族群動能強(3.2%)",
+        "站上MA60 +10.1%",
+        "量能爆大 1.6×",
+        "外資連買 3日",
+        "月營收YoY +42%",
+        "RSI健康(67)"
+      ],
+      "flags": [
+        "距高點過遠(-29.6%)"
+      ]
+    },
+    "2801": {
+      "code": "2801",
+      "name": "彰銀",
+      "entry_date": "20261113",
+      "entry_px": 29.0,
+      "entry_score": 10,
+      "cur_px": 29.0,
+      "hold_days": 0,
+      "gross_ret": 0.0,
+      "lot": 100000,
+      "reasons": [
+        "族群動能強(1.7%)",
+        "站上MA60 +5.2%",
+        "外資連買 3日",
+        "有融券(0.08)",
+        "外資持股大變動(-1.0pp)",
+        "距高甜蜜點(-6.0%)"
+      ],
+      "flags": []
     }
   },
   "closed": [
@@ -4958,6 +4975,21 @@
       "hold_days": 4,
       "reason": "分數降至 1",
       "entry_score": 10
+    },
+    {
+      "code": "1513",
+      "name": "中興電",
+      "entry_date": "20261014",
+      "exit_date": "20261113",
+      "entry_px": 168.5,
+      "exit_px": 168.5,
+      "gross_ret": 0.0,
+      "net_ret": -0.69,
+      "lot": 100000,
+      "net_twd": -685,
+      "hold_days": 60,
+      "reason": "持有 60 日到期",
+      "entry_score": 10
     }
   ],
   "log": [
@@ -6502,10 +6534,18 @@
         "[出場] 2886 兆豐金 分數降至 6  net=+3.8%  (+3,843 元)  現金=8,861,577",
         "[出場] 6214 精誠 分數降至 1  net=-8.2%  (-8,179 元)  現金=8,953,398"
       ]
+    },
+    {
+      "date": "20261113",
+      "events": [
+        "[出場] 1513 中興電 持有 60 日到期  net=-0.7%  (-685 元)  現金=9,052,713",
+        "[進場] 7799 禾榮科  分=10  MA60=+10.1%  外資=+3日  配置=100,000元  現金剩=8,952,713",
+        "[進場] 2801 彰銀  分=10  MA60=+5.2%  外資=+3日  配置=100,000元  現金剩=8,852,713"
+      ]
     }
   ],
   "start_date": "20260729",
-  "cash": 8953398,
+  "cash": 8852713,
   "total_invested": 9309909,
   "equity_curve": [
     {
@@ -8019,6 +8059,13 @@
       "equity": 9476418,
       "invested": 9309909,
       "ret_pct": 1.79
+    },
+    {
+      "date": "20261113",
+      "cash": 8852713,
+      "equity": 9475733,
+      "invested": 9309909,
+      "ret_pct": 1.78
     }
   ],
   "summary": {
@@ -8026,17 +8073,17 @@
     "regime": "range",
     "lot_size": 100000,
     "total_invested": 9309909,
-    "cash": 8953398,
-    "open_positions": 5,
-    "pos_market_val": 523020,
-    "total_equity": 9476418,
-    "total_ret_pct": 1.79,
-    "closed_trades": 322,
-    "win_rate": 34.2,
+    "cash": 8852713,
+    "open_positions": 6,
+    "pos_market_val": 623020,
+    "total_equity": 9475733,
+    "total_ret_pct": 1.78,
+    "closed_trades": 323,
+    "win_rate": 34.1,
     "avg_win": 7.09,
-    "avg_loss": -3.0,
-    "pnl_ratio": 2.36,
-    "realized_net_twd": 143489,
-    "open_unreal_twd": 22060
+    "avg_loss": -2.99,
+    "pnl_ratio": 2.37,
+    "realized_net_twd": 142804,
+    "open_unreal_twd": 21868
   }
 }

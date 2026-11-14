@@ -1,31 +1,5 @@
 {
   "positions": {
-    "8039": {
-      "code": "8039",
-      "name": "台虹",
-      "entry_date": "20261015",
-      "entry_px": 283.5,
-      "entry_score": 10,
-      "cur_px": 283.5,
-      "hold_days": 59,
-      "gross_ret": 0.0,
-      "lot": 100000,
-      "reasons": [
-        "族群動能強(4.9%)",
-        "站上MA60 +6.4%",
-        "量能爆大 1.8×",
-        "有融券(0.09)",
-        "外資持股大變動(-2.8pp)",
-        "RSI健康(56)"
-      ],
-      "flags": [
-        "月營收YoY -19%"
-      ],
-      "score": null,
-      "ma60_pct": 0,
-      "fstreak": 0,
-      "stop_dist": 10.0
-    },
     "3044": {
       "code": "3044",
       "name": "健鼎",
@@ -33,7 +7,7 @@
       "entry_px": 583.0,
       "entry_score": 10,
       "cur_px": 583.0,
-      "hold_days": 47,
+      "hold_days": 48,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -61,7 +35,7 @@
       "entry_px": 69.8,
       "entry_score": 10,
       "cur_px": 85.1,
-      "hold_days": 7,
+      "hold_days": 8,
       "gross_ret": 21.92,
       "lot": 100000,
       "reasons": [
@@ -85,7 +59,7 @@
       "entry_px": 1365.0,
       "entry_score": 12,
       "cur_px": 1380.0,
-      "hold_days": 3,
+      "hold_days": 4,
       "gross_ret": 1.1,
       "lot": 100000,
       "reasons": [
@@ -109,7 +83,7 @@
       "entry_px": 478.0,
       "entry_score": 10,
       "cur_px": 478.0,
-      "hold_days": 0,
+      "hold_days": 1,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -122,7 +96,11 @@
       ],
       "flags": [
         "距高點過遠(-29.6%)"
-      ]
+      ],
+      "score": 10,
+      "ma60_pct": 10.1,
+      "fstreak": 3,
+      "stop_dist": 10.0
     },
     "2801": {
       "code": "2801",
@@ -131,7 +109,7 @@
       "entry_px": 29.0,
       "entry_score": 10,
       "cur_px": 29.0,
-      "hold_days": 0,
+      "hold_days": 1,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -142,7 +120,11 @@
         "外資持股大變動(-1.0pp)",
         "距高甜蜜點(-6.0%)"
       ],
-      "flags": []
+      "flags": [],
+      "score": 10,
+      "ma60_pct": 5.2,
+      "fstreak": 3,
+      "stop_dist": 10.0
     }
   },
   "closed": [
@@ -4990,6 +4972,21 @@
       "hold_days": 60,
       "reason": "持有 60 日到期",
       "entry_score": 10
+    },
+    {
+      "code": "8039",
+      "name": "台虹",
+      "entry_date": "20261015",
+      "exit_date": "20261113",
+      "entry_px": 283.5,
+      "exit_px": 283.5,
+      "gross_ret": 0.0,
+      "net_ret": -0.69,
+      "lot": 100000,
+      "net_twd": -685,
+      "hold_days": 60,
+      "reason": "持有 60 日到期",
+      "entry_score": 10
     }
   ],
   "log": [
@@ -6542,10 +6539,16 @@
         "[進場] 7799 禾榮科  分=10  MA60=+10.1%  外資=+3日  配置=100,000元  現金剩=8,952,713",
         "[進場] 2801 彰銀  分=10  MA60=+5.2%  外資=+3日  配置=100,000元  現金剩=8,852,713"
       ]
+    },
+    {
+      "date": "20261113",
+      "events": [
+        "[出場] 8039 台虹 持有 60 日到期  net=-0.7%  (-685 元)  現金=8,952,028"
+      ]
     }
   ],
   "start_date": "20260729",
-  "cash": 8852713,
+  "cash": 8952028,
   "total_invested": 9309909,
   "equity_curve": [
     {
@@ -8066,6 +8069,13 @@
       "equity": 9475733,
       "invested": 9309909,
       "ret_pct": 1.78
+    },
+    {
+      "date": "20261113",
+      "cash": 8952028,
+      "equity": 9475048,
+      "invested": 9309909,
+      "ret_pct": 1.77
     }
   ],
   "summary": {
@@ -8073,17 +8083,17 @@
     "regime": "range",
     "lot_size": 100000,
     "total_invested": 9309909,
-    "cash": 8852713,
-    "open_positions": 6,
-    "pos_market_val": 623020,
-    "total_equity": 9475733,
-    "total_ret_pct": 1.78,
-    "closed_trades": 323,
-    "win_rate": 34.1,
+    "cash": 8952028,
+    "open_positions": 5,
+    "pos_market_val": 523020,
+    "total_equity": 9475048,
+    "total_ret_pct": 1.77,
+    "closed_trades": 324,
+    "win_rate": 34.0,
     "avg_win": 7.09,
-    "avg_loss": -2.99,
-    "pnl_ratio": 2.37,
-    "realized_net_twd": 142804,
-    "open_unreal_twd": 21868
+    "avg_loss": -2.98,
+    "pnl_ratio": 2.38,
+    "realized_net_twd": 142119,
+    "open_unreal_twd": 22060
   }
 }

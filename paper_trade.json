@@ -7,7 +7,7 @@
       "entry_px": 583.0,
       "entry_score": 10,
       "cur_px": 583.0,
-      "hold_days": 48,
+      "hold_days": 49,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -35,7 +35,7 @@
       "entry_px": 69.8,
       "entry_score": 10,
       "cur_px": 85.1,
-      "hold_days": 8,
+      "hold_days": 9,
       "gross_ret": 21.92,
       "lot": 100000,
       "reasons": [
@@ -59,7 +59,7 @@
       "entry_px": 1365.0,
       "entry_score": 12,
       "cur_px": 1380.0,
-      "hold_days": 4,
+      "hold_days": 5,
       "gross_ret": 1.1,
       "lot": 100000,
       "reasons": [
@@ -83,7 +83,7 @@
       "entry_px": 478.0,
       "entry_score": 10,
       "cur_px": 478.0,
-      "hold_days": 1,
+      "hold_days": 2,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -109,7 +109,7 @@
       "entry_px": 29.0,
       "entry_score": 10,
       "cur_px": 29.0,
-      "hold_days": 1,
+      "hold_days": 2,
       "gross_ret": 0.0,
       "lot": 100000,
       "reasons": [
@@ -8069,6 +8069,13 @@
       "equity": 9475733,
       "invested": 9309909,
       "ret_pct": 1.78
+    },
+    {
+      "date": "20261113",
+      "cash": 8952028,
+      "equity": 9475048,
+      "invested": 9309909,
+      "ret_pct": 1.77
     },
     {
       "date": "20261113",
